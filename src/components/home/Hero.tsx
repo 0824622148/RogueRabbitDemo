@@ -150,7 +150,7 @@ export default function Hero() {
               </div>
             </div>
             <div style={{ position: 'absolute', right: 20, bottom: 22, color: '#0F0F10' }}>
-              <div className="rr-display" style={{ fontSize: 56, letterSpacing: '-.02em' }}>R240</div>
+              <div className="rr-display" style={{ fontSize: 56, letterSpacing: '-.02em' }}>R1800</div>
             </div>
           </div>
         </div>
