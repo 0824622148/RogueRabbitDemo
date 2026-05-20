@@ -10,9 +10,9 @@ const SPECS = [
 
 export default function StorySpecs() {
   return (
-    <section style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', borderBottom: '1px solid #3A3A3C' }}>
+    <section className="rr-story-grid" style={{ borderBottom: '1px solid #3A3A3C' }}>
       {/* Story */}
-      <div style={{ padding: '100px 80px', borderRight: '1px solid #3A3A3C' }}>
+      <div className="rr-story-pad-left" style={{ borderRight: '1px solid #3A3A3C' }}>
         <span className="rr-overline" style={{ color: '#D90017' }}>[ STORY · 001 ]</span>
         <h2
           className="rr-display"
@@ -33,7 +33,7 @@ export default function StorySpecs() {
       </div>
 
       {/* Specs */}
-      <div style={{ padding: '100px 80px', background: '#1E1E20' }}>
+      <div className="rr-story-pad-right" style={{ background: '#1E1E20' }}>
         <span className="rr-overline">[ SPECS · TECH ]</span>
         <h2
           className="rr-display"

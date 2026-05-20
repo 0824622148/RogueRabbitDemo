@@ -42,7 +42,6 @@ export default function RootLayout({
           fontFamily: 'var(--font-body)',
           background: '#0F0F10',
           color: '#E6E6E6',
-          minWidth: '1280px',
           WebkitFontSmoothing: 'antialiased',
           textRendering: 'optimizeLegibility',
         }}

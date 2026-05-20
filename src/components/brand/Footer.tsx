@@ -17,25 +17,11 @@ export default function Footer() {
         color: '#E6E6E6',
       }}
     >
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: '1.6fr 1fr 1fr 1fr 1fr',
-          gap: 40,
-          marginBottom: 60,
-        }}
-      >
-        <div>
+      <div className="rr-footer-grid">
+        {/* Brand column — spans full width on mobile */}
+        <div className="rr-footer-brand">
           <RougeLogo size={48} withWordmark />
-          <p
-            style={{
-              marginTop: 22,
-              fontSize: 13,
-              color: '#A6A6A8',
-              lineHeight: 1.7,
-              maxWidth: 320,
-            }}
-          >
+          <p style={{ marginTop: 22, fontSize: 13, color: '#A6A6A8', lineHeight: 1.7, maxWidth: 320 }}>
             Built different. Worn by the ones who refuse to blend in. Independent streetwear out of every corner that
             doesn&apos;t ask for permission.
           </p>
@@ -44,18 +30,10 @@ export default function Footer() {
               <a
                 key={s}
                 style={{
-                  width: 36,
-                  height: 36,
-                  border: '1px solid #3A3A3C',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: 10,
-                  letterSpacing: '.1em',
-                  color: '#E6E6E6',
-                  cursor: 'pointer',
-                  textDecoration: 'none',
+                  width: 36, height: 36, border: '1px solid #3A3A3C',
+                  display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                  fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.1em',
+                  color: '#E6E6E6', cursor: 'pointer', textDecoration: 'none',
                 }}
               >
                 {s}
@@ -63,6 +41,7 @@ export default function Footer() {
             ))}
           </div>
         </div>
+
         {FOOTER_COLS.map(({ title, items }) => (
           <div key={title}>
             <div className="rr-overline" style={{ marginBottom: 18 }}>{title}</div>
@@ -80,10 +59,8 @@ export default function Footer() {
       <div className="rr-hair" />
       <div
         style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          paddingTop: 22,
-          alignItems: 'center',
+          display: 'flex', justifyContent: 'space-between',
+          paddingTop: 22, alignItems: 'center', flexWrap: 'wrap', gap: 12,
         }}
       >
         <span className="rr-mono">© 2026 ROUGE RABBIT · ALL RIGHTS RESERVED</span>

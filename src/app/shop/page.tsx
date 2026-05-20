@@ -15,15 +15,12 @@ export default function ShopPage() {
       <FilterBar />
 
       {/* Grid with side filter rail */}
-      <section style={{ display: 'grid', gridTemplateColumns: '260px 1fr', borderBottom: '1px solid #3A3A3C' }}>
-        <SideRail />
+      <section className="rr-shop-layout" style={{ borderBottom: '1px solid #3A3A3C' }}>
+        <div className="rr-shop-sidebar">
+          <SideRail />
+        </div>
         <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)',
-            gap: 1,
-            background: '#3A3A3C',
-          }}
+          className="rr-3col-grid"
         >
           {SHOP_PRODUCTS.map((p, i) => (
             <Link

@@ -31,8 +31,8 @@ export default function OnFootStrip() {
             [ ON FOOT · CAMPAIGN FILM · 00:42 ]
           </div>
           <div
-            className="rr-display"
-            style={{ fontSize: 180, lineHeight: 1, color: '#E6E6E6', letterSpacing: '-.01em' }}
+            className="rr-display rr-onfoot-title"
+            style={{ lineHeight: 1, color: '#E6E6E6', letterSpacing: '-.01em' }}
           >
             WEAR THE EDGE.
           </div>

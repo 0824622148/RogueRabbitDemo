@@ -10,11 +10,11 @@ export default function SectionHead({ index, kicker, title, action, dark = true 
   const textColor = dark ? '#E6E6E6' : '#0F0F10'
   return (
     <div
+      className="rr-sectionhead-pad"
       style={{
         display: 'flex',
         alignItems: 'flex-end',
         justifyContent: 'space-between',
-        padding: '0 40px',
         marginBottom: 36,
       }}
     >

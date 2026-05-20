@@ -1,21 +1,29 @@
 export default function CampaignStrip() {
   return (
     <section
+      className="rr-campaign-strip-inner"
       style={{
-        position: 'relative', height: 620,
-        background: '#1E1E20', overflow: 'hidden',
-        borderTop: '1px solid #3A3A3C', borderBottom: '1px solid #3A3A3C',
+        position: 'relative',
+        background: '#1E1E20',
+        overflow: 'hidden',
+        borderTop: '1px solid #3A3A3C',
+        borderBottom: '1px solid #3A3A3C',
+        minHeight: 400,
       }}
     >
-      <div className="rr-stripe-bg" style={{ position: 'absolute', inset: 0 }} />
-      <div
-        style={{
-          position: 'absolute', inset: 0,
-          display: 'grid', gridTemplateColumns: '1fr 1fr',
-        }}
-      >
+      <div className="rr-stripe-bg" style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }} />
+
+      <div className="rr-campaign-grid" style={{ height: '100%' }}>
         {/* Left — editorial image */}
-        <div style={{ borderRight: '1px solid #3A3A3C', position: 'relative', overflow: 'hidden' }}>
+        <div
+          className="rr-campaign-image"
+          style={{
+            borderRight: '1px solid #3A3A3C',
+            position: 'relative',
+            overflow: 'hidden',
+            minHeight: 340,
+          }}
+        >
           <img
             src="/uploads/editorial-campaign-03.png"
             alt="Rouge Rabbit Editorial Campaign 03"
@@ -33,10 +41,10 @@ export default function CampaignStrip() {
           </div>
         </div>
 
-        {/* Right — manifesto copy */}
+        {/* Right — manifesto */}
         <div
+          className="rr-campaign-copy-pad"
           style={{
-            padding: '80px 80px',
             display: 'flex', flexDirection: 'column', justifyContent: 'center',
             background: '#0F0F10',
           }}
@@ -44,7 +52,10 @@ export default function CampaignStrip() {
           <span className="rr-overline" style={{ color: '#D90017' }}>[ MANIFESTO · 002 ]</span>
           <h2
             className="rr-display"
-            style={{ fontSize: 128, margin: '20px 0 28px', color: '#E6E6E6', lineHeight: 0.88 }}
+            style={{
+              fontSize: 'clamp(56px, 8vw, 128px)',
+              margin: '20px 0 28px', color: '#E6E6E6', lineHeight: 0.88,
+            }}
           >
             NOT FOR<br />EVERYONE.
           </h2>

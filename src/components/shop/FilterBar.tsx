@@ -9,6 +9,7 @@ export default function FilterBar() {
 
   return (
     <section
+      className="rr-filterbar"
       style={{
         position: 'sticky', top: 0, zIndex: 30,
         padding: '18px 40px',
@@ -16,6 +17,7 @@ export default function FilterBar() {
         backdropFilter: 'blur(10px)',
         borderBottom: '1px solid #3A3A3C',
         display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 20,
+        flexWrap: 'wrap',
       }}
     >
       <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>

@@ -7,17 +7,14 @@ export default function SplitCTA() {
 
   return (
     <section
-      style={{
-        display: 'grid',
-        gridTemplateColumns: '1fr 1.4fr',
-        borderBottom: '1px solid #3A3A3C',
-      }}
+      className="rr-split-cta"
+      style={{ borderBottom: '1px solid #3A3A3C' }}
     >
       {/* Left — members signup */}
       <div
+        className="rr-split-left-pad"
         style={{
           background: '#D90017',
-          padding: '80px 60px',
           color: '#E6E6E6',
           position: 'relative',
           overflow: 'hidden',
@@ -26,7 +23,7 @@ export default function SplitCTA() {
         <span className="rr-overline" style={{ color: '#E6E6E6' }}>[ MEMBERS · ONLY ]</span>
         <h2
           className="rr-display"
-          style={{ fontSize: 96, margin: '20px 0 24px', lineHeight: 0.9 }}
+          style={{ fontSize: 'clamp(56px, 7vw, 96px)', margin: '20px 0 24px', lineHeight: 0.9 }}
         >
           GET IN<br />EARLY.
         </h2>
@@ -47,22 +44,17 @@ export default function SplitCTA() {
               padding: '16px 18px',
               color: '#E6E6E6',
               fontFamily: 'var(--font-mono)',
-              fontSize: 11,
-              letterSpacing: '.18em',
-              textTransform: 'uppercase',
-              outline: 'none',
+              fontSize: 11, letterSpacing: '.18em',
+              textTransform: 'uppercase', outline: 'none',
+              minWidth: 0,
             }}
           />
           <button
             style={{
-              background: '#0F0F10',
-              color: '#E6E6E6',
-              border: 'none',
-              padding: '0 22px',
-              fontFamily: 'var(--font-mono)',
-              fontSize: 11,
-              letterSpacing: '.22em',
-              cursor: 'pointer',
+              background: '#0F0F10', color: '#E6E6E6', border: 'none',
+              padding: '0 22px', fontFamily: 'var(--font-mono)',
+              fontSize: 11, letterSpacing: '.22em', cursor: 'pointer',
+              flexShrink: 0,
             }}
           >
             JOIN →
@@ -72,11 +64,8 @@ export default function SplitCTA() {
         <div
           style={{
             position: 'absolute', right: -60, bottom: -100,
-            fontFamily: 'var(--font-display)',
-            fontSize: 380,
-            color: 'rgba(0,0,0,.18)',
-            lineHeight: 1,
-            pointerEvents: 'none',
+            fontFamily: 'var(--font-display)', fontSize: 380,
+            color: 'rgba(0,0,0,.18)', lineHeight: 1, pointerEvents: 'none',
           }}
         >
           R
@@ -85,14 +74,18 @@ export default function SplitCTA() {
 
       {/* Right — IG feed */}
       <div
-        className="rr-stripe-bg"
-        style={{ position: 'relative', padding: '80px 60px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}
+        className="rr-stripe-bg rr-split-right-pad"
+        style={{
+          position: 'relative',
+          display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
+          gap: 32,
+        }}
       >
         <div>
           <span className="rr-overline">[ FROM THE FEED · @ROUGE.RABBIT ]</span>
           <h2
             className="rr-display"
-            style={{ fontSize: 76, margin: '20px 0 12px', color: '#E6E6E6' }}
+            style={{ fontSize: 'clamp(44px, 5vw, 76px)', margin: '20px 0 12px', color: '#E6E6E6' }}
           >
             SEEN IN<br />THE STREETS.
           </h2>
@@ -100,13 +93,7 @@ export default function SplitCTA() {
             Tag your fit with #ROUGEONFOOT for a chance to land on the wall.
           </p>
         </div>
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(6, 1fr)',
-            gap: 8,
-          }}
-        >
+        <div className="rr-ig-grid">
           {[1, 2, 3, 4, 5, 6].map((i) => (
             <a
               key={i}
@@ -140,7 +127,7 @@ export default function SplitCTA() {
               />
               <div
                 style={{
-                  position: 'absolute', top: 8, left: 8,
+                  position: 'absolute', top: 6, left: 6,
                   color: '#E6E6E6',
                   fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '.2em',
                   textShadow: '0 1px 4px rgba(0,0,0,.6)',

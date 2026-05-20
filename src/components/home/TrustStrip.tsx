@@ -1,31 +1,24 @@
 const TRUST_ITEMS = [
-  ['NUMBERED EDITIONS',    'Each pair logged. Once it\'s gone, it\'s gone.'],
-  ['EXPRESS · WORLDWIDE',  'Tracked dispatch in under 24h.'],
-  ['RETURNS · 30 DAYS',    'Don\'t love it? Send it back.'],
-  ['MEMBERS DROP FIRST',   'Sign up · 48h early access.'],
+  ['NUMBERED EDITIONS',   "Each pair logged. Once it's gone, it's gone."],
+  ['EXPRESS · WORLDWIDE', 'Tracked dispatch in under 24h.'],
+  ['RETURNS · 30 DAYS',   "Don't love it? Send it back."],
+  ['MEMBERS DROP FIRST',  'Sign up · 48h early access.'],
 ] as const
 
 export default function TrustStrip() {
   return (
     <section
-      style={{
-        padding: '26px 80px',
-        display: 'grid',
-        gridTemplateColumns: 'repeat(4, 1fr)',
-        gap: 30,
-        borderBottom: '1px solid #3A3A3C',
-      }}
+      className="rr-trust-grid"
+      style={{ borderBottom: '1px solid #3A3A3C' }}
     >
       {TRUST_ITEMS.map(([title, desc]) => (
         <div key={title} style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
           <span
             style={{
               width: 28, height: 28,
-              border: '1px solid #D90017',
-              color: '#D90017',
+              border: '1px solid #D90017', color: '#D90017',
               display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-              fontFamily: 'var(--font-mono)', fontSize: 11,
-              flexShrink: 0,
+              fontFamily: 'var(--font-mono)', fontSize: 11, flexShrink: 0,
             }}
           >
             +

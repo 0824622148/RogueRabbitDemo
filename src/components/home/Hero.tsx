@@ -13,16 +13,17 @@ function Stat({ n, l }: { n: string; l: string }) {
 export default function Hero() {
   return (
     <section
+      className="rr-hero-section"
       style={{
         position: 'relative',
-        height: 820,
         background: '#0F0F10',
         overflow: 'hidden',
         borderBottom: '1px solid #3A3A3C',
       }}
     >
-      {/* Left rail */}
+      {/* Left rail — hidden on mobile via rr-hero-rails */}
       <div
+        className="rr-hero-rails"
         style={{
           position: 'absolute', left: 0, top: 0, bottom: 0, width: 40,
           borderRight: '1px solid #3A3A3C',
@@ -38,8 +39,9 @@ export default function Hero() {
         </span>
       </div>
 
-      {/* Right rail */}
+      {/* Right rail — hidden on mobile */}
       <div
+        className="rr-hero-rails"
         style={{
           position: 'absolute', right: 0, top: 0, bottom: 0, width: 40,
           borderLeft: '1px solid #3A3A3C',
@@ -54,15 +56,17 @@ export default function Hero() {
       {/* Background gradient */}
       <div
         style={{
-          position: 'absolute', inset: '0 40px',
+          position: 'absolute', inset: 0,
           background:
             'radial-gradient(ellipse at 70% 50%, rgba(217,0,23,0.18), transparent 60%),' +
             'linear-gradient(180deg, #0f0f10 0%, #161618 100%)',
+          pointerEvents: 'none',
         }}
       />
 
-      {/* Giant outline number */}
+      {/* Giant outline number — decorative, desktop only */}
       <div
+        className="rr-hero-rails"
         style={{
           position: 'absolute', right: 80, top: -30,
           fontFamily: 'var(--font-display)', fontSize: 440, lineHeight: 1,
@@ -75,31 +79,26 @@ export default function Hero() {
         03
       </div>
 
-      <div
-        style={{
-          position: 'relative', height: '100%',
-          display: 'grid', gridTemplateColumns: '1fr 1fr',
-          padding: '60px 80px', gap: 40, alignItems: 'center',
-        }}
-      >
+      {/* Main grid */}
+      <div className="rr-hero-grid" style={{ position: 'relative' }}>
         {/* Left copy */}
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 30 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24 }}>
             <span className="rr-chip rr-chip--red">● LIVE · DROP 003</span>
             <span className="rr-mono">F/W 2026 · CHAPTER ONE</span>
           </div>
           <h1
-            className="rr-display"
-            style={{ fontSize: 180, margin: 0, color: '#E6E6E6', letterSpacing: '-.01em' }}
+            className="rr-display rr-hero-title"
+            style={{ margin: 0, color: '#E6E6E6', letterSpacing: '-.01em' }}
           >
             RAW<br />BY<br />
             <span style={{ color: '#D90017' }}>NATURE.</span>
           </h1>
-          <p style={{ marginTop: 28, color: '#A6A6A8', maxWidth: 460, fontSize: 14, lineHeight: 1.7 }}>
+          <p style={{ marginTop: 22, color: '#A6A6A8', maxWidth: 460, fontSize: 14, lineHeight: 1.7 }}>
             The Rouge 01 silhouette — engineered for the ones who refuse to blend in.
             Knit upper, cinematic sole, marked with the rabbit. Worn loud.
           </p>
-          <div style={{ display: 'flex', gap: 14, marginTop: 36 }}>
+          <div style={{ display: 'flex', gap: 14, marginTop: 28, flexWrap: 'wrap' }}>
             <Link href="/shop/rouge-01">
               <button className="rr-btn">
                 SHOP THE DROP <span className="arr"><Arrow size={14} /></span>
@@ -108,9 +107,10 @@ export default function Hero() {
             <button className="rr-btn rr-btn--ghost">WATCH FILM ▸</button>
           </div>
           <div
+            className="rr-hero-stats"
             style={{
-              display: 'flex', gap: 40, marginTop: 60, paddingTop: 24,
-              borderTop: '1px solid #3A3A3C',
+              display: 'flex', gap: 40, marginTop: 48, paddingTop: 24,
+              borderTop: '1px solid #3A3A3C', flexWrap: 'wrap',
             }}
           >
             <Stat n="04" l="COLOURWAYS" />
@@ -120,8 +120,8 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* Right hero shot */}
-        <div style={{ position: 'relative', height: '100%' }}>
+        {/* Right — hero shoe image, hidden on mobile */}
+        <div className="rr-hero-right" style={{ position: 'relative', height: '100%', minHeight: 500 }}>
           <div
             style={{
               position: 'absolute', inset: '20px 0 20px 40px',

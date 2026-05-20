@@ -26,19 +26,16 @@ export default function PDPHero() {
 
   return (
     <section
-      style={{
-        display: 'grid',
-        gridTemplateColumns: '70px 1fr 1fr 460px',
-        minHeight: 880,
-        borderBottom: '1px solid #3A3A3C',
-      }}
+      className="rr-pdp-grid"
+      style={{ borderBottom: '1px solid #3A3A3C' }}
     >
       {/* Thumbnails rail */}
       <div
+        className="rr-pdp-thumb-rail"
         style={{
           borderRight: '1px solid #3A3A3C',
           padding: '30px 12px',
-          display: 'flex', flexDirection: 'column', gap: 10,
+          flexDirection: 'column', gap: 10,
         }}
       >
         {THUMB_IMAGES.map((src, i) => (
@@ -84,6 +81,7 @@ export default function PDPHero() {
 
       {/* Lifestyle image */}
       <div
+        className="rr-pdp-lifestyle"
         style={{
           background: '#0a0a0a', position: 'relative', overflow: 'hidden',
           borderRight: '1px solid #3A3A3C',
@@ -107,8 +105,8 @@ export default function PDPHero() {
 
       {/* Purchase column */}
       <div
+        className="rr-pdp-purchase-col"
         style={{
-          padding: '40px 36px',
           display: 'flex', flexDirection: 'column',
           background: '#0F0F10',
         }}
