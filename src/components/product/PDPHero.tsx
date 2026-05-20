@@ -13,7 +13,7 @@ const THUMB_IMAGES = [
 ]
 
 const META_ROWS = [
-  ['SHIPPING', 'FREE EXPRESS · OVER $250'],
+  ['SHIPPING', 'FREE EXPRESS · OVER R250'],
   ['RETURNS',  '30 DAYS · NO QUESTIONS'],
   ['EDITION',  'NUMBERED · 250 PAIRS'],
   ['RELEASE',  'MAR 14 · 2026'],
@@ -124,8 +124,8 @@ export default function PDPHero() {
         </h1>
 
         <div style={{ display: 'flex', alignItems: 'baseline', gap: 14, marginTop: 24 }}>
-          <span className="rr-display" style={{ fontSize: 44 }}>$240</span>
-          <span className="rr-mono">USD · TAX INCL.</span>
+          <span className="rr-display" style={{ fontSize: 44 }}>R240</span>
+          <span className="rr-mono">ZAR · TAX INCL.</span>
         </div>
 
         {/* Colourway selector */}
@@ -180,7 +180,7 @@ export default function PDPHero() {
         {/* CTAs */}
         <div style={{ marginTop: 32, display: 'flex', flexDirection: 'column', gap: 10 }}>
           <button className="rr-btn" style={{ justifyContent: 'space-between', padding: '20px 26px' }}>
-            <span>ADD TO BAG · $240</span>
+            <span>ADD TO BAG · R240</span>
             <Arrow size={16} />
           </button>
           <button className="rr-btn rr-btn--ghost" style={{ justifyContent: 'center' }}>

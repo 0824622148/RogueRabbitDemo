@@ -71,14 +71,14 @@ export default function SideRail() {
 
       {/* Price range */}
       <div style={{ padding: '20px 0', borderTop: '1px solid #3A3A3C' }}>
-        <div className="rr-overline" style={{ marginBottom: 10 }}>PRICE · USD</div>
+        <div className="rr-overline" style={{ marginBottom: 10 }}>PRICE · ZAR</div>
         <div
           style={{
             display: 'flex', justifyContent: 'space-between',
             fontFamily: 'var(--font-mono)', fontSize: 12, color: '#E6E6E6',
           }}
         >
-          <span>$45</span><span>$420</span>
+          <span>R45</span><span>R420</span>
         </div>
         <div style={{ position: 'relative', height: 2, background: '#3A3A3C', marginTop: 12 }}>
           <div style={{ position: 'absolute', left: '10%', right: '30%', height: 2, background: '#D90017' }} />
