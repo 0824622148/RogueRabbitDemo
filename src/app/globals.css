@@ -1,26 +1,305 @@
 @import "tailwindcss";
 
+/* ── Tailwind v4 Theme Tokens ─────────────────── */
+@theme {
+  --color-raven:      #0F0F10;
+  --color-smoke:      #1E1E20;
+  --color-steel:      #3A3A3C;
+  --color-ash:        #A6A6A8;
+  --color-bone:       #E6E6E6;
+  --color-rouge:      #D90017;
+  --color-rouge-deep: #A60012;
+
+  --font-display: "Bebas Neue", "Oswald", "Impact", sans-serif;
+  --font-body:    "Montserrat", "Inter", system-ui, sans-serif;
+  --font-mono:    "JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace;
+
+  --letter-spacing-display: 0.01em;
+  --letter-spacing-mono:    0.18em;
+  --letter-spacing-overline:0.28em;
+  --letter-spacing-wide:    0.22em;
+  --letter-spacing-widest:  0.32em;
+
+  --line-height-display: 0.86;
+  --line-height-hero:    0.88;
+  --line-height-tight:   0.9;
+
+  --animate-marquee-22: rr-marquee 22s linear infinite;
+  --animate-marquee-28: rr-marquee 28s linear infinite;
+  --animate-marquee-30: rr-marquee 30s linear infinite;
+}
+
+/* ── Keyframes ────────────────────────────────── */
+@keyframes rr-marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* ── CSS variables for brand fonts (next/font injects via var()) ── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --raven: #0F0F10;
+  --smoke: #1E1E20;
+  --steel: #3A3A3C;
+  --ash:   #A6A6A8;
+  --bone:  #E6E6E6;
+  --rouge: #D90017;
+  --rouge-deep: #A60012;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+* { box-sizing: border-box; }
+
+/* ── Typography utilities ─────────────────────── */
+.rr-display {
+  font-family: var(--font-display);
+  letter-spacing: 0.01em;
+  line-height: 0.86;
+  text-transform: uppercase;
+  font-weight: 400;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.rr-mono {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ash);
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+.rr-overline {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--ash);
 }
+
+/* ── Buttons ──────────────────────────────────── */
+.rr-btn {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  padding: 16px 26px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--rouge);
+  color: var(--bone);
+  transition: background .25s ease, color .25s ease, transform .2s ease;
+}
+.rr-btn:hover { background: var(--rouge-deep); }
+.rr-btn .arr { transition: transform .3s ease; }
+.rr-btn:hover .arr { transform: translateX(6px); }
+
+.rr-btn--ghost {
+  background: transparent;
+  color: var(--bone);
+  border-color: var(--steel);
+}
+.rr-btn--ghost:hover { border-color: var(--bone); background: transparent; }
+
+.rr-btn--solid-bone {
+  background: var(--bone);
+  color: var(--raven);
+}
+.rr-btn--solid-bone:hover { background: var(--ash); }
+
+/* ── Hairlines ────────────────────────────────── */
+.rr-hair { height: 1px; background: var(--steel); width: 100%; }
+.rr-hair--bone { background: var(--bone); }
+
+/* ── Marquee ──────────────────────────────────── */
+.rr-marquee {
+  overflow: hidden;
+  white-space: nowrap;
+  background: var(--rouge);
+  color: var(--bone);
+  border-top: 1px solid #000;
+  border-bottom: 1px solid #000;
+}
+.rr-marquee__track {
+  display: inline-flex;
+  gap: 60px;
+  padding: 10px 0;
+  animation: rr-marquee 30s linear infinite;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+}
+.rr-marquee__track > span { display: inline-flex; align-items: center; gap: 60px; }
+
+/* ── Slash divider ────────────────────────────── */
+.rr-slash {
+  display: inline-block;
+  width: 1px;
+  height: 14px;
+  background: var(--steel);
+  transform: rotate(20deg);
+  margin: 0 4px;
+}
+
+/* ── Stripe backgrounds ───────────────────────── */
+.rr-stripe-bg {
+  background:
+    repeating-linear-gradient(45deg, rgba(255,255,255,0.04) 0 2px, transparent 2px 18px),
+    linear-gradient(180deg, #161616 0%, #0a0a0a 100%);
+}
+.rr-stripe-bg--red {
+  background:
+    repeating-linear-gradient(135deg, rgba(217,0,23,0.18) 0 2px, transparent 2px 22px),
+    linear-gradient(180deg, #2a0407 0%, #0a0a0a 100%);
+}
+
+/* ── Corner + marks ───────────────────────────── */
+.rr-plus {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  pointer-events: none;
+}
+.rr-plus::before, .rr-plus::after {
+  content: "";
+  position: absolute;
+  background: var(--bone);
+}
+.rr-plus::before { left: 50%; top: 0; bottom: 0; width: 1px; transform: translateX(-50%); }
+.rr-plus::after  { top: 50%; left: 0; right: 0; height: 1px; transform: translateY(-50%); }
+
+/* ── Product card ─────────────────────────────── */
+.rr-card {
+  background: var(--smoke);
+  position: relative;
+  overflow: hidden;
+}
+.rr-card__media {
+  background: #fff;
+  position: relative;
+  overflow: hidden;
+}
+.rr-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform .8s cubic-bezier(.2,.7,.2,1);
+}
+.rr-card:hover .rr-card__media img { transform: scale(1.06); }
+.rr-card__hover {
+  position: absolute; inset: auto 0 0 0;
+  padding: 14px 18px;
+  background: linear-gradient(180deg, transparent, rgba(0,0,0,.7));
+  display: flex; justify-content: space-between; align-items: center;
+  transform: translateY(110%);
+  transition: transform .35s cubic-bezier(.2,.7,.2,1);
+  color: var(--bone);
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: .18em; text-transform: uppercase;
+}
+.rr-card:hover .rr-card__hover { transform: translateY(0); }
+
+/* ── Index brackets ───────────────────────────── */
+.rr-bracket-l, .rr-bracket-r {
+  display: inline-block;
+  color: var(--rouge);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0;
+}
+
+/* ── Screen container ─────────────────────────── */
+.rr-screen {
+  background: var(--raven);
+  color: var(--bone);
+  font-family: var(--font-body);
+  width: 100%;
+}
+
+/* ── Layout utils ─────────────────────────────── */
+.rr-row { display: flex; }
+.rr-center { display: flex; align-items: center; justify-content: center; }
+
+/* ── Mobile bottom nav glow ───────────────────── */
+.rr-bottom-glow {
+  background: linear-gradient(180deg, rgba(15,15,16,0) 0%, rgba(15,15,16,0.95) 60%, #0f0f10 100%);
+}
+
+/* ── Chip / badge ─────────────────────────────── */
+.rr-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  padding: 6px 10px;
+  border: 1px solid var(--steel);
+  color: var(--bone);
+  background: rgba(255,255,255,0.02);
+}
+.rr-chip--red   { color: var(--rouge); border-color: var(--rouge); }
+.rr-chip--solid { background: var(--rouge); color: var(--bone); border-color: var(--rouge); }
+
+/* ── Vertical text ────────────────────────────── */
+.rr-vtext {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--ash);
+}
+
+/* ── Noise overlay ────────────────────────────── */
+.rr-noise::after {
+  content: "";
+  position: absolute; inset: 0;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.06 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  pointer-events: none;
+  mix-blend-mode: overlay;
+  opacity: .35;
+}
+
+/* ── Filter pill ──────────────────────────────── */
+.rr-pill {
+  display: inline-flex; align-items: center; gap: 8px;
+  border: 1px solid var(--steel);
+  padding: 8px 14px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--bone);
+  background: transparent;
+  cursor: pointer;
+  transition: all .2s;
+}
+.rr-pill:hover { border-color: var(--bone); }
+.rr-pill--active { background: var(--bone); color: var(--raven); border-color: var(--bone); }
+
+/* ── Thumbnail strip ──────────────────────────── */
+.rr-thumb {
+  width: 100%; aspect-ratio: 1; background: #fff; cursor: pointer;
+  border: 1px solid transparent; transition: border-color .2s;
+  display: flex; align-items: center; justify-content: center;
+}
+.rr-thumb img { width: 90%; height: 90%; object-fit: contain; }
+.rr-thumb--active { border-color: var(--rouge); }
+
+/* ── Size box ─────────────────────────────────── */
+.rr-size {
+  border: 1px solid var(--steel);
+  padding: 14px 0;
+  text-align: center;
+  font-family: var(--font-mono); font-size: 12px; letter-spacing: .12em;
+  cursor: pointer; color: var(--bone);
+  transition: all .2s;
+  background: transparent;
+}
+.rr-size:hover { border-color: var(--bone); }
+.rr-size--active { background: var(--bone); color: var(--raven); border-color: var(--bone); }
+.rr-size--oos { color: var(--steel); text-decoration: line-through; cursor: not-allowed; }
+.rr-size--oos:hover { border-color: var(--steel); }

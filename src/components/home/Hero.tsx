@@ -1,0 +1,160 @@
+import Link from 'next/link'
+import Arrow from '@/components/brand/Arrow'
+
+function Stat({ n, l }: { n: string; l: string }) {
+  return (
+    <div>
+      <div className="rr-display" style={{ fontSize: 38, color: '#E6E6E6' }}>{n}</div>
+      <div className="rr-mono" style={{ marginTop: 4 }}>{l}</div>
+    </div>
+  )
+}
+
+export default function Hero() {
+  return (
+    <section
+      style={{
+        position: 'relative',
+        height: 820,
+        background: '#0F0F10',
+        overflow: 'hidden',
+        borderBottom: '1px solid #3A3A3C',
+      }}
+    >
+      {/* Left rail */}
+      <div
+        style={{
+          position: 'absolute', left: 0, top: 0, bottom: 0, width: 40,
+          borderRight: '1px solid #3A3A3C',
+          display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
+          padding: '20px 0', alignItems: 'center',
+        }}
+      >
+        <span className="rr-mono" style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}>
+          R/001 — DROP 003 — F/W 26
+        </span>
+        <span className="rr-mono" style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)', color: '#D90017' }}>
+          LIVE NOW
+        </span>
+      </div>
+
+      {/* Right rail */}
+      <div
+        style={{
+          position: 'absolute', right: 0, top: 0, bottom: 0, width: 40,
+          borderLeft: '1px solid #3A3A3C',
+          display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
+          padding: '20px 0', alignItems: 'center',
+        }}
+      >
+        <span className="rr-mono" style={{ writingMode: 'vertical-rl' }}>SCROLL ↓</span>
+        <span className="rr-mono" style={{ writingMode: 'vertical-rl' }}>00 / 04</span>
+      </div>
+
+      {/* Background gradient */}
+      <div
+        style={{
+          position: 'absolute', inset: '0 40px',
+          background:
+            'radial-gradient(ellipse at 70% 50%, rgba(217,0,23,0.18), transparent 60%),' +
+            'linear-gradient(180deg, #0f0f10 0%, #161618 100%)',
+        }}
+      />
+
+      {/* Giant outline number */}
+      <div
+        style={{
+          position: 'absolute', right: 80, top: -30,
+          fontFamily: 'var(--font-display)', fontSize: 440, lineHeight: 1,
+          color: 'transparent',
+          WebkitTextStroke: '1px rgba(230,230,230,0.06)',
+          pointerEvents: 'none',
+          letterSpacing: '-.04em',
+        }}
+      >
+        03
+      </div>
+
+      <div
+        style={{
+          position: 'relative', height: '100%',
+          display: 'grid', gridTemplateColumns: '1fr 1fr',
+          padding: '60px 80px', gap: 40, alignItems: 'center',
+        }}
+      >
+        {/* Left copy */}
+        <div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 30 }}>
+            <span className="rr-chip rr-chip--red">● LIVE · DROP 003</span>
+            <span className="rr-mono">F/W 2026 · CHAPTER ONE</span>
+          </div>
+          <h1
+            className="rr-display"
+            style={{ fontSize: 180, margin: 0, color: '#E6E6E6', letterSpacing: '-.01em' }}
+          >
+            RAW<br />BY<br />
+            <span style={{ color: '#D90017' }}>NATURE.</span>
+          </h1>
+          <p style={{ marginTop: 28, color: '#A6A6A8', maxWidth: 460, fontSize: 14, lineHeight: 1.7 }}>
+            The Rouge 01 silhouette — engineered for the ones who refuse to blend in.
+            Knit upper, cinematic sole, marked with the rabbit. Worn loud.
+          </p>
+          <div style={{ display: 'flex', gap: 14, marginTop: 36 }}>
+            <Link href="/shop/rouge-01">
+              <button className="rr-btn">
+                SHOP THE DROP <span className="arr"><Arrow size={14} /></span>
+              </button>
+            </Link>
+            <button className="rr-btn rr-btn--ghost">WATCH FILM ▸</button>
+          </div>
+          <div
+            style={{
+              display: 'flex', gap: 40, marginTop: 60, paddingTop: 24,
+              borderTop: '1px solid #3A3A3C',
+            }}
+          >
+            <Stat n="04" l="COLOURWAYS" />
+            <Stat n="07" l="SIZES" />
+            <Stat n="250" l="UNITS · NUMBERED" />
+            <Stat n="48H" l="EARLY ACCESS" />
+          </div>
+        </div>
+
+        {/* Right hero shot */}
+        <div style={{ position: 'relative', height: '100%' }}>
+          <div
+            style={{
+              position: 'absolute', inset: '20px 0 20px 40px',
+              background: '#fff',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              overflow: 'hidden',
+            }}
+          >
+            <img
+              src="/assets/shoe-black.jpg"
+              alt="Rouge 01 Obsidian"
+              style={{
+                width: '120%', height: '120%',
+                objectFit: 'contain',
+                transform: 'rotate(-8deg)',
+              }}
+            />
+            <div className="rr-plus" style={{ top: 12, left: 12 }} />
+            <div className="rr-plus" style={{ top: 12, right: 12 }} />
+            <div className="rr-plus" style={{ bottom: 12, left: 12 }} />
+            <div className="rr-plus" style={{ bottom: 12, right: 12 }} />
+            <div style={{ position: 'absolute', left: 20, top: 30, color: '#0F0F10' }}>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.22em' }}>SKU · RR-01-OBS</div>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.22em', marginTop: 4 }}>
+                VIEW · 3/4 ROTATION
+              </div>
+            </div>
+            <div style={{ position: 'absolute', right: 20, bottom: 22, color: '#0F0F10' }}>
+              <div className="rr-display" style={{ fontSize: 56, letterSpacing: '-.02em' }}>$240</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
