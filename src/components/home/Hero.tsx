@@ -83,8 +83,7 @@ export default function Hero() {
       <div className="rr-hero-grid" style={{ position: 'relative' }}>
         {/* Left copy */}
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24 }}>
-            <span className="rr-chip rr-chip--red">● LIVE · DROP 003</span>
+          <div style={{ marginBottom: 24 }}>
             <span className="rr-mono">F/W 2026 · CHAPTER ONE</span>
           </div>
           <h1
