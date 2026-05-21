@@ -9,11 +9,11 @@ import SplitCTA from '@/components/home/SplitCTA'
 
 export default function HomePage() {
   return (
-    <div style={{ background: '#0F0F10', color: '#E6E6E6', fontFamily: 'var(--font-body)' }}>
+    <div className="rr-home-wrap" style={{ background: '#0F0F10', color: '#E6E6E6', fontFamily: 'var(--font-body)' }}>
       <NavBar />
       <Hero />
-      <TrustStrip />
-      <FeaturedDrop />
+      <div className="rr-order-trust"><TrustStrip /></div>
+      <div className="rr-order-featured"><FeaturedDrop /></div>
       <CampaignStrip />
       <NewArrivals />
       <SplitCTA />

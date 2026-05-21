@@ -419,6 +419,16 @@
   .rr-filterbar        { padding: 14px 20px; gap: 12px; }
 }
 
+/* ── Mobile section reordering ───────────────── */
+.rr-home-wrap      { display: flex; flex-direction: column; }
+.rr-order-trust    { order: 0; }
+.rr-order-featured { order: 0; }
+
+@media (max-width: 768px) {
+  .rr-order-trust    { order: 2; }
+  .rr-order-featured { order: 1; }
+}
+
 /* ── Small mobile (max 480px) ─────────────────── */
 @media (max-width: 480px) {
   .rr-hero-title       { font-size: clamp(60px, 17vw, 86px); }
