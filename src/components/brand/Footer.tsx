@@ -1,4 +1,8 @@
+'use client'
+
 import RougeLogo from './RougeLogo'
+import { FaInstagram, FaYoutube } from 'react-icons/fa'
+import { FaTiktok, FaXTwitter } from 'react-icons/fa6'
 
 const FOOTER_COLS = [
   { title: 'SHOP',    items: ['New Arrivals', 'Footwear', 'Apparel', 'Accessories', 'Sale'] },
@@ -26,17 +30,28 @@ export default function Footer() {
             doesn&apos;t ask for permission.
           </p>
           <div style={{ display: 'flex', gap: 10, marginTop: 24 }}>
-            {['IG', 'TT', 'YT', 'X'].map((s) => (
+            {[
+              { icon: <FaInstagram size={16} />, href: 'https://instagram.com/rouge.rabbit', label: 'Instagram' },
+              { icon: <FaTiktok size={15} />,    href: 'https://tiktok.com/@rouge.rabbit',   label: 'TikTok' },
+              { icon: <FaYoutube size={16} />,   href: 'https://youtube.com/@rougerabbit',   label: 'YouTube' },
+              { icon: <FaXTwitter size={15} />,  href: 'https://x.com/rougerabbit',          label: 'X' },
+            ].map(({ icon, href, label }) => (
               <a
-                key={s}
+                key={label}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={label}
                 style={{
                   width: 36, height: 36, border: '1px solid #3A3A3C',
                   display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                  fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.1em',
                   color: '#E6E6E6', cursor: 'pointer', textDecoration: 'none',
+                  transition: 'border-color .2s, color .2s',
                 }}
+                onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.borderColor = '#E6E6E6' }}
+                onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.borderColor = '#3A3A3C' }}
               >
-                {s}
+                {icon}
               </a>
             ))}
           </div>
