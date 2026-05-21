@@ -12,8 +12,8 @@ export default function HomePage() {
     <div className="rr-home-wrap" style={{ background: '#0F0F10', color: '#E6E6E6', fontFamily: 'var(--font-body)' }}>
       <NavBar />
       <Hero />
-      <div className="rr-order-trust"><TrustStrip /></div>
-      <div className="rr-order-featured"><FeaturedDrop /></div>
+      <div><TrustStrip /></div>
+      <div><FeaturedDrop /></div>
       <CampaignStrip />
       <NewArrivals />
       <SplitCTA />
