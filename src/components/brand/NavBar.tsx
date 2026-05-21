@@ -118,7 +118,11 @@ export default function NavBar({ cartCount = 2 }: { cartCount?: number }) {
             <span className="rr-mono rr-nav-account-label" style={{ color: '#E6E6E6' }}>ACCOUNT</span>
           </button>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, color: '#E6E6E6', cursor: 'pointer' }}>
-            <span className="rr-mono" style={{ color: '#E6E6E6' }}>BAG</span>
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+              <path d="M3.5 5.5H14.5L13 15.5H5L3.5 5.5Z" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round" />
+              <path d="M6.5 5.5C6.5 3.843 7.343 2.5 9 2.5C10.657 2.5 11.5 3.843 11.5 5.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+            </svg>
+            <span className="rr-mono rr-nav-search-label" style={{ color: '#E6E6E6' }}>BAG</span>
             <span
               style={{
                 background: '#D90017', color: '#E6E6E6',
