@@ -7,9 +7,9 @@ export default function NewArrivals() {
     <section className="rr-section-pad" style={{ background: '#0F0F10' }}>
       <SectionHead
         index="02"
-        kicker="JUST LANDED · APPAREL & FW"
+        kicker="ROUGE 01 EDITION · NOW AVAILABLE · MORE DROPS COMING"
         title="NEW ARRIVALS."
-        action="Browse all 38"
+        action="Shop Rouge 01"
       />
       <div className="rr-4col-grid-gap rr-section-inner-pad">
         {NEW_ARRIVALS.map((p, i) => (
