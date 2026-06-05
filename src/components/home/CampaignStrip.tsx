@@ -24,8 +24,8 @@ export default function CampaignStrip() {
           }}
         >
           <img
-            src="/uploads/editorial-campaign-03.png"
-            alt="Rouge Rabbit Editorial Campaign 03"
+            src="/assets/girl-model.png"
+            alt="Rouge Rabbit Girl Model"
             style={{
               position: 'absolute', inset: 0,
               width: '100%', height: '100%',
