@@ -135,7 +135,6 @@ export default function Hero() {
               style={{
                 width: '120%', height: '120%',
                 objectFit: 'contain',
-                transform: 'rotate(-8deg)',
               }}
             />
             <div className="rr-plus" style={{ top: 12, left: 12 }} />
