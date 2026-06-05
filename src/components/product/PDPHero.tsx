@@ -5,12 +5,16 @@ import Arrow from '@/components/brand/Arrow'
 import { COLOURWAYS, SIZES } from '@/data/products'
 import type { Colourway } from '@/types'
 
-const THUMB_IMAGES = [
-  '/assets/shoe-black.jpg',
-  '/assets/shoe-red.jpg',
-  '/assets/shoe-blue.jpg',
-  '/assets/shoe-pink.jpg',
-]
+const VIEWS = ['FRONT', 'SIDE', 'BACK', 'TOP'] as const
+type View = typeof VIEWS[number]
+
+// One image per colourway per view — swap in real angle shots when available
+const VIEW_IMAGES: Record<string, Record<View, string>> = {
+  obs: { FRONT: '/assets/shoe-black.jpg', SIDE: '/assets/shoe-black.jpg', BACK: '/assets/shoe-black.jpg', TOP: '/assets/shoe-black.jpg' },
+  car: { FRONT: '/assets/shoe-red.jpg',   SIDE: '/assets/shoe-red.jpg',   BACK: '/assets/shoe-red.jpg',   TOP: '/assets/shoe-red.jpg'   },
+  ice: { FRONT: '/assets/shoe-blue.jpg',  SIDE: '/assets/shoe-blue.jpg',  BACK: '/assets/shoe-blue.jpg',  TOP: '/assets/shoe-blue.jpg'  },
+  ros: { FRONT: '/assets/shoe-pink.jpg',  SIDE: '/assets/shoe-pink.jpg',  BACK: '/assets/shoe-pink.jpg',  TOP: '/assets/shoe-pink.jpg'  },
+}
 
 const META_ROWS = [
   ['SHIPPING', 'DELIVERY COMING SOON · PRE-ORDER NOW'],
@@ -22,30 +26,45 @@ const META_ROWS = [
 export default function PDPHero() {
   const [cw, setCw] = useState<Colourway>(COLOURWAYS[0])
   const [sz, setSz] = useState('US 9')
-  const [thumb, setThumb] = useState(0)
+  const [view, setView] = useState<View>('FRONT')
+
+  const activeImage = VIEW_IMAGES[cw.id]?.[view] ?? cw.image
 
   return (
     <section
       className="rr-pdp-grid"
       style={{ borderBottom: '1px solid #3A3A3C' }}
     >
-      {/* Thumbnails rail */}
+      {/* View selector rail */}
       <div
         className="rr-pdp-thumb-rail"
         style={{
           borderRight: '1px solid #3A3A3C',
-          padding: '30px 12px',
-          flexDirection: 'column', gap: 10,
+          padding: '30px 8px',
+          flexDirection: 'column', gap: 8,
         }}
       >
-        {THUMB_IMAGES.map((src, i) => (
-          <div
-            key={i}
-            className={`rr-thumb ${thumb === i ? 'rr-thumb--active' : ''}`}
-            onClick={() => { setThumb(i); if (i < COLOURWAYS.length) setCw(COLOURWAYS[i]) }}
+        {VIEWS.map((v) => (
+          <button
+            key={v}
+            onClick={() => setView(v)}
+            style={{
+              background: 'none', border: 'none', cursor: 'pointer', padding: 0,
+              display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
+            }}
           >
-            <img src={i === 0 ? cw.image : src} alt="" />
-          </div>
+            <div className={`rr-thumb ${view === v ? 'rr-thumb--active' : ''}`} style={{ width: '100%' }}>
+              <img src={VIEW_IMAGES[cw.id][v]} alt={v} />
+            </div>
+            <span
+              style={{
+                fontFamily: 'var(--font-mono)', fontSize: 8, letterSpacing: '.14em',
+                color: view === v ? '#D90017' : '#A6A6A8',
+              }}
+            >
+              {v}
+            </span>
+          </button>
         ))}
         <div style={{ flex: 1 }} />
         <div className="rr-vtext" style={{ alignSelf: 'center' }}>
@@ -62,17 +81,18 @@ export default function PDPHero() {
         }}
       >
         <img
-          src={cw.image}
-          alt={`Rouge 01 ${cw.name}`}
-          style={{ width: '92%', height: '92%', objectFit: 'contain', transform: 'rotate(-4deg)' }}
+          src={activeImage}
+          alt={`Rouge 01 ${cw.name} — ${view}`}
+          style={{ width: '92%', height: '92%', objectFit: 'contain' }}
         />
         <div className="rr-plus" style={{ top: 18, left: 18 }} />
         <div className="rr-plus" style={{ top: 18, right: 18 }} />
         <div className="rr-plus" style={{ bottom: 18, left: 18 }} />
         <div className="rr-plus" style={{ bottom: 18, right: 18 }} />
         <div style={{ position: 'absolute', top: 18, left: 40, color: '#0F0F10' }}>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.22em' }}>VIEW · 01 / 04</div>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.22em', marginTop: 4 }}>3/4 ROTATION</div>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.22em' }}>
+            VIEW · {view}
+          </div>
         </div>
         <div style={{ position: 'absolute', bottom: 18, right: 40, color: '#0F0F10' }}>
           <span className="rr-chip" style={{ borderColor: '#0F0F10', color: '#0F0F10' }}>+ ZOOM</span>
