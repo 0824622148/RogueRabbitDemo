@@ -12,7 +12,7 @@ export default function CampaignStrip() {
     >
       <div className="rr-stripe-bg" style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }} />
 
-      <div className="rr-campaign-grid">
+      <div className="rr-campaign-grid" style={{ position: 'relative', inset: 'unset' }}>
         {/* Left — editorial image */}
         <div
           className="rr-campaign-image"
