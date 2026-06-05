@@ -13,7 +13,7 @@ const VIEW_IMAGES: Record<string, Record<View, string>> = {
   obs: { FRONT: '/assets/shoe-black-front.png', SIDE: '/assets/shoe-black.jpg', BACK: '/assets/shoe-black-rear.png', TOP: '/assets/shoe-black-top.png' },
   car: { FRONT: '/assets/shoe-red.jpg',   SIDE: '/assets/shoe-red.jpg',   BACK: '/assets/shoe-red.jpg',   TOP: '/assets/shoe-red.jpg'   },
   ice: { FRONT: '/assets/shoe-blue-front.png', SIDE: '/assets/shoe-blue.jpg', BACK: '/assets/shoe-blue-rear.png', TOP: '/assets/shoe-blue-top.png' },
-  ros: { FRONT: '/assets/shoe-pink.jpg',  SIDE: '/assets/shoe-pink.jpg',  BACK: '/assets/shoe-pink.jpg',  TOP: '/assets/shoe-pink.jpg'  },
+  ros: { FRONT: '/assets/shoe-pink-front.png', SIDE: '/assets/shoe-pink.jpg', BACK: '/assets/shoe-pink-rear.png', TOP: '/assets/shoe-pink-top.png' },
 }
 
 const META_ROWS = [
