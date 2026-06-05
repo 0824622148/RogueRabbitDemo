@@ -83,7 +83,7 @@ export default function PDPHero() {
         <img
           src={activeImage}
           alt={`Rouge 01 ${cw.name} — ${view}`}
-          style={{ width: '92%', height: '92%', objectFit: 'contain' }}
+          style={{ width: '75%', height: '75%', objectFit: 'contain' }}
         />
         <div className="rr-plus" style={{ top: 18, left: 18 }} />
         <div className="rr-plus" style={{ top: 18, right: 18 }} />
