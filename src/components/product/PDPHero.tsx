@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Arrow from '@/components/brand/Arrow'
 import { COLOURWAYS, SIZES } from '@/data/products'
 import type { Colourway } from '@/types'
@@ -27,10 +27,51 @@ export default function PDPHero() {
   const [cw, setCw] = useState<Colourway>(COLOURWAYS[0])
   const [sz, setSz] = useState('US 9')
   const [view, setView] = useState<View>('FRONT')
+  const [zoomed, setZoomed] = useState(false)
 
   const activeImage = VIEW_IMAGES[cw.id]?.[view] ?? cw.image
 
+  useEffect(() => {
+    if (!zoomed) return
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setZoomed(false) }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [zoomed])
+
   return (
+    <>
+    {zoomed && (
+      <div
+        onClick={() => setZoomed(false)}
+        style={{
+          position: 'fixed', inset: 0, zIndex: 1000,
+          background: 'rgba(0,0,0,0.92)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          cursor: 'zoom-out',
+        }}
+      >
+        <div style={{ position: 'absolute', top: 28, right: 36 }}>
+          <span className="rr-mono" style={{ color: '#A6A6A8', fontSize: 12, letterSpacing: '.2em' }}>
+            ESC TO CLOSE
+          </span>
+        </div>
+        <div style={{ position: 'absolute', top: 28, left: 36 }}>
+          <span className="rr-mono" style={{ color: '#E6E6E6', fontSize: 11, letterSpacing: '.2em' }}>
+            ROUGE 01 · {cw.name} · {view}
+          </span>
+        </div>
+        <img
+          src={activeImage}
+          alt={`Rouge 01 ${cw.name} — ${view}`}
+          onClick={(e) => e.stopPropagation()}
+          style={{
+            maxWidth: '88vw', maxHeight: '88vh',
+            objectFit: 'contain',
+            cursor: 'default',
+          }}
+        />
+      </div>
+    )}
     <section
       className="rr-pdp-grid"
       style={{ borderBottom: '1px solid #3A3A3C' }}
@@ -94,7 +135,10 @@ export default function PDPHero() {
             VIEW · {view}
           </div>
         </div>
-        <div style={{ position: 'absolute', bottom: 18, right: 40, color: '#0F0F10' }}>
+        <div
+          style={{ position: 'absolute', bottom: 18, right: 40, color: '#0F0F10', cursor: 'zoom-in' }}
+          onClick={() => setZoomed(true)}
+        >
           <span className="rr-chip" style={{ borderColor: '#0F0F10', color: '#0F0F10' }}>+ ZOOM</span>
         </div>
       </div>
@@ -201,5 +245,6 @@ export default function PDPHero() {
         </div>
       </div>
     </section>
+    </>
   )
 }
