@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import Arrow from '@/components/brand/Arrow'
-import { COLOURWAYS, SIZES } from '@/data/products'
+import { COLOURWAYS, MALE_SIZES, FEMALE_SIZES } from '@/data/products'
 import type { Colourway } from '@/types'
 
 const VIEWS = ['FRONT', 'SIDE', 'BACK', 'TOP'] as const
@@ -129,10 +129,12 @@ function ZoomModal({ src, alt, label, onClose }: { src: string; alt: string; lab
 
 export default function PDPHero() {
   const [cw, setCw] = useState<Colourway>(COLOURWAYS[0])
-  const [sz, setSz] = useState('US 9')
+  const [gender, setGender] = useState<'MALE' | 'FEMALE'>('MALE')
+  const [sz, setSz] = useState('')
   const [view, setView] = useState<View>('FRONT')
   const [zoomed, setZoomed] = useState(false)
 
+  const sizes = gender === 'MALE' ? MALE_SIZES : FEMALE_SIZES
   const activeImage = VIEW_IMAGES[cw.id]?.[view] ?? cw.image
 
   return (
@@ -230,11 +232,33 @@ export default function PDPHero() {
           {/* Size selector */}
           <div style={{ marginTop: 30 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 14 }}>
-              <span className="rr-overline" style={{ color: '#E6E6E6' }}>SIZE · UNISEX US</span>
+              <span className="rr-overline" style={{ color: '#E6E6E6' }}>SIZE · US</span>
               <a className="rr-mono" style={{ color: '#E6E6E6', textDecoration: 'underline', cursor: 'pointer' }}>SIZE GUIDE</a>
             </div>
+
+            {/* Gender toggle */}
+            <div style={{ display: 'flex', gap: 0, marginBottom: 14 }}>
+              {(['MALE', 'FEMALE'] as const).map((g) => (
+                <button
+                  key={g}
+                  onClick={() => { setGender(g); setSz('') }}
+                  style={{
+                    flex: 1, padding: '10px 0',
+                    fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.14em',
+                    border: '1px solid #3A3A3C',
+                    borderRight: g === 'MALE' ? 'none' : '1px solid #3A3A3C',
+                    background: gender === g ? '#D90017' : 'transparent',
+                    color: gender === g ? '#fff' : '#A6A6A8',
+                    cursor: 'pointer',
+                  }}
+                >
+                  {g}
+                </button>
+              ))}
+            </div>
+
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8 }}>
-              {SIZES.map((s) => (
+              {sizes.map((s) => (
                 <button
                   key={s.v}
                   onClick={() => !s.oos && setSz(s.v)}
@@ -245,7 +269,6 @@ export default function PDPHero() {
                 </button>
               ))}
             </div>
-            <div className="rr-mono" style={{ marginTop: 12, color: '#D90017' }}>▲ ONLY 03 LEFT IN US 9</div>
           </div>
 
           {/* CTAs */}

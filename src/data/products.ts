@@ -39,16 +39,30 @@ export const COLOURWAYS: Colourway[] = [
   { id: 'ros', name: 'ROSE',     hex: '#F3B0B9', image: '/assets/shoe-pink.jpg' },
 ]
 
-export const SIZES: Size[] = [
+export const MALE_SIZES: Size[] = [
   { v: 'US 6',  oos: false },
   { v: 'US 7',  oos: false },
   { v: 'US 8',  oos: false },
-  { v: 'US 9',  oos: true  },
+  { v: 'US 9',  oos: false },
   { v: 'US 10', oos: false },
   { v: 'US 11', oos: false },
   { v: 'US 12', oos: false },
-  { v: 'US 13', oos: true  },
+  { v: 'US 13', oos: false },
 ]
+
+export const FEMALE_SIZES: Size[] = [
+  { v: 'US 4',  oos: false },
+  { v: 'US 5',  oos: false },
+  { v: 'US 6',  oos: false },
+  { v: 'US 7',  oos: false },
+  { v: 'US 8',  oos: false },
+  { v: 'US 9',  oos: false },
+  { v: 'US 10', oos: false },
+  { v: 'US 11', oos: false },
+]
+
+// Keep for backwards compatibility
+export const SIZES = MALE_SIZES
 
 export const MARQUEE_ITEMS_1 = [
   'DROP 003 · LIVE NOW', 'DELIVERY COMING SOON · PRE-ORDER NOW', 'NUMBERED EDITIONS · 250 PAIRS',
