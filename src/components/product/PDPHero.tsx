@@ -16,7 +16,7 @@ const META_ROWS = [
   ['SHIPPING', 'DELIVERY COMING SOON · PRE-ORDER NOW'],
   ['RETURNS',  '30 DAYS · NO QUESTIONS'],
   ['EDITION',  'NUMBERED · 250 PAIRS'],
-  ['RELEASE',  'MAR 14 · 2026'],
+  ['RELEASE',  'JUL 31 · 2026'],
 ]
 
 export default function PDPHero() {
