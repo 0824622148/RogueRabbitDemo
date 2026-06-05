@@ -124,7 +124,8 @@ export default function PDPHero() {
         <img
           src={activeImage}
           alt={`Rouge 01 ${cw.name} — ${view}`}
-          style={{ width: '75%', height: '75%', objectFit: 'contain' }}
+          onClick={() => setZoomed(true)}
+          style={{ width: '75%', height: '75%', objectFit: 'contain', cursor: 'zoom-in' }}
         />
         <div className="rr-plus" style={{ top: 18, left: 18 }} />
         <div className="rr-plus" style={{ top: 18, right: 18 }} />
