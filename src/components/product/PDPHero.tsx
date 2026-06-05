@@ -11,7 +11,7 @@ type View = typeof VIEWS[number]
 // One image per colourway per view — swap in real angle shots when available
 const VIEW_IMAGES: Record<string, Record<View, string>> = {
   obs: { FRONT: '/assets/shoe-black-front.png', SIDE: '/assets/shoe-black.jpg', BACK: '/assets/shoe-black-rear.png', TOP: '/assets/shoe-black-top.png' },
-  car: { FRONT: '/assets/shoe-red.jpg',   SIDE: '/assets/shoe-red.jpg',   BACK: '/assets/shoe-red.jpg',   TOP: '/assets/shoe-red.jpg'   },
+  car: { FRONT: '/assets/shoe-red-front.png', SIDE: '/assets/shoe-red.jpg', BACK: '/assets/shoe-red-rear.png', TOP: '/assets/shoe-red-top.png' },
   ice: { FRONT: '/assets/shoe-blue-front.png', SIDE: '/assets/shoe-blue.jpg', BACK: '/assets/shoe-blue-rear.png', TOP: '/assets/shoe-blue-top.png' },
   ros: { FRONT: '/assets/shoe-pink-front.png', SIDE: '/assets/shoe-pink.jpg', BACK: '/assets/shoe-pink-rear.png', TOP: '/assets/shoe-pink-top.png' },
 }
