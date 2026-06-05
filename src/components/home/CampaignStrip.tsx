@@ -8,12 +8,11 @@ export default function CampaignStrip() {
         overflow: 'hidden',
         borderTop: '1px solid #3A3A3C',
         borderBottom: '1px solid #3A3A3C',
-        minHeight: 400,
       }}
     >
       <div className="rr-stripe-bg" style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }} />
 
-      <div className="rr-campaign-grid" style={{ height: '100%' }}>
+      <div className="rr-campaign-grid">
         {/* Left — editorial image */}
         <div
           className="rr-campaign-image"
