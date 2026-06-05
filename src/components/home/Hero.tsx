@@ -130,7 +130,7 @@ export default function Hero() {
             }}
           >
             <img
-              src="/assets/shoe-black.jpg"
+              src="/assets/ig-06.png"
               alt="Rouge 01 Obsidian"
               style={{
                 width: '120%', height: '120%',
