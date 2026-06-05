@@ -7,7 +7,7 @@ export default function NewArrivals() {
     <section className="rr-section-pad" style={{ background: '#0F0F10' }}>
       <SectionHead
         index="02"
-        kicker="ROUGE 01 EDITION · NOW AVAILABLE · MORE DROPS COMING"
+        kicker="ROUGE 01 EDITION · NOW AVAILABLE · MORE DROPS COMING SEPTEMBER"
         title="NEW ARRIVALS."
         action="Shop Rouge 01"
       />
