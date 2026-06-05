@@ -79,30 +79,6 @@ export default function PDPHero() {
         </div>
       </div>
 
-      {/* Lifestyle image */}
-      <div
-        className="rr-pdp-lifestyle"
-        style={{
-          background: '#0a0a0a', position: 'relative', overflow: 'hidden',
-          borderRight: '1px solid #3A3A3C',
-        }}
-      >
-        <img
-          src="/uploads/r-011.png"
-          alt="Rouge 01 Editorial Lifestyle"
-          style={{
-            position: 'absolute', inset: 0,
-            width: '100%', height: '100%',
-            objectFit: 'cover', filter: 'brightness(0.88)',
-          }}
-        />
-        <div className="rr-plus" style={{ top: 18, left: 18 }} />
-        <div className="rr-plus" style={{ bottom: 18, right: 18 }} />
-        <div style={{ position: 'absolute', bottom: 18, left: 30 }}>
-          <div className="rr-mono" style={{ color: '#A6A6A8', fontSize: 9 }}>MODEL · 6&apos;1&quot; / WEARS US 10</div>
-        </div>
-      </div>
-
       {/* Purchase column */}
       <div
         className="rr-pdp-purchase-col"
