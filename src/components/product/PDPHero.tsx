@@ -10,7 +10,7 @@ type View = typeof VIEWS[number]
 
 const VIEW_IMAGES: Record<string, Record<View, string>> = {
   obs: { FRONT: '/assets/shoe-black-front.png', SIDE: '/assets/shoe-black-side.png', BACK: '/assets/shoe-black-rear.png', TOP: '/assets/shoe-black-top.png' },
-  car: { FRONT: '/assets/shoe-red-front.png', SIDE: '/assets/shoe-red-side.jpeg', BACK: '/assets/shoe-red-rear.png', TOP: '/assets/shoe-red-top.png' },
+  car: { FRONT: '/assets/shoe-red-front.png', SIDE: '/assets/shoe-red-side.png', BACK: '/assets/shoe-red-rear.png', TOP: '/assets/shoe-red-top.png' },
   ice: { FRONT: '/assets/shoe-blue-front.png', SIDE: '/assets/shoe-blue-side.png', BACK: '/assets/shoe-blue-rear.png', TOP: '/assets/shoe-blue-top.png' },
   ros: { FRONT: '/assets/shoe-pink-front.png', SIDE: '/assets/shoe-pink-side.png', BACK: '/assets/shoe-pink-rear.png', TOP: '/assets/shoe-pink-top.png' },
   brn: { FRONT: '/assets/shoe-brown-front.png', SIDE: '/assets/shoe-brown-side.png', BACK: '/assets/shoe-brown-rear.png', TOP: '/assets/shoe-brown-top.png' },
