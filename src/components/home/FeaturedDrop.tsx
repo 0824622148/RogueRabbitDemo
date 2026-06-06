@@ -1,21 +1,103 @@
+'use client'
+
+import { useState } from 'react'
 import SectionHead from '@/components/brand/SectionHead'
 import ProductCard from '@/components/brand/ProductCard'
 import { HOME_PRODUCTS } from '@/data/products'
 
+const VISIBLE = 4
+const TOTAL = HOME_PRODUCTS.length
+const MAX_OFFSET = TOTAL - VISIBLE
+
 export default function FeaturedDrop() {
+  const [offset, setOffset] = useState(0)
+
   return (
     <section className="rr-section-pad" style={{ background: '#0F0F10', position: 'relative' }}>
-      <SectionHead
-        index="01"
-        kicker="DROP · 003 · FEATURED"
-        title="THE ROUGE 01."
-        action="See all colourways"
-      />
-      <div className="rr-4col-grid rr-section-inner-pad">
-        {HOME_PRODUCTS.map((p, i) => (
-          <ProductCard key={p.id} product={p} mediaHeight={420} indexLabel={`R/00${i + 1}`} />
+
+      {/* Header row with nav arrows */}
+      <div className="rr-sectionhead-pad" style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 36 }}>
+        <SectionHead
+          index="01"
+          kicker="DROP · 003 · FEATURED"
+          title="THE ROUGE 01."
+        />
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16, paddingBottom: 8 }}>
+          <span className="rr-mono" style={{ color: '#A6A6A8', fontSize: 11, letterSpacing: '.18em' }}>
+            {offset + 1} / {MAX_OFFSET + 1}
+          </span>
+          <button
+            onClick={() => setOffset(o => Math.max(0, o - 1))}
+            disabled={offset === 0}
+            style={{
+              width: 44, height: 44, border: '1px solid #3A3A3C', background: 'none',
+              color: offset === 0 ? '#3A3A3C' : '#E6E6E6',
+              cursor: offset === 0 ? 'default' : 'pointer',
+              fontFamily: 'var(--font-mono)', fontSize: 16,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              transition: 'border-color .2s, color .2s',
+            }}
+          >
+            ←
+          </button>
+          <button
+            onClick={() => setOffset(o => Math.min(MAX_OFFSET, o + 1))}
+            disabled={offset === MAX_OFFSET}
+            style={{
+              width: 44, height: 44, border: '1px solid #3A3A3C', background: 'none',
+              color: offset === MAX_OFFSET ? '#3A3A3C' : '#E6E6E6',
+              cursor: offset === MAX_OFFSET ? 'default' : 'pointer',
+              fontFamily: 'var(--font-mono)', fontSize: 16,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              transition: 'border-color .2s, color .2s',
+            }}
+          >
+            →
+          </button>
+        </div>
+      </div>
+
+      {/* Carousel track */}
+      <div className="rr-section-inner-pad" style={{ overflow: 'hidden' }}>
+        <div
+          style={{
+            display: 'flex',
+            width: `${(TOTAL / VISIBLE) * 100}%`,
+            transform: `translateX(-${offset * (100 / TOTAL)}%)`,
+            transition: 'transform 0.5s cubic-bezier(.2,.7,.2,1)',
+          }}
+        >
+          {HOME_PRODUCTS.map((p, i) => (
+            <div
+              key={p.id}
+              style={{
+                flex: `0 0 ${100 / TOTAL}%`,
+                borderRight: '1px solid #3A3A3C',
+                boxSizing: 'border-box',
+              }}
+            >
+              <ProductCard product={p} mediaHeight={420} indexLabel={`R/00${i + 1}`} />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Dot indicators */}
+      <div style={{ display: 'flex', gap: 8, justifyContent: 'center', marginTop: 28 }}>
+        {Array.from({ length: MAX_OFFSET + 1 }).map((_, i) => (
+          <button
+            key={i}
+            onClick={() => setOffset(i)}
+            style={{
+              height: 2, width: i === offset ? 32 : 10,
+              background: i === offset ? '#D90017' : '#3A3A3C',
+              border: 'none', cursor: 'pointer',
+              transition: 'all 0.3s ease', padding: 0,
+            }}
+          />
         ))}
       </div>
+
     </section>
   )
 }

@@ -2,9 +2,10 @@ import type { Product, Colourway, Size } from '@/types'
 
 export const HOME_PRODUCTS: Product[] = [
   { id: 1, name: 'ROUGE 01 · OBSIDIAN', cat: 'FOOTWEAR / DROP 003', price: '1800', image: '/assets/shoe-black-side.png', badge: 'NEW', sizes: '07', mediaBg: '#fff' },
-  { id: 2, name: 'ROUGE 01 · CARDINAL', cat: 'FOOTWEAR / DROP 003', price: '1800', image: '/assets/shoe-red-side.png',  badge: 'HOT', sizes: '06', mediaBg: '#fff' },
+  { id: 2, name: 'ROUGE 01 · CARDINAL', cat: 'FOOTWEAR / DROP 003', price: '1800', image: '/assets/shoe-red-side.png',   badge: 'HOT', sizes: '06', mediaBg: '#fff' },
   { id: 3, name: 'ROUGE 01 · ICE',      cat: 'FOOTWEAR / DROP 003', price: '1800', image: '/assets/shoe-blue-side.png',  sizes: '07', mediaBg: '#fff' },
   { id: 4, name: 'ROUGE 01 · ROSE',     cat: 'FOOTWEAR / DROP 003', price: '1800', image: '/assets/shoe-pink-side.png',  sizes: '05', mediaBg: '#fff' },
+  { id: 5, name: 'ROUGE 01 · BEIGE',    cat: 'FOOTWEAR / DROP 003', price: '1800', image: '/assets/shoe-brown-side.png', badge: 'NEW', sizes: '08', mediaBg: '#fff' },
 ]
 
 export const SHOP_PRODUCTS: Product[] = [
