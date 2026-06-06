@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import SectionHead from '@/components/brand/SectionHead'
 import ProductCard from '@/components/brand/ProductCard'
 import { HOME_PRODUCTS } from '@/data/products'
@@ -68,16 +69,19 @@ export default function FeaturedDrop() {
           }}
         >
           {HOME_PRODUCTS.map((p, i) => (
-            <div
+            <Link
               key={p.id}
+              href="/shop/rouge-01"
               style={{
                 flex: `0 0 ${100 / TOTAL}%`,
                 borderRight: '1px solid #3A3A3C',
                 boxSizing: 'border-box',
+                display: 'block',
+                textDecoration: 'none',
               }}
             >
               <ProductCard product={p} mediaHeight={420} indexLabel={`R/00${i + 1}`} />
-            </div>
+            </Link>
           ))}
         </div>
       </div>

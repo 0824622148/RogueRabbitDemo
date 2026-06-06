@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import Arrow from '@/components/brand/Arrow'
 import { COLOURWAYS, MALE_SIZES, FEMALE_SIZES } from '@/data/products'
 import type { Colourway } from '@/types'
+import PreOrderModal from '@/components/shop/PreOrderModal'
 
 const VIEWS = ['FRONT', 'SIDE', 'BACK', 'TOP'] as const
 type View = typeof VIEWS[number]
@@ -17,10 +18,11 @@ const VIEW_IMAGES: Record<string, Record<View, string>> = {
 }
 
 const META_ROWS = [
-  ['SHIPPING', 'DELIVERY COMING SOON · PRE-ORDER NOW'],
-  ['RETURNS',  '30 DAYS · NO QUESTIONS'],
-  ['EDITION',  'NUMBERED · 250 PAIRS'],
-  ['RELEASE',  'JUL 31 · 2026'],
+  ['COLLECTION', 'ROSEBANK · V&A · GATEWAY'],
+  ['DELIVERY',   'COMING SOON'],
+  ['RETURNS',    '30 DAYS · NO QUESTIONS'],
+  ['EDITION',    'NUMBERED · 250 PAIRS'],
+  ['RELEASE',    'JUL 31 · 2026'],
 ]
 
 function ZoomModal({ src, alt, label, onClose }: { src: string; alt: string; label: string; onClose: () => void }) {
@@ -216,12 +218,21 @@ export default function PDPHero() {
   const [view, setView] = useState<View>('FRONT')
   const [zoomed, setZoomed] = useState(false)
   const [sizeGuide, setSizeGuide] = useState(false)
+  const [preOrder, setPreOrder] = useState(false)
 
   const sizes = gender === 'MALE' ? MALE_SIZES : FEMALE_SIZES
   const activeImage = VIEW_IMAGES[cw.id]?.[view] ?? cw.image
 
   return (
     <>
+      {preOrder && (
+        <PreOrderModal
+          initialColourway={cw}
+          initialSize={sz}
+          initialGender={gender}
+          onClose={() => setPreOrder(false)}
+        />
+      )}
       {sizeGuide && <SizeGuideModal gender={gender} onClose={() => setSizeGuide(false)} />}
       {zoomed && (
         <ZoomModal
@@ -357,8 +368,12 @@ export default function PDPHero() {
 
           {/* CTAs */}
           <div style={{ marginTop: 32, display: 'flex', flexDirection: 'column', gap: 10 }}>
-            <button className="rr-btn" style={{ justifyContent: 'space-between', padding: '20px 26px' }}>
-              <span>ADD TO BAG · R1800</span>
+            <button
+              className="rr-btn"
+              style={{ justifyContent: 'space-between', padding: '20px 26px' }}
+              onClick={() => setPreOrder(true)}
+            >
+              <span>PRE-ORDER NOW · R1800</span>
               <Arrow size={16} />
             </button>
             <button className="rr-btn rr-btn--ghost" style={{ justifyContent: 'center' }}>♡ ADD TO WISHLIST</button>

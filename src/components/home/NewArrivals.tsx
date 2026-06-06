@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import SectionHead from '@/components/brand/SectionHead'
 import ProductCard from '@/components/brand/ProductCard'
 import { NEW_ARRIVALS } from '@/data/products'
@@ -13,7 +14,9 @@ export default function NewArrivals() {
       />
       <div className="rr-4col-grid-gap rr-section-inner-pad">
         {NEW_ARRIVALS.map((p, i) => (
-          <ProductCard key={p.id} product={p} mediaHeight={340} indexLabel={`R/01${i + 1}`} />
+          <Link key={p.id} href="/shop/rouge-01" style={{ display: 'block', textDecoration: 'none' }}>
+            <ProductCard product={p} mediaHeight={340} indexLabel={`R/01${i + 1}`} />
+          </Link>
         ))}
       </div>
     </section>

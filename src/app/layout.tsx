@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Bebas_Neue, Montserrat, JetBrains_Mono } from 'next/font/google'
 import './globals.css'
+import WhatsAppWidget from '@/components/brand/WhatsAppWidget'
 
 const bebasNeue = Bebas_Neue({
   weight: '400',
@@ -24,6 +25,7 @@ const jetbrainsMono = JetBrains_Mono({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://rougerabbit.co.za'),
   title: 'Rouge Rabbit — Built Different.',
   description: 'Modern streetwear for the youth who refuse to blend in. Shop the Rouge 01 silhouette and latest drops.',
 }
@@ -47,6 +49,7 @@ export default function RootLayout({
         }}
       >
         {children}
+        <WhatsAppWidget />
       </body>
     </html>
   )

@@ -42,7 +42,7 @@ export default function ProductCard({ product, mediaHeight = 360, indexLabel }: 
           </div>
         )}
         <div className="rr-card__hover">
-          <span>QUICK ADD →</span>
+          <span>PRE-ORDER →</span>
           <span>{product.sizes ? `${product.sizes} SIZES` : 'VIEW'}</span>
         </div>
       </div>
