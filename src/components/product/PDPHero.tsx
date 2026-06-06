@@ -13,6 +13,7 @@ const VIEW_IMAGES: Record<string, Record<View, string>> = {
   car: { FRONT: '/assets/shoe-red-front.png', SIDE: '/assets/shoe-red-side.jpeg', BACK: '/assets/shoe-red-rear.png', TOP: '/assets/shoe-red-top.png' },
   ice: { FRONT: '/assets/shoe-blue-front.png', SIDE: '/assets/shoe-blue-side.png', BACK: '/assets/shoe-blue-rear.png', TOP: '/assets/shoe-blue-top.png' },
   ros: { FRONT: '/assets/shoe-pink-front.png', SIDE: '/assets/shoe-pink-side.png', BACK: '/assets/shoe-pink-rear.png', TOP: '/assets/shoe-pink-top.png' },
+  brn: { FRONT: '/assets/shoe-brown-front.png', SIDE: '/assets/shoe-brown-side.png', BACK: '/assets/shoe-brown-rear.png', TOP: '/assets/shoe-brown-top.png' },
 }
 
 const META_ROWS = [
