@@ -1,43 +1,40 @@
 import type { Product, Colourway, Size } from '@/types'
 
 export const HOME_PRODUCTS: Product[] = [
-  { id: 1, name: 'ROUGE 01 · OBSIDIAN', cat: 'FOOTWEAR / DROP 003', price: '1800', image: '/assets/shoe-black.jpg', badge: 'NEW', sizes: '07' },
-  { id: 2, name: 'ROUGE 01 · CARDINAL', cat: 'FOOTWEAR / DROP 003', price: '1800', image: '/assets/shoe-red.jpg',   badge: 'HOT', sizes: '06' },
-  { id: 3, name: 'ROUGE 01 · ICE',      cat: 'FOOTWEAR / DROP 003', price: '1800', image: '/assets/shoe-blue.jpg', sizes: '07' },
-  { id: 4, name: 'ROUGE 01 · ROSE',     cat: 'FOOTWEAR / DROP 003', price: '1800', image: '/assets/shoe-pink.jpg', sizes: '05' },
+  { id: 1, name: 'ROUGE 01 · OBSIDIAN', cat: 'FOOTWEAR / DROP 003', price: '1800', image: '/assets/shoe-black-front.png', badge: 'NEW', sizes: '07', mediaBg: '#fff' },
+  { id: 2, name: 'ROUGE 01 · CARDINAL', cat: 'FOOTWEAR / DROP 003', price: '1800', image: '/assets/shoe-red-front.png',   badge: 'HOT', sizes: '06', mediaBg: '#fff' },
+  { id: 3, name: 'ROUGE 01 · ICE',      cat: 'FOOTWEAR / DROP 003', price: '1800', image: '/assets/shoe-blue-front.png',  sizes: '07', mediaBg: '#fff' },
+  { id: 4, name: 'ROUGE 01 · ROSE',     cat: 'FOOTWEAR / DROP 003', price: '1800', image: '/assets/shoe-pink-front.png',  sizes: '05', mediaBg: '#fff' },
 ]
 
 export const SHOP_PRODUCTS: Product[] = [
-  { id: 1, name: 'ROUGE 01 · OBSIDIAN', cat: 'FOOTWEAR / DROP 003', price: '1800', image: '/assets/shoe-black.jpg', badge: 'NEW' },
-  { id: 2, name: 'ROUGE 01 · CARDINAL', cat: 'FOOTWEAR / DROP 003', price: '1800', image: '/assets/shoe-red.jpg',   badge: 'HOT' },
-  { id: 3, name: 'ROUGE 01 · ICE',      cat: 'FOOTWEAR / DROP 003', price: '1800', image: '/assets/shoe-blue.jpg' },
-  { id: 4, name: 'ROUGE 01 · ROSE',     cat: 'FOOTWEAR / DROP 003', price: '1800', image: '/assets/shoe-pink.jpg' },
-  { id: 5, name: 'ROUGE 01 · CARDINAL', cat: 'FOOTWEAR / DROP 003', price: '1800', image: '/assets/shoe-red.jpg',   badge: 'LOW STOCK' },
-  { id: 6, name: 'ROUGE 01 · OBSIDIAN', cat: 'FOOTWEAR / DROP 003', price: '1800', image: '/assets/shoe-black.jpg' },
-  { id: 7, name: 'ROUGE 01 · ICE',      cat: 'FOOTWEAR / DROP 003', price: '1800', image: '/assets/shoe-blue.jpg' },
-  { id: 8, name: 'ROUGE 01 · ROSE',     cat: 'FOOTWEAR / DROP 003', price: '1800', image: '/assets/shoe-pink.jpg' },
+  { id: 1, name: 'ROUGE 01 · OBSIDIAN', cat: 'FOOTWEAR / DROP 003', price: '1800', image: '/assets/shoe-black-front.png', badge: 'NEW', mediaBg: '#fff' },
+  { id: 2, name: 'ROUGE 01 · CARDINAL', cat: 'FOOTWEAR / DROP 003', price: '1800', image: '/assets/shoe-red-front.png',   badge: 'HOT', mediaBg: '#fff' },
+  { id: 3, name: 'ROUGE 01 · ICE',      cat: 'FOOTWEAR / DROP 003', price: '1800', image: '/assets/shoe-blue-front.png',  mediaBg: '#fff' },
+  { id: 4, name: 'ROUGE 01 · ROSE',     cat: 'FOOTWEAR / DROP 003', price: '1800', image: '/assets/shoe-pink-front.png',  mediaBg: '#fff' },
+  { id: 5, name: 'ROUGE 01 · BEIGE',    cat: 'FOOTWEAR / DROP 003', price: '1800', image: '/assets/shoe-brown-front.png', badge: 'NEW', mediaBg: '#fff' },
 ]
 
 export const NEW_ARRIVALS: Product[] = [
-  { id: 11, name: 'ROUGE 01 · OBSIDIAN', cat: 'FOOTWEAR / DROP 003', price: '1800', image: '/assets/shoe-black.jpg',        badge: 'NEW', mediaBg: '#fff' },
-  { id: 12, name: 'ROUGE 01 · CARDINAL', cat: 'FOOTWEAR / DROP 003', price: '1800', image: '/assets/shoe-red.jpg',          badge: 'HOT', mediaBg: '#fff' },
-  { id: 13, name: 'ROUGE 01 · ICE',      cat: 'FOOTWEAR / DROP 003', price: '1800', image: '/assets/shoe-blue.jpg',         mediaBg: '#fff' },
-  { id: 14, name: 'ROUGE 01 · ROSE',     cat: 'FOOTWEAR / DROP 003', price: '1800', image: '/assets/shoe-pink.jpg',         mediaBg: '#fff' },
-  { id: 15, name: 'ROUGE 01 · BEIGE',    cat: 'FOOTWEAR / DROP 003', price: '1800', image: '/assets/shoe-brown-front.png',  badge: 'NEW', mediaBg: '#fff' },
+  { id: 11, name: 'ROUGE 01 · OBSIDIAN', cat: 'FOOTWEAR / DROP 003', price: '1800', image: '/assets/shoe-black-front.png', badge: 'NEW', mediaBg: '#fff' },
+  { id: 12, name: 'ROUGE 01 · CARDINAL', cat: 'FOOTWEAR / DROP 003', price: '1800', image: '/assets/shoe-red-front.png',   badge: 'HOT', mediaBg: '#fff' },
+  { id: 13, name: 'ROUGE 01 · ICE',      cat: 'FOOTWEAR / DROP 003', price: '1800', image: '/assets/shoe-blue-front.png',  mediaBg: '#fff' },
+  { id: 14, name: 'ROUGE 01 · ROSE',     cat: 'FOOTWEAR / DROP 003', price: '1800', image: '/assets/shoe-pink-front.png',  mediaBg: '#fff' },
+  { id: 15, name: 'ROUGE 01 · BEIGE',    cat: 'FOOTWEAR / DROP 003', price: '1800', image: '/assets/shoe-brown-front.png', badge: 'NEW', mediaBg: '#fff' },
 ]
 
 export const RECOMMENDED_PRODUCTS: Product[] = [
-  { id: 21, name: 'ROUGE 01 · ICE',      cat: 'FOOTWEAR / DROP 003', price: '1800', image: '/assets/shoe-blue.jpg' },
-  { id: 22, name: 'ROUGE 01 · ROSE',     cat: 'FOOTWEAR / DROP 003', price: '1800', image: '/assets/shoe-pink.jpg' },
-  { id: 23, name: 'ROUGE 01 · CARDINAL', cat: 'FOOTWEAR / DROP 003', price: '1800', image: '/assets/shoe-red.jpg' },
-  { id: 24, name: 'ROUGE 01 · OBSIDIAN', cat: 'FOOTWEAR / DROP 003', price: '1800', image: '/assets/shoe-black.jpg' },
+  { id: 21, name: 'ROUGE 01 · ICE',      cat: 'FOOTWEAR / DROP 003', price: '1800', image: '/assets/shoe-blue-front.png',  mediaBg: '#fff' },
+  { id: 22, name: 'ROUGE 01 · ROSE',     cat: 'FOOTWEAR / DROP 003', price: '1800', image: '/assets/shoe-pink-front.png',  mediaBg: '#fff' },
+  { id: 23, name: 'ROUGE 01 · CARDINAL', cat: 'FOOTWEAR / DROP 003', price: '1800', image: '/assets/shoe-red-front.png',   mediaBg: '#fff' },
+  { id: 24, name: 'ROUGE 01 · BEIGE',    cat: 'FOOTWEAR / DROP 003', price: '1800', image: '/assets/shoe-brown-front.png', mediaBg: '#fff' },
 ]
 
 export const COLOURWAYS: Colourway[] = [
-  { id: 'obs', name: 'OBSIDIAN', hex: '#0F0F10', image: '/assets/shoe-black.jpg' },
-  { id: 'car', name: 'CARDINAL', hex: '#D90017', image: '/assets/shoe-red.jpg' },
-  { id: 'ice', name: 'ICE',      hex: '#9DC9E7', image: '/assets/shoe-blue.jpg' },
-  { id: 'ros', name: 'ROSE',     hex: '#F3B0B9', image: '/assets/shoe-pink.jpg' },
+  { id: 'obs', name: 'OBSIDIAN', hex: '#0F0F10', image: '/assets/shoe-black-front.png' },
+  { id: 'car', name: 'CARDINAL', hex: '#D90017', image: '/assets/shoe-red-front.png'   },
+  { id: 'ice', name: 'ICE',      hex: '#9DC9E7', image: '/assets/shoe-blue-front.png'  },
+  { id: 'ros', name: 'ROSE',     hex: '#F3B0B9', image: '/assets/shoe-pink-front.png'  },
   { id: 'brn', name: 'BEIGE',    hex: '#C4A882', image: '/assets/shoe-brown-front.png' },
 ]
 
