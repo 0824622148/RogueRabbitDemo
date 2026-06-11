@@ -78,3 +78,5 @@ create table orders (
 );
 
 alter table orders enable row level security;
+grant all on orders to service_role;
+grant usage, select on sequence orders_id_seq to service_role;
