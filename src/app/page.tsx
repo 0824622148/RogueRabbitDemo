@@ -6,16 +6,22 @@ import FeaturedDrop from '@/components/home/FeaturedDrop'
 import CampaignStrip from '@/components/home/CampaignStrip'
 import NewArrivals from '@/components/home/NewArrivals'
 import SplitCTA from '@/components/home/SplitCTA'
+import { getProducts } from '@/lib/queries/products'
 
-export default function HomePage() {
+export default async function HomePage() {
+  const [sideProducts, frontProducts] = await Promise.all([
+    getProducts('SIDE'),
+    getProducts('FRONT'),
+  ])
+
   return (
     <div className="rr-home-wrap" style={{ background: '#0F0F10', color: '#E6E6E6', fontFamily: 'var(--font-body)' }}>
       <NavBar />
       <Hero />
       <div><TrustStrip /></div>
-      <div><FeaturedDrop /></div>
+      <div><FeaturedDrop products={sideProducts} /></div>
       <CampaignStrip />
-      <NewArrivals />
+      <NewArrivals products={frontProducts} />
       <SplitCTA />
       <Footer />
     </div>

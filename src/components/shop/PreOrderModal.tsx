@@ -1,16 +1,13 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { COLOURWAYS, MALE_SIZES, FEMALE_SIZES } from '@/data/products'
-import type { Colourway } from '@/types'
+import type { ColourwayDB, Size } from '@/types'
 
-// Update these before launch
 const EARLY_ACCESS_CODE = 'ROUGE30'
 const FULL_PRICE = 1800
 const DISCOUNT_PCT = 0.30
 const DISCOUNTED_PRICE = Math.round(FULL_PRICE * (1 - DISCOUNT_PCT))
 
-// Update with real collection point locations before launch
 const COLLECTION_POINTS = [
   { id: 'jhb', label: 'JOHANNESBURG · ROSEBANK' },
   { id: 'cpt', label: 'CAPE TOWN · V&A WATERFRONT' },
@@ -27,9 +24,10 @@ const BANK = {
 }
 
 interface Props {
-  initialColourway?: Colourway
+  initialColourway?: ColourwayDB
   initialSize?: string
   initialGender?: 'MALE' | 'FEMALE'
+  colourways: ColourwayDB[]
   onClose: () => void
 }
 
@@ -37,9 +35,9 @@ function genReference() {
   return 'RR-' + Date.now().toString(36).toUpperCase().slice(-6)
 }
 
-export default function PreOrderModal({ initialColourway, initialSize, initialGender, onClose }: Props) {
+export default function PreOrderModal({ initialColourway, initialSize, initialGender, colourways, onClose }: Props) {
   const [step, setStep] = useState<'form' | 'success'>('form')
-  const [cw, setCw] = useState<Colourway>(initialColourway ?? COLOURWAYS[0])
+  const [cw, setCw] = useState<ColourwayDB>(initialColourway ?? colourways[0])
   const [gender, setGender] = useState<'MALE' | 'FEMALE'>(initialGender ?? 'MALE')
   const [sz, setSz] = useState(initialSize ?? '')
   const [collection, setCollection] = useState('')
@@ -53,7 +51,10 @@ export default function PreOrderModal({ initialColourway, initialSize, initialGe
   const [submitError, setSubmitError] = useState('')
   const [reference, setReference] = useState('')
 
-  const sizes = gender === 'MALE' ? MALE_SIZES : FEMALE_SIZES
+  const sizes: Size[] = cw.inventory
+    .filter(i => i.gender === (gender === 'MALE' ? 'M' : 'F'))
+    .map(i => ({ v: i.size_value, oos: !i.in_stock }))
+
   const price = codeApplied ? DISCOUNTED_PRICE : FULL_PRICE
   const canSubmit = name.trim() && email.trim() && phone.trim() && sz && collection
 
@@ -136,7 +137,6 @@ export default function PreOrderModal({ initialColourway, initialSize, initialGe
           position: 'relative',
         }}
       >
-        {/* Header */}
         <div style={{
           display: 'flex', justifyContent: 'space-between', alignItems: 'center',
           padding: '22px 28px',
@@ -159,7 +159,6 @@ export default function PreOrderModal({ initialColourway, initialSize, initialGe
         {step === 'form' && (
           <div style={{ padding: '28px 28px 32px' }}>
 
-            {/* Product line */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 28 }}>
               <div>
                 <div className="rr-overline" style={{ marginBottom: 4 }}>ROUGE 01 · FOOTWEAR</div>
@@ -177,14 +176,13 @@ export default function PreOrderModal({ initialColourway, initialSize, initialGe
               </div>
             </div>
 
-            {/* Colourway */}
             <div style={{ marginBottom: 24 }}>
               <div className="rr-overline" style={{ marginBottom: 12, color: '#A6A6A8' }}>COLOURWAY · {cw.name}</div>
               <div style={{ display: 'flex', gap: 8 }}>
-                {COLOURWAYS.map((c) => (
+                {colourways.map((c) => (
                   <button
                     key={c.id}
-                    onClick={() => setCw(c)}
+                    onClick={() => { setCw(c); setSz('') }}
                     style={{
                       width: 44, height: 44, background: '#fff', padding: 3,
                       border: `1px solid ${cw.id === c.id ? '#D90017' : '#3A3A3C'}`,
@@ -197,7 +195,6 @@ export default function PreOrderModal({ initialColourway, initialSize, initialGe
               </div>
             </div>
 
-            {/* Size */}
             <div style={{ marginBottom: 24 }}>
               <div className="rr-overline" style={{ marginBottom: 12, color: '#A6A6A8' }}>SIZE · US</div>
               <div style={{ display: 'flex', gap: 0, marginBottom: 12 }}>
@@ -234,7 +231,6 @@ export default function PreOrderModal({ initialColourway, initialSize, initialGe
               </div>
             </div>
 
-            {/* Collection point */}
             <div style={{ marginBottom: 24 }}>
               <div className="rr-overline" style={{ marginBottom: 12, color: '#A6A6A8' }}>COLLECTION POINT</div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
@@ -261,7 +257,6 @@ export default function PreOrderModal({ initialColourway, initialSize, initialGe
               </div>
             </div>
 
-            {/* Early access code */}
             <div style={{ marginBottom: 28 }}>
               <div className="rr-overline" style={{ marginBottom: 12, color: '#A6A6A8' }}>EARLY ACCESS CODE (OPTIONAL)</div>
               <div style={{ display: 'flex', gap: 8 }}>
@@ -300,10 +295,8 @@ export default function PreOrderModal({ initialColourway, initialSize, initialGe
               )}
             </div>
 
-            {/* Divider */}
             <div style={{ borderTop: '1px solid #3A3A3C', marginBottom: 24 }} />
 
-            {/* Personal details */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 24 }}>
               {[
                 { label: 'FULL NAME', value: name, setter: setName, type: 'text', placeholder: 'Your name' },
@@ -333,7 +326,6 @@ export default function PreOrderModal({ initialColourway, initialSize, initialGe
               </div>
             )}
 
-            {/* Submit */}
             <button
               onClick={submit}
               disabled={!canSubmit || submitting}
@@ -359,7 +351,6 @@ export default function PreOrderModal({ initialColourway, initialSize, initialGe
         {step === 'success' && (
           <div style={{ padding: '32px 28px' }}>
 
-            {/* Success badge */}
             <div style={{ marginBottom: 28 }}>
               <div style={{
                 display: 'inline-flex', alignItems: 'center', gap: 10,
@@ -374,7 +365,6 @@ export default function PreOrderModal({ initialColourway, initialSize, initialGe
               </p>
             </div>
 
-            {/* Order summary */}
             <div style={{ border: '1px solid #3A3A3C', padding: '20px', marginBottom: 20 }}>
               <div className="rr-overline" style={{ color: '#D90017', marginBottom: 16 }}>ORDER SUMMARY</div>
               {[
@@ -391,7 +381,6 @@ export default function PreOrderModal({ initialColourway, initialSize, initialGe
               ))}
             </div>
 
-            {/* EFT details */}
             <div style={{ background: '#0F0F10', border: '1px solid #3A3A3C', padding: '20px', marginBottom: 20 }}>
               <div className="rr-overline" style={{ color: '#D90017', marginBottom: 16 }}>EFT BANKING DETAILS</div>
               {[

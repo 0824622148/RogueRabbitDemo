@@ -2,20 +2,11 @@
 
 import { useState, useEffect, useRef } from 'react'
 import Arrow from '@/components/brand/Arrow'
-import { COLOURWAYS, MALE_SIZES, FEMALE_SIZES } from '@/data/products'
-import type { Colourway } from '@/types'
+import type { ColourwayDB, Size } from '@/types'
 import PreOrderModal from '@/components/shop/PreOrderModal'
 
 const VIEWS = ['FRONT', 'SIDE', 'BACK', 'TOP'] as const
 type View = typeof VIEWS[number]
-
-const VIEW_IMAGES: Record<string, Record<View, string>> = {
-  obs: { FRONT: '/assets/shoe-black-front.png', SIDE: '/assets/shoe-black-side.png', BACK: '/assets/shoe-black-rear.png', TOP: '/assets/shoe-black-top.png' },
-  car: { FRONT: '/assets/shoe-red-front.png', SIDE: '/assets/shoe-red-side.png', BACK: '/assets/shoe-red-rear.png', TOP: '/assets/shoe-red-top.png' },
-  ice: { FRONT: '/assets/shoe-blue-front.png', SIDE: '/assets/shoe-blue-side.png', BACK: '/assets/shoe-blue-rear.png', TOP: '/assets/shoe-blue-top.png' },
-  ros: { FRONT: '/assets/shoe-pink-front.png', SIDE: '/assets/shoe-pink-side.png', BACK: '/assets/shoe-pink-rear.png', TOP: '/assets/shoe-pink-top.png' },
-  brn: { FRONT: '/assets/shoe-brown-front.png', SIDE: '/assets/shoe-brown-side.png', BACK: '/assets/shoe-brown-rear.png', TOP: '/assets/shoe-brown-top.png' },
-}
 
 const META_ROWS = [
   ['COLLECTION', 'ROSEBANK · V&A · GATEWAY'],
@@ -24,6 +15,10 @@ const META_ROWS = [
   ['EDITION',    'NUMBERED · 250 PAIRS'],
   ['RELEASE',    'JUL 31 · 2026'],
 ]
+
+interface Props {
+  colourways: ColourwayDB[]
+}
 
 function ZoomModal({ src, alt, label, onClose }: { src: string; alt: string; label: string; onClose: () => void }) {
   const [scale, setScale] = useState(1)
@@ -211,8 +206,8 @@ function SizeGuideModal({ gender, onClose }: { gender: 'MALE' | 'FEMALE'; onClos
   )
 }
 
-export default function PDPHero() {
-  const [cw, setCw] = useState<Colourway>(COLOURWAYS[0])
+export default function PDPHero({ colourways }: Props) {
+  const [cw, setCw] = useState<ColourwayDB>(colourways[0])
   const [gender, setGender] = useState<'MALE' | 'FEMALE'>('MALE')
   const [sz, setSz] = useState('')
   const [view, setView] = useState<View>('FRONT')
@@ -220,8 +215,11 @@ export default function PDPHero() {
   const [sizeGuide, setSizeGuide] = useState(false)
   const [preOrder, setPreOrder] = useState(false)
 
-  const sizes = gender === 'MALE' ? MALE_SIZES : FEMALE_SIZES
-  const activeImage = VIEW_IMAGES[cw.id]?.[view] ?? cw.image
+  const sizes: Size[] = cw.inventory
+    .filter(i => i.gender === (gender === 'MALE' ? 'M' : 'F'))
+    .map(i => ({ v: i.size_value, oos: !i.in_stock }))
+
+  const activeImage = cw.images.find(i => i.view === view)?.url ?? cw.image
 
   return (
     <>
@@ -230,6 +228,7 @@ export default function PDPHero() {
           initialColourway={cw}
           initialSize={sz}
           initialGender={gender}
+          colourways={colourways}
           onClose={() => setPreOrder(false)}
         />
       )}
@@ -256,7 +255,7 @@ export default function PDPHero() {
               style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}
             >
               <div className={`rr-thumb ${view === v ? 'rr-thumb--active' : ''}`} style={{ width: '100%' }}>
-                <img src={VIEW_IMAGES[cw.id][v]} alt={v} />
+                <img src={cw.images.find(i => i.view === v)?.url ?? cw.image} alt={v} />
               </div>
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: 8, letterSpacing: '.14em', color: view === v ? '#D90017' : '#A6A6A8' }}>
                 {v}
@@ -312,10 +311,10 @@ export default function PDPHero() {
               <span className="rr-mono">{cw.name}</span>
             </div>
             <div style={{ display: 'flex', gap: 10 }}>
-              {COLOURWAYS.map((c) => (
+              {colourways.map((c) => (
                 <button
                   key={c.id}
-                  onClick={() => setCw(c)}
+                  onClick={() => { setCw(c); setSz('') }}
                   style={{ width: 54, height: 54, background: '#fff', padding: 4, border: `1px solid ${cw.id === c.id ? '#D90017' : '#3A3A3C'}`, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                 >
                   <img src={c.image} alt={c.name} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
@@ -331,7 +330,6 @@ export default function PDPHero() {
               <a className="rr-mono" style={{ color: '#E6E6E6', textDecoration: 'underline', cursor: 'pointer' }} onClick={() => setSizeGuide(true)}>SIZE GUIDE</a>
             </div>
 
-            {/* Gender toggle */}
             <div style={{ display: 'flex', gap: 0, marginBottom: 14 }}>
               {(['MALE', 'FEMALE'] as const).map((g) => (
                 <button

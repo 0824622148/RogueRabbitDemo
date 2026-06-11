@@ -4,19 +4,22 @@ import { useState } from 'react'
 import Link from 'next/link'
 import SectionHead from '@/components/brand/SectionHead'
 import ProductCard from '@/components/brand/ProductCard'
-import { HOME_PRODUCTS } from '@/data/products'
+import type { Product } from '@/types'
 
 const VISIBLE = 4
-const TOTAL = HOME_PRODUCTS.length
-const MAX_OFFSET = TOTAL - VISIBLE
 
-export default function FeaturedDrop() {
+interface Props {
+  products: Product[]
+}
+
+export default function FeaturedDrop({ products }: Props) {
   const [offset, setOffset] = useState(0)
+  const TOTAL = products.length
+  const MAX_OFFSET = Math.max(0, TOTAL - VISIBLE)
 
   return (
     <section className="rr-section-pad" style={{ background: '#0F0F10', position: 'relative' }}>
 
-      {/* Header row with nav arrows */}
       <div className="rr-sectionhead-pad" style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 36 }}>
         <SectionHead
           index="01"
@@ -58,7 +61,6 @@ export default function FeaturedDrop() {
         </div>
       </div>
 
-      {/* Carousel track */}
       <div className="rr-section-inner-pad" style={{ overflow: 'hidden' }}>
         <div
           style={{
@@ -68,10 +70,10 @@ export default function FeaturedDrop() {
             transition: 'transform 0.5s cubic-bezier(.2,.7,.2,1)',
           }}
         >
-          {HOME_PRODUCTS.map((p, i) => (
+          {products.map((p, i) => (
             <Link
               key={p.id}
-              href="/shop/rouge-01"
+              href={`/shop/${p.slug}`}
               style={{
                 flex: `0 0 ${100 / TOTAL}%`,
                 borderRight: '1px solid #3A3A3C',
@@ -86,7 +88,6 @@ export default function FeaturedDrop() {
         </div>
       </div>
 
-      {/* Dot indicators */}
       <div style={{ display: 'flex', gap: 8, justifyContent: 'center', marginTop: 28 }}>
         {Array.from({ length: MAX_OFFSET + 1 }).map((_, i) => (
           <button

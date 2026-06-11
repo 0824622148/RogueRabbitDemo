@@ -1,8 +1,12 @@
 import SectionHead from '@/components/brand/SectionHead'
 import ProductCard from '@/components/brand/ProductCard'
-import { RECOMMENDED_PRODUCTS } from '@/data/products'
+import type { Product } from '@/types'
 
-export default function Recommended() {
+interface Props {
+  products: Product[]
+}
+
+export default function Recommended({ products }: Props) {
   return (
     <section style={{ padding: '100px 0' }}>
       <SectionHead index="03" kicker="ALSO WORN" title="WEAR IT WITH." action="Shop the look" />
@@ -15,7 +19,7 @@ export default function Recommended() {
           background: '#3A3A3C',
         }}
       >
-        {RECOMMENDED_PRODUCTS.map((p, i) => (
+        {products.map((p, i) => (
           <ProductCard key={p.id} product={p} mediaHeight={360} indexLabel={`R/02${i + 1}`} />
         ))}
       </div>

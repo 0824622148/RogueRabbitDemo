@@ -1,9 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { createClient } from '@supabase/supabase-js'
 
-// Set these in your .env.local (and Vercel environment variables) before launch:
+// Set these in .env.local and Vercel environment variables before launch:
 //   RESEND_API_KEY=re_xxxxxxxxxxxx
-//   ADMIN_EMAIL=hello@rougerabbit.co.za
+//   ADMIN_EMAIL=orders@rougerabbit.co.za
 //   EARLY_ACCESS_CODE=ROUGE30
+//   SUPABASE_SERVICE_ROLE_KEY=<from Supabase → Settings → API>
 
 const EARLY_ACCESS_CODE = process.env.EARLY_ACCESS_CODE ?? 'ROUGE30'
 const FULL_PRICE = 1800
@@ -19,9 +21,16 @@ const BANK = {
   universalCode: '250655',
 }
 
+function getServiceClient() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+  )
+}
+
 async function sendEmail(to: string, subject: string, html: string) {
   const apiKey = process.env.RESEND_API_KEY
-  if (!apiKey) return // email skipped until key is configured
+  if (!apiKey) return
 
   await fetch('https://api.resend.com/emails', {
     method: 'POST',
@@ -41,26 +50,52 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Invalid request body' }, { status: 400 })
   }
 
-  const { reference, name, email, phone, colourway, size, gender, collection, earlyAccessCode, finalPrice } = body as Record<string, string>
+  const { reference, name, email, phone, colourway, size, gender, collection, earlyAccessCode } =
+    body as Record<string, string>
 
   if (!name || !email || !phone || !colourway || !size || !collection || !reference) {
     return NextResponse.json({ error: 'All fields are required' }, { status: 422 })
   }
 
-  const discountApplied = typeof earlyAccessCode === 'string' &&
+  const discountApplied =
+    typeof earlyAccessCode === 'string' &&
     earlyAccessCode.trim().toUpperCase() === EARLY_ACCESS_CODE
   const price = discountApplied ? Math.round(FULL_PRICE * (1 - DISCOUNT_PCT)) : FULL_PRICE
 
-  // Log to console — visible in Vercel Functions log and local dev terminal
+  // Persist order — critical; log but don't block if service key not yet configured
+  let orderId: number | null = null
+  if (process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    const db = getServiceClient()
+    const { data, error } = await db.from('orders').insert({
+      reference,
+      colourway,
+      gender: gender || 'M',
+      size_value: size,
+      city: collection,
+      name,
+      email,
+      phone,
+      early_access: discountApplied,
+      discount_pct: discountApplied ? 30 : 0,
+      amount_due: price,
+    }).select('id').single()
+
+    if (error) {
+      console.error('[PRE-ORDER] DB insert failed:', error)
+    } else {
+      orderId = (data as any).id
+    }
+  }
+
   console.log('[PRE-ORDER]', JSON.stringify({
     timestamp: new Date().toISOString(),
-    reference, name, email, phone,
+    orderId, reference, name, email, phone,
     colourway, size, gender, collection,
-    discountApplied, finalPrice: price,
+    discountApplied, amountDue: price,
   }))
 
-  // Admin notification email
-  const adminEmail = process.env.ADMIN_EMAIL ?? 'hello@rougerabbit.co.za'
+  const adminEmail = process.env.ADMIN_EMAIL ?? 'orders@rougerabbit.co.za'
+
   await sendEmail(
     adminEmail,
     `[PRE-ORDER] ${reference} — ${name} · ${colourway} ${size}`,
@@ -68,6 +103,7 @@ export async function POST(request: NextRequest) {
       <h2 style="color:#D90017;margin:0 0 24px;">NEW PRE-ORDER</h2>
       <table style="border-collapse:collapse;width:100%;">
         ${[
+          ['Order ID', orderId ? `#${orderId}` : '—'],
           ['Reference', reference],
           ['Name', name],
           ['Email', email],
@@ -75,14 +111,13 @@ export async function POST(request: NextRequest) {
           ['Colourway', colourway],
           ['Size', `${size} · ${gender}`],
           ['Collection Point', collection],
-          ['Discount Applied', discountApplied ? `YES — 30% ROUGE30` : 'No'],
+          ['Discount Applied', discountApplied ? 'YES — 30% ROUGE30' : 'No'],
           ['Amount Due', `R${price}`],
         ].map(([k, v]) => `<tr><td style="padding:8px 16px 8px 0;color:#A6A6A8;white-space:nowrap;">${k}</td><td style="padding:8px 0;color:#E6E6E6;">${v}</td></tr>`).join('')}
       </table>
     </div>`,
   )
 
-  // Consumer confirmation email
   await sendEmail(
     email,
     `ROUGE 01 Pre-Order Confirmed · ${reference}`,
@@ -132,5 +167,5 @@ export async function POST(request: NextRequest) {
     </div>`,
   )
 
-  return NextResponse.json({ success: true })
+  return NextResponse.json({ success: true, orderId })
 }
