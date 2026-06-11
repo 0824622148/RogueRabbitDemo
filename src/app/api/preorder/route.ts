@@ -30,9 +30,12 @@ function getServiceClient() {
 
 async function sendEmail(to: string, subject: string, html: string) {
   const apiKey = process.env.RESEND_API_KEY
-  if (!apiKey) return
+  if (!apiKey) {
+    console.warn('[EMAIL] RESEND_API_KEY not set — skipping')
+    return
+  }
 
-  await fetch('https://api.resend.com/emails', {
+  const res = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${apiKey}`,
@@ -40,6 +43,11 @@ async function sendEmail(to: string, subject: string, html: string) {
     },
     body: JSON.stringify({ from: RESEND_FROM, to: [to], subject, html }),
   })
+
+  if (!res.ok) {
+    const body = await res.text()
+    console.error('[EMAIL] Resend error:', res.status, body)
+  }
 }
 
 export async function POST(request: NextRequest) {
@@ -69,7 +77,7 @@ export async function POST(request: NextRequest) {
     const { data, error } = await db.from('orders').insert({
       reference,
       colourway,
-      gender: gender || 'M',
+      gender: gender === 'FEMALE' ? 'F' : 'M',
       size_value: size,
       city: collection,
       name,
