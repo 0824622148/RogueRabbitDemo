@@ -15,9 +15,9 @@ const RESEND_FROM = 'Rouge Rabbit <orders@rougerabbit.co.za>'
 // TODO: Update bank details before launch
 const BANK = {
   name: 'First National Bank (FNB)',
-  accountName: 'Rouge Rabbit',
-  accountNumber: '62XXXXXXXXXX',
-  branchCode: 'XXXXXX',
+  accountName: 'Rouge Rabbit (Pty) Ltd',
+  accountNumber: '62843917205',
+  branchCode: '254005',
   universalCode: '250655',
 }
 
