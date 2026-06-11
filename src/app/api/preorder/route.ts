@@ -89,7 +89,8 @@ export async function POST(request: NextRequest) {
     }).select('id').single()
 
     if (error) {
-      console.error('[PRE-ORDER] DB insert failed:', error)
+      console.error('[PRE-ORDER] DB insert failed:', JSON.stringify(error))
+      return NextResponse.json({ error: 'DB insert failed', detail: error.message }, { status: 500 })
     } else {
       orderId = (data as any).id
     }
