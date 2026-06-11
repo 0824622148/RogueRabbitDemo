@@ -4,6 +4,23 @@ import { useState } from 'react'
 
 export default function SplitCTA() {
   const [email, setEmail] = useState('')
+  const [submitting, setSubmitting] = useState(false)
+  const [done, setDone] = useState(false)
+
+  const submit = async () => {
+    if (!email.trim() || submitting) return
+    setSubmitting(true)
+    try {
+      await fetch('/api/members', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.trim() }),
+      })
+      setDone(true)
+    } finally {
+      setSubmitting(false)
+    }
+  }
 
   return (
     <section
@@ -30,36 +47,48 @@ export default function SplitCTA() {
         <p style={{ maxWidth: 360, fontSize: 14, lineHeight: 1.7, opacity: 0.9 }}>
           48-hour early access to every drop. Numbered pairs reserved. No spam, no noise.
         </p>
-        <div style={{ marginTop: 36, display: 'flex', maxWidth: 460 }}>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="YOUR.EMAIL@HERE"
-            style={{
-              flex: 1,
-              background: 'transparent',
-              border: '1px solid rgba(255,255,255,.5)',
-              borderRight: 'none',
-              padding: '16px 18px',
-              color: '#E6E6E6',
-              fontFamily: 'var(--font-mono)',
-              fontSize: 11, letterSpacing: '.18em',
-              textTransform: 'uppercase', outline: 'none',
-              minWidth: 0,
-            }}
-          />
-          <button
-            style={{
-              background: '#0F0F10', color: '#E6E6E6', border: 'none',
-              padding: '0 22px', fontFamily: 'var(--font-mono)',
-              fontSize: 11, letterSpacing: '.22em', cursor: 'pointer',
-              flexShrink: 0,
-            }}
-          >
-            JOIN →
-          </button>
-        </div>
+        {done ? (
+          <div style={{ marginTop: 36, display: 'flex', alignItems: 'center', gap: 12 }}>
+            <span style={{ color: '#E6E6E6', fontSize: 18 }}>✓</span>
+            <span className="rr-mono" style={{ fontSize: 11, letterSpacing: '.18em', color: '#E6E6E6' }}>
+              YOU&apos;RE ON THE LIST. FIRST ACCESS INCOMING.
+            </span>
+          </div>
+        ) : (
+          <div style={{ marginTop: 36, display: 'flex', maxWidth: 460 }}>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && submit()}
+              placeholder="YOUR.EMAIL@HERE"
+              style={{
+                flex: 1,
+                background: 'transparent',
+                border: '1px solid rgba(255,255,255,.5)',
+                borderRight: 'none',
+                padding: '16px 18px',
+                color: '#E6E6E6',
+                fontFamily: 'var(--font-mono)',
+                fontSize: 11, letterSpacing: '.18em',
+                textTransform: 'uppercase', outline: 'none',
+                minWidth: 0,
+              }}
+            />
+            <button
+              onClick={submit}
+              disabled={submitting}
+              style={{
+                background: '#0F0F10', color: '#E6E6E6', border: 'none',
+                padding: '0 22px', fontFamily: 'var(--font-mono)',
+                fontSize: 11, letterSpacing: '.22em', cursor: submitting ? 'default' : 'pointer',
+                flexShrink: 0, opacity: submitting ? 0.6 : 1,
+              }}
+            >
+              {submitting ? '...' : 'JOIN →'}
+            </button>
+          </div>
+        )}
         {/* Ghost R */}
         <div
           style={{

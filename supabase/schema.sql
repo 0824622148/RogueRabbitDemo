@@ -80,3 +80,17 @@ create table orders (
 alter table orders enable row level security;
 grant all on orders to service_role;
 grant usage, select on sequence orders_id_seq to service_role;
+
+-- Members / early access list (server-only via service role key)
+create table members (
+  id         serial primary key,
+  name       text,
+  email      text unique not null,
+  phone      text,
+  source     text default 'homepage' check (source in ('homepage', 'preorder')),
+  created_at timestamptz default now()
+);
+
+alter table members enable row level security;
+grant all on members to service_role;
+grant usage, select on sequence members_id_seq to service_role;

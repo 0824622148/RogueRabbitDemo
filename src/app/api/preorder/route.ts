@@ -92,6 +92,11 @@ export async function POST(request: NextRequest) {
       console.error('[PRE-ORDER] DB insert failed:', JSON.stringify(error))
     } else {
       orderId = (data as any).id
+      // Auto-enrol buyer into members list
+      await db.from('members').upsert(
+        { name, email, phone, source: 'preorder' },
+        { onConflict: 'email', ignoreDuplicates: true },
+      )
     }
   }
 
