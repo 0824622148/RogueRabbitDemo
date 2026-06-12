@@ -127,24 +127,24 @@ function ZoomModal({ src, alt, label, onClose }: { src: string; alt: string; lab
 
 const SIZE_GUIDE = {
   MALE: [
-    { us: 'US 6',  eu: 'EU 39', cm: '24.0 cm' },
-    { us: 'US 7',  eu: 'EU 40', cm: '25.0 cm' },
-    { us: 'US 8',  eu: 'EU 41', cm: '26.0 cm' },
-    { us: 'US 9',  eu: 'EU 42', cm: '27.0 cm' },
-    { us: 'US 10', eu: 'EU 43', cm: '28.0 cm' },
-    { us: 'US 11', eu: 'EU 44', cm: '29.0 cm' },
-    { us: 'US 12', eu: 'EU 45', cm: '30.0 cm' },
-    { us: 'US 13', eu: 'EU 46', cm: '31.0 cm' },
+    { uk: 'UK 6',  eu: 'EU 39', cm: '24.0 cm' },
+    { uk: 'UK 7',  eu: 'EU 40', cm: '25.0 cm' },
+    { uk: 'UK 8',  eu: 'EU 41', cm: '26.0 cm' },
+    { uk: 'UK 9',  eu: 'EU 42', cm: '27.0 cm' },
+    { uk: 'UK 10', eu: 'EU 43', cm: '28.0 cm' },
+    { uk: 'UK 11', eu: 'EU 44', cm: '29.0 cm' },
+    { uk: 'UK 12', eu: 'EU 45', cm: '30.0 cm' },
+    { uk: 'UK 13', eu: 'EU 46', cm: '31.0 cm' },
   ],
   FEMALE: [
-    { us: 'US 4',  eu: 'EU 35', cm: '22.0 cm' },
-    { us: 'US 5',  eu: 'EU 36', cm: '22.5 cm' },
-    { us: 'US 6',  eu: 'EU 37', cm: '23.5 cm' },
-    { us: 'US 7',  eu: 'EU 38', cm: '24.0 cm' },
-    { us: 'US 8',  eu: 'EU 39', cm: '25.0 cm' },
-    { us: 'US 9',  eu: 'EU 40', cm: '25.5 cm' },
-    { us: 'US 10', eu: 'EU 41', cm: '26.5 cm' },
-    { us: 'US 11', eu: 'EU 42', cm: '27.0 cm' },
+    { uk: 'UK 4',  eu: 'EU 35', cm: '22.0 cm' },
+    { uk: 'UK 5',  eu: 'EU 36', cm: '22.5 cm' },
+    { uk: 'UK 6',  eu: 'EU 37', cm: '23.5 cm' },
+    { uk: 'UK 7',  eu: 'EU 38', cm: '24.0 cm' },
+    { uk: 'UK 8',  eu: 'EU 39', cm: '25.0 cm' },
+    { uk: 'UK 9',  eu: 'EU 40', cm: '25.5 cm' },
+    { uk: 'UK 10', eu: 'EU 41', cm: '26.5 cm' },
+    { uk: 'UK 11', eu: 'EU 42', cm: '27.0 cm' },
   ],
 }
 
@@ -189,13 +189,13 @@ function SizeGuideModal({ gender, onClose }: { gender: 'MALE' | 'FEMALE'; onClos
 
         <div style={{ borderTop: '1px solid #3A3A3C' }}>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', padding: '10px 0', borderBottom: '1px solid #3A3A3C' }}>
-            {['US', 'EU', 'FOOT LENGTH'].map(h => (
+            {['UK', 'EU', 'FOOT LENGTH'].map(h => (
               <span key={h} className="rr-mono" style={{ fontSize: 9, color: '#A6A6A8', letterSpacing: '.16em' }}>{h}</span>
             ))}
           </div>
           {rows.map(r => (
-            <div key={r.us} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', padding: '10px 0', borderBottom: '1px solid #3A3A3C' }}>
-              <span className="rr-mono" style={{ color: '#E6E6E6', fontSize: 11 }}>{r.us}</span>
+            <div key={r.uk} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', padding: '10px 0', borderBottom: '1px solid #3A3A3C' }}>
+              <span className="rr-mono" style={{ color: '#E6E6E6', fontSize: 11 }}>{r.uk}</span>
               <span className="rr-mono" style={{ color: '#E6E6E6', fontSize: 11 }}>{r.eu}</span>
               <span className="rr-mono" style={{ color: '#A6A6A8', fontSize: 11 }}>{r.cm}</span>
             </div>
