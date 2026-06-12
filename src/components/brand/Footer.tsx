@@ -31,8 +31,8 @@ export default function Footer() {
           </p>
           <div style={{ display: 'flex', gap: 10, marginTop: 24 }}>
             {[
-              { icon: <FaInstagram size={16} />, href: 'https://instagram.com/rouge.rabbit', label: 'Instagram' },
-              { icon: <FaTiktok size={15} />,    href: 'https://tiktok.com/@rouge.rabbit',   label: 'TikTok' },
+              { icon: <FaInstagram size={16} />, href: 'https://www.instagram.com/rougerabbit.za?igsh=dmpjcWsyYnFkcjh5&utm_source=qr', label: 'Instagram' },
+              { icon: <FaTiktok size={15} />,    href: 'https://www.tiktok.com/@rouge_rabbitza',                                        label: 'TikTok' },
               { icon: <FaYoutube size={16} />,   href: 'https://youtube.com/@rougerabbit',   label: 'YouTube' },
               { icon: <FaXTwitter size={15} />,  href: 'https://x.com/rougerabbit',          label: 'X' },
             ].map(({ icon, href, label }) => (
