@@ -12,13 +12,12 @@ const FULL_PRICE = 1800
 const DISCOUNT_PCT = 0.30
 const RESEND_FROM = 'Rouge Rabbit <orders@rougerabbit.co.za>'
 
-// TODO: Update bank details before launch
 const BANK = {
-  name: 'First National Bank (FNB)',
+  name: 'Standard Bank of South Africa',
   accountName: 'Rouge Rabbit (Pty) Ltd',
-  accountNumber: '62843917205',
-  branchCode: '254005',
-  universalCode: '250655',
+  accountNumber: '0000010279568248',
+  branchCode: '051001',
+  universalCode: '051001',
 }
 
 function getServiceClient() {

@@ -14,13 +14,12 @@ const COLLECTION_POINTS = [
   { id: 'dbn', label: 'DURBAN · GATEWAY' },
 ]
 
-// TODO: Update with real banking details before launch
 const BANK = {
-  name: 'First National Bank (FNB)',
-  accountName: 'Rouge Rabbit',
-  accountNumber: '62XXXXXXXXXX',
-  branchCode: 'XXXXXX',
-  universalCode: '250655',
+  name: 'Standard Bank of South Africa',
+  accountName: 'Rouge Rabbit (Pty) Ltd',
+  accountNumber: '0000010279568248',
+  branchCode: '051001',
+  universalCode: '051001',
 }
 
 interface Props {
