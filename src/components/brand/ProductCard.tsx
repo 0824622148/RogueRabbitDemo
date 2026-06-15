@@ -1,4 +1,8 @@
+'use client'
+
+import { useState } from 'react'
 import type { Product } from '@/types'
+import { useWishlist } from '@/context/WishlistContext'
 
 interface ProductCardProps {
   product: Product
@@ -10,9 +14,23 @@ export default function ProductCard({ product, mediaHeight = 360, indexLabel }: 
   const mediaBg = product.mediaBg ?? '#fff'
   const isDark = mediaBg !== '#fff'
   const idxColor = isDark ? '#E6E6E6' : '#0F0F10'
+  const [hovered, setHovered] = useState(false)
+  const { addItem, removeItem, isWishlisted } = useWishlist()
+  const wishlisted = isWishlisted(product.id)
+
+  function handleWishlist(e: React.MouseEvent) {
+    e.preventDefault()
+    e.stopPropagation()
+    wishlisted ? removeItem(product.id) : addItem(product.id)
+  }
 
   return (
-    <article className="rr-card" style={{ background: '#1E1E20' }}>
+    <article
+      className="rr-card"
+      style={{ background: '#1E1E20' }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
       <div
         className="rr-card__media"
         style={{ height: mediaHeight, background: mediaBg, position: 'relative', overflow: 'hidden' }}
@@ -41,6 +59,29 @@ export default function ProductCard({ product, mediaHeight = 360, indexLabel }: 
             <span className="rr-mono" style={{ color: idxColor }}>{indexLabel}</span>
           </div>
         )}
+
+        {/* Wishlist heart — visible on hover or when wishlisted */}
+        {(hovered || wishlisted) && (
+          <button
+            onClick={handleWishlist}
+            aria-label={wishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
+            style={{
+              position: 'absolute',
+              bottom: 14, right: 14,
+              background: 'rgba(15,15,16,0.75)',
+              border: '1px solid #3A3A3C',
+              color: wishlisted ? '#D90017' : '#E6E6E6',
+              width: 36, height: 36,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              cursor: 'pointer',
+              fontSize: 16,
+              transition: 'color .2s',
+            }}
+          >
+            {wishlisted ? '♥' : '♡'}
+          </button>
+        )}
+
         <div className="rr-card__hover">
           <span>PRE-ORDER →</span>
           <span>{product.sizes ? `${product.sizes} SIZES` : 'VIEW'}</span>

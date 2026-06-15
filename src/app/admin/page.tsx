@@ -10,7 +10,8 @@ function getServiceClient() {
 }
 
 function fmt(dateStr: string) {
-  return new Date(dateStr).toLocaleDateString('en-ZA', {
+  return new Date(dateStr).toLocaleString('en-ZA', {
+    timeZone: 'Africa/Johannesburg',
     day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit',
   })
 }

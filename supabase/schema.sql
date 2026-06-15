@@ -94,3 +94,17 @@ create table members (
 alter table members enable row level security;
 grant all on members to service_role;
 grant usage, select on sequence members_id_seq to service_role;
+
+-- Wishlist (email-gated, server-only via service role key)
+create table wishlist (
+  id           serial primary key,
+  email        text not null,
+  product_id   int  not null references products(id) on delete cascade,
+  colourway_id text references colourways(id) on delete set null,
+  created_at   timestamptz default now(),
+  constraint   wishlist_unique unique (email, product_id, colourway_id)
+);
+
+alter table wishlist enable row level security;
+grant all on wishlist to service_role;
+grant usage, select on sequence wishlist_id_seq to service_role;

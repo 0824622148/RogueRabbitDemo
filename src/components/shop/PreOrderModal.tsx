@@ -195,7 +195,7 @@ export default function PreOrderModal({ initialColourway, initialSize, initialGe
             </div>
 
             <div style={{ marginBottom: 24 }}>
-              <div className="rr-overline" style={{ marginBottom: 12, color: '#A6A6A8' }}>SIZE · US</div>
+              <div className="rr-overline" style={{ marginBottom: 12, color: '#A6A6A8' }}>SIZE · UK</div>
               <div style={{ display: 'flex', gap: 0, marginBottom: 12 }}>
                 {(['MALE', 'FEMALE'] as const).map((g) => (
                   <button

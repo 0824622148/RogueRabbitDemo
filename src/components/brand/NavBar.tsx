@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import RougeLogo from './RougeLogo'
+import { useWishlist } from '@/context/WishlistContext'
 
 const NAV_LINKS = [
   { label: 'NEW',      href: '/shop' },
@@ -17,6 +18,7 @@ export default function NavBar({ cartCount = 2 }: { cartCount?: number }) {
   const pathname = usePathname()
   const isShop = pathname.startsWith('/shop')
   const [menuOpen, setMenuOpen] = useState(false)
+  const { count: wishlistCount, openDrawer } = useWishlist()
 
   return (
     <>
@@ -116,6 +118,35 @@ export default function NavBar({ cartCount = 2 }: { cartCount?: number }) {
               <path d="M1.5 13C1.5 10 4 8.5 7 8.5C10 8.5 12.5 10 12.5 13" stroke="currentColor" strokeWidth="1.2" />
             </svg>
             <span className="rr-mono rr-nav-account-label" style={{ color: '#E6E6E6' }}>ACCOUNT</span>
+          </button>
+          <button
+            onClick={openDrawer}
+            style={{
+              background: 'none', border: 'none', color: '#E6E6E6',
+              display: 'inline-flex', alignItems: 'center', gap: 8,
+              cursor: 'pointer', padding: 0,
+            }}
+            aria-label="Open wishlist"
+          >
+            <svg width="16" height="15" viewBox="0 0 16 15" fill="none" aria-hidden="true">
+              <path
+                d="M8 13.5C8 13.5 1.5 9 1.5 4.5C1.5 2.567 3.067 1 5 1C6.26 1 7.368 1.68 8 2.697C8.632 1.68 9.74 1 11 1C12.933 1 14.5 2.567 14.5 4.5C14.5 9 8 13.5 8 13.5Z"
+                stroke="currentColor"
+                strokeWidth="1.2"
+                fill={wishlistCount > 0 ? 'currentColor' : 'none'}
+                strokeLinejoin="round"
+              />
+            </svg>
+            <span className="rr-mono rr-nav-search-label" style={{ color: '#E6E6E6' }}>WISHLIST</span>
+            {wishlistCount > 0 && (
+              <span style={{
+                background: '#D90017', color: '#E6E6E6',
+                fontFamily: 'var(--font-mono)', fontSize: 10,
+                padding: '2px 6px', minWidth: 22, textAlign: 'center',
+              }}>
+                {String(wishlistCount).padStart(2, '0')}
+              </span>
+            )}
           </button>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, color: '#E6E6E6', cursor: 'pointer' }}>
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">

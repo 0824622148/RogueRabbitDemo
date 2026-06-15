@@ -2,6 +2,9 @@ import type { Metadata } from 'next'
 import { Bebas_Neue, Montserrat, JetBrains_Mono } from 'next/font/google'
 import './globals.css'
 import WhatsAppWidget from '@/components/brand/WhatsAppWidget'
+import { WishlistProvider } from '@/context/WishlistContext'
+import WishlistDrawer from '@/components/wishlist/WishlistDrawer'
+import WishlistEmailModal from '@/components/wishlist/WishlistEmailModal'
 
 const bebasNeue = Bebas_Neue({
   weight: '400',
@@ -52,8 +55,12 @@ export default function RootLayout({
           textRendering: 'optimizeLegibility',
         }}
       >
-        {children}
-        <WhatsAppWidget />
+        <WishlistProvider>
+          {children}
+          <WishlistDrawer />
+          <WishlistEmailModal />
+          <WhatsAppWidget />
+        </WishlistProvider>
       </body>
     </html>
   )

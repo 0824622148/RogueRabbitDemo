@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import Arrow from '@/components/brand/Arrow'
 import type { ColourwayDB, Size } from '@/types'
 import PreOrderModal from '@/components/shop/PreOrderModal'
+import { useWishlist } from '@/context/WishlistContext'
 
 const VIEWS = ['FRONT', 'SIDE', 'BACK', 'TOP'] as const
 type View = typeof VIEWS[number]
@@ -181,7 +182,7 @@ function SizeGuideModal({ gender, onClose }: { gender: 'MALE' | 'FEMALE'; onClos
           ✕ CLOSE
         </button>
 
-        <span className="rr-overline" style={{ color: '#D90017' }}>[ SIZE GUIDE · {gender} ]</span>
+        <span className="rr-overline" style={{ color: '#D90017' }}>[ UK SIZE GUIDE · {gender} ]</span>
         <p style={{ color: '#A6A6A8', fontSize: 12, lineHeight: 1.7, margin: '12px 0 20px' }}>
           Measure your foot from heel to longest toe while standing. If between sizes, go up.
           The Rouge 01 runs true to size.
@@ -214,6 +215,7 @@ export default function PDPHero({ colourways }: Props) {
   const [zoomed, setZoomed] = useState(false)
   const [sizeGuide, setSizeGuide] = useState(false)
   const [preOrder, setPreOrder] = useState(false)
+  const { addItem, removeItem, isWishlisted } = useWishlist()
 
   const sizes: Size[] = cw.inventory
     .filter(i => i.gender === (gender === 'MALE' ? 'M' : 'F'))
@@ -326,8 +328,8 @@ export default function PDPHero({ colourways }: Props) {
           {/* Size selector */}
           <div style={{ marginTop: 30 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 14 }}>
-              <span className="rr-overline" style={{ color: '#E6E6E6' }}>SIZE · US</span>
-              <a className="rr-mono" style={{ color: '#E6E6E6', textDecoration: 'underline', cursor: 'pointer' }} onClick={() => setSizeGuide(true)}>SIZE GUIDE</a>
+              <span className="rr-overline" style={{ color: '#E6E6E6' }}>SIZE · UK</span>
+              <a className="rr-mono" style={{ color: '#E6E6E6', textDecoration: 'underline', cursor: 'pointer' }} onClick={() => setSizeGuide(true)}>UK SIZE GUIDE</a>
             </div>
 
             <div style={{ display: 'flex', gap: 0, marginBottom: 14 }}>
@@ -374,7 +376,16 @@ export default function PDPHero({ colourways }: Props) {
               <span>PRE-ORDER NOW · R1800</span>
               <Arrow size={16} />
             </button>
-            <button className="rr-btn rr-btn--ghost" style={{ justifyContent: 'center' }}>♡ ADD TO WISHLIST</button>
+            <button
+              className="rr-btn rr-btn--ghost"
+              style={{ justifyContent: 'center' }}
+              onClick={() => {
+                const wishlisted = isWishlisted(cw.product_id, cw.id)
+                wishlisted ? removeItem(cw.product_id, cw.id) : addItem(cw.product_id, cw.id)
+              }}
+            >
+              {isWishlisted(cw.product_id, cw.id) ? '♥ WISHLISTED' : '♡ ADD TO WISHLIST'}
+            </button>
           </div>
 
           {/* Meta rows */}
