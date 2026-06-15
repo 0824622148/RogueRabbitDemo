@@ -5,7 +5,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { useWishlist } from '@/context/WishlistContext'
 
 export default function WishlistDrawer() {
-  const { isOpen, closeDrawer, items, removeItem } = useWishlist()
+  const { isOpen, closeDrawer, items, isLoading, removeItem } = useWishlist()
 
   return (
     <AnimatePresence>
@@ -68,7 +68,26 @@ export default function WishlistDrawer() {
 
             {/* Items */}
             <div style={{ flex: 1, overflowY: 'auto', padding: '0 28px' }}>
-              {items.length === 0 ? (
+              {isLoading ? (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+                  {[0, 1, 2].map(i => (
+                    <div
+                      key={i}
+                      style={{
+                        display: 'flex', gap: 16, alignItems: 'flex-start',
+                        padding: '20px 0',
+                        borderBottom: '1px solid #3A3A3C',
+                      }}
+                    >
+                      <div style={{ width: 80, height: 80, flexShrink: 0, background: '#2A2A2C' }} />
+                      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 8 }}>
+                        <div style={{ height: 10, width: '60%', background: '#2A2A2C' }} />
+                        <div style={{ height: 10, width: '30%', background: '#2A2A2C' }} />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : items.length === 0 ? (
                 <div style={{ textAlign: 'center', paddingTop: 80 }}>
                   <div style={{ fontSize: 32, marginBottom: 16, color: '#3A3A3C' }}>♡</div>
                   <p className="rr-overline" style={{ color: '#A6A6A8', marginBottom: 24 }}>

@@ -18,6 +18,7 @@ interface WishlistContextValue {
   email: string | null
   items: WishlistItem[]
   count: number
+  isLoading: boolean
   isOpen: boolean
   promptOpen: boolean
   openDrawer: () => void
@@ -60,6 +61,7 @@ function parseItems(raw: any[]): WishlistItem[] {
 export function WishlistProvider({ children }: { children: React.ReactNode }) {
   const [email, setEmailState] = useState<string | null>(null)
   const [items, setItems] = useState<WishlistItem[]>([])
+  const [isLoading, setIsLoading] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const [promptOpen, setPromptOpen] = useState(false)
   const pendingRef = useRef<{ productId: number; colourwayId?: string | null } | null>(null)
@@ -74,6 +76,7 @@ export function WishlistProvider({ children }: { children: React.ReactNode }) {
   }, [])
 
   const fetchItems = useCallback(async (forEmail: string) => {
+    setIsLoading(true)
     try {
       const res = await fetch(`/api/wishlist?email=${encodeURIComponent(forEmail)}`)
       if (!res.ok) return
@@ -81,6 +84,8 @@ export function WishlistProvider({ children }: { children: React.ReactNode }) {
       setItems(parseItems(raw))
     } catch {
       // silent — wishlist is non-critical
+    } finally {
+      setIsLoading(false)
     }
   }, [])
 
@@ -167,6 +172,7 @@ export function WishlistProvider({ children }: { children: React.ReactNode }) {
       email,
       items,
       count: items.length,
+      isLoading,
       isOpen,
       promptOpen,
       openDrawer: () => setIsOpen(true),

@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
     .from('wishlist')
     .select(`
       id, product_id, colourway_id,
-      products ( name, slug, price, media_bg, image_contain, image_fit, image_object_pos ),
+      products ( name, slug, price, media_bg ),
       colourways ( name, hex, product_images ( view, url ) )
     `)
     .eq('email', email.toLowerCase())
