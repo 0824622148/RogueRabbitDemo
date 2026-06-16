@@ -12,7 +12,6 @@ export default function FilterBar() {
       className="rr-filterbar"
       style={{
         position: 'sticky', top: 0, zIndex: 30,
-        padding: '18px 40px',
         background: 'rgba(15,15,16,0.95)',
         backdropFilter: 'blur(10px)',
         borderBottom: '1px solid #3A3A3C',

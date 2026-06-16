@@ -14,6 +14,7 @@ const FOOTER_COLS = [
 export default function Footer() {
   return (
     <footer
+      className="rr-footer-wrap"
       style={{
         background: '#070708',
         borderTop: '1px solid #3A3A3C',

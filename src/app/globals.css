@@ -220,6 +220,26 @@
 .rr-row { display: flex; }
 .rr-center { display: flex; align-items: center; justify-content: center; }
 
+/* ── Section heading title ────────────────────── */
+.rr-section-title { font-size: 92px; }
+
+/* ── PDP title ────────────────────────────────── */
+.rr-pdp-title { font-size: 76px; }
+
+/* ── FilterBar base padding ───────────────────── */
+.rr-filterbar { padding: 18px 40px; }
+
+/* ── Wishlist heart on product card ───────────── */
+.rr-card-wishlist         { opacity: 0; }
+.rr-card:hover .rr-card-wishlist { opacity: 1; }
+.rr-card-wishlist.rr-card-wishlist--active { opacity: 1; }
+
+/* ── Breadcrumb ───────────────────────────────── */
+.rr-breadcrumb { }
+
+/* ── Shop load-more ───────────────────────────── */
+.rr-shop-loadmore { }
+
 /* ── Mobile bottom nav glow ───────────────────── */
 .rr-bottom-glow {
   background: linear-gradient(180deg, rgba(15,15,16,0) 0%, rgba(15,15,16,0.95) 60%, #0f0f10 100%);
@@ -453,7 +473,28 @@
   .rr-nav-wordmark     { display: none; }
   .rr-nav-search-label { display: none; }
   .rr-nav-account-label { display: none; }
-  .rr-filterbar        { padding: 14px 20px; gap: 12px; }
+  .rr-filterbar        { padding: 14px 20px !important; gap: 12px; }
+
+  /* Section + PDP title sizes */
+  .rr-section-title    { font-size: clamp(44px, 12vw, 76px); }
+  .rr-pdp-title        { font-size: clamp(48px, 13vw, 72px); }
+
+  /* Wishlist heart always visible on mobile */
+  .rr-card-wishlist    { opacity: 1; }
+
+  /* Footer padding */
+  .rr-footer-wrap      { padding: 48px 20px 24px !important; }
+
+  /* Breadcrumb: tighten padding, hide middle crumbs, hide live counter */
+  .rr-breadcrumb       { padding: 14px 20px !important; gap: 10px; flex-wrap: wrap; }
+  .rr-breadcrumb-hide  { display: none; }
+  .rr-breadcrumb-live  { display: none; }
+
+  /* Shop load-more */
+  .rr-shop-loadmore    { padding: 48px 20px !important; }
+
+  /* Hero stats gap (inline style was overriding CSS) */
+  .rr-hero-stats       { gap: 24px; margin-top: 36px; }
 }
 
 /* ── Mobile section reordering ───────────────── */

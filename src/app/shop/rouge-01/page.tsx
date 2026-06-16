@@ -30,6 +30,7 @@ export default async function ProductPage() {
       <NavBar />
 
       <div
+        className="rr-breadcrumb"
         style={{
           padding: '20px 40px',
           display: 'flex', gap: 14, alignItems: 'center',
@@ -38,13 +39,13 @@ export default async function ProductPage() {
       >
         <span className="rr-mono">SHOP</span>
         <span style={{ color: '#3A3A3C' }}>/</span>
-        <span className="rr-mono">FOOTWEAR</span>
-        <span style={{ color: '#3A3A3C' }}>/</span>
-        <span className="rr-mono">DROP 003</span>
-        <span style={{ color: '#3A3A3C' }}>/</span>
+        <span className="rr-mono rr-breadcrumb-hide">FOOTWEAR</span>
+        <span className="rr-breadcrumb-hide" style={{ color: '#3A3A3C' }}>/</span>
+        <span className="rr-mono rr-breadcrumb-hide">DROP 003</span>
+        <span className="rr-breadcrumb-hide" style={{ color: '#3A3A3C' }}>/</span>
         <span className="rr-mono" style={{ color: '#E6E6E6' }}>{name}</span>
         <span style={{ flex: 1 }} />
-        <span className="rr-mono" style={{ color: '#D90017' }}>● 12 SELLING NOW</span>
+        <span className="rr-mono rr-breadcrumb-live">● 12 SELLING NOW</span>
       </div>
 
       <PDPHero colourways={colourways} />

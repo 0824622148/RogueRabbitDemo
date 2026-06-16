@@ -25,7 +25,8 @@ export default function NavBar({ cartCount = 2 }: { cartCount?: number }) {
       <header
         className="rr-nav-header"
         style={{
-          position: 'relative',
+          position: 'sticky',
+          top: 0,
           borderBottom: '1px solid #3A3A3C',
           background: 'rgba(15,15,16,0.95)',
           backdropFilter: 'blur(12px)',

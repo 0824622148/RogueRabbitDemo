@@ -322,7 +322,7 @@ export default function PDPHero({ colourways }: Props) {
             <span className="rr-mono">RR-01-{cw.id.toUpperCase()}</span>
           </div>
 
-          <h1 className="rr-display" style={{ fontSize: 76, margin: 0, lineHeight: 0.88, letterSpacing: '-.01em' }}>
+          <h1 className="rr-display rr-pdp-title" style={{ margin: 0, lineHeight: 0.88, letterSpacing: '-.01em' }}>
             ROUGE 01<br /><span style={{ color: '#D90017' }}>{cw.name}.</span>
           </h1>
 

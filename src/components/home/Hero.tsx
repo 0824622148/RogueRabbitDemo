@@ -108,7 +108,7 @@ export default function Hero() {
           <div
             className="rr-hero-stats"
             style={{
-              display: 'flex', gap: 40, marginTop: 48, paddingTop: 24,
+              display: 'flex', marginTop: 48, paddingTop: 24,
               borderTop: '1px solid #3A3A3C', flexWrap: 'wrap',
             }}
           >

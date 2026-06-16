@@ -37,7 +37,7 @@ export default async function ShopPage() {
         </div>
       </section>
 
-      <section style={{ padding: '70px 40px', textAlign: 'center' }}>
+      <section className="rr-shop-loadmore" style={{ padding: '70px 40px', textAlign: 'center' }}>
         <div className="rr-mono" style={{ marginBottom: 18 }}>SHOWING {products.length} OF {products.length}</div>
         <button className="rr-btn rr-btn--ghost">LOAD NEXT 12 →</button>
       </section>

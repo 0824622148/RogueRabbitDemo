@@ -33,8 +33,8 @@ export default function SectionHead({ index, kicker, title, action, dark = true 
           <span className="rr-overline">{kicker}</span>
         </div>
         <h2
-          className="rr-display"
-          style={{ fontSize: 92, margin: 0, color: textColor }}
+          className="rr-display rr-section-title"
+          style={{ margin: 0, color: textColor }}
         >
           {title}
         </h2>
