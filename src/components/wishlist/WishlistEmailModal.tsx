@@ -52,13 +52,14 @@ export default function WishlistEmailModal() {
             transition={{ duration: 0.2 }}
             style={{
               position: 'fixed',
-              top: '50%', left: '50%',
-              transform: 'translate(-50%, -50%)',
+              inset: 0,
+              margin: 'auto',
+              height: 'fit-content',
               zIndex: 301,
-              width: '100%', maxWidth: 400,
+              width: 'calc(100% - 32px)', maxWidth: 400,
               background: '#1E1E20',
               border: '1px solid #3A3A3C',
-              padding: '36px 32px',
+              padding: '36px 28px',
             }}
           >
             <button
