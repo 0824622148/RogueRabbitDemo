@@ -8,7 +8,7 @@ interface Props {
 
 export default function Recommended({ products }: Props) {
   return (
-    <section style={{ padding: '100px 0' }}>
+    <section className="rr-recommended" style={{ padding: '100px 0' }}>
       <SectionHead index="03" kicker="ALSO WORN" title="WEAR IT WITH." action="Shop the look" />
       <div
         style={{

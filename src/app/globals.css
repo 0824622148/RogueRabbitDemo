@@ -493,6 +493,9 @@
   /* Shop load-more */
   .rr-shop-loadmore    { padding: 48px 20px !important; }
 
+  /* Hide "Wear it with" section on mobile */
+  .rr-recommended      { display: none; }
+
   /* Hero stats gap (inline style was overriding CSS) */
   .rr-hero-stats       { gap: 24px; margin-top: 36px; }
 }
