@@ -329,6 +329,7 @@
 .rr-onfoot-title       { font-size: 180px; }
 .rr-nav-links          { display: flex; }
 .rr-nav-hamburger      { display: none; }
+.rr-nav-right          { gap: 24px; }
 .rr-section-pad        { padding: 100px 0; }
 .rr-section-inner-pad  { padding: 0 40px; }
 .rr-campaign-copy-pad  { padding: 80px 80px; }
@@ -413,7 +414,9 @@
   .rr-onfoot-title     { font-size: clamp(40px, 11vw, 80px); }
   .rr-nav-links        { display: none; }
   .rr-nav-hamburger    { display: flex; }
-  .rr-nav-right        { gap: 16px; }
+  .rr-nav-header       { padding: 14px 16px !important; }
+  .rr-nav-right        { gap: 14px; }
+  .rr-nav-wordmark     { display: none; }
   .rr-nav-search-label { display: none; }
   .rr-nav-account-label { display: none; }
   .rr-filterbar        { padding: 14px 20px; gap: 12px; }

@@ -4,9 +4,10 @@ interface RougeLogoProps {
   size?: number
   withWordmark?: boolean
   color?: string
+  wordmarkClass?: string
 }
 
-export default function RougeLogo({ size = 32, withWordmark = false, color = 'bone' }: RougeLogoProps) {
+export default function RougeLogo({ size = 32, withWordmark = false, color = 'bone', wordmarkClass }: RougeLogoProps) {
   return (
     <div style={{ display: 'inline-flex', alignItems: 'center', gap: 12 }}>
       <Image
@@ -24,7 +25,7 @@ export default function RougeLogo({ size = 32, withWordmark = false, color = 'bo
       />
       {withWordmark && (
         <span
-          className="rr-display"
+          className={`rr-display${wordmarkClass ? ` ${wordmarkClass}` : ''}`}
           style={{ fontSize: size * 0.9, color: color === 'bone' ? '#E6E6E6' : '#0F0F10', letterSpacing: '.06em' }}
         >
           ROUGE RABBIT

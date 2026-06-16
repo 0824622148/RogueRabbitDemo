@@ -23,6 +23,7 @@ export default function NavBar({ cartCount = 2 }: { cartCount?: number }) {
   return (
     <>
       <header
+        className="rr-nav-header"
         style={{
           position: 'relative',
           borderBottom: '1px solid #3A3A3C',
@@ -85,13 +86,13 @@ export default function NavBar({ cartCount = 2 }: { cartCount?: number }) {
 
         {/* Center — logo */}
         <Link href="/" style={{ cursor: 'pointer', display: 'inline-flex' }}>
-          <RougeLogo size={36} withWordmark />
+          <RougeLogo size={36} withWordmark wordmarkClass="rr-nav-wordmark" />
         </Link>
 
         {/* Right — icons */}
         <div
           className="rr-nav-right"
-          style={{ display: 'flex', gap: 24, justifyContent: 'flex-end', alignItems: 'center' }}
+          style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}
         >
           <button
             style={{
@@ -171,7 +172,7 @@ export default function NavBar({ cartCount = 2 }: { cartCount?: number }) {
       {menuOpen && (
         <div
           style={{
-            position: 'fixed', top: 61, left: 0, right: 0,
+            position: 'fixed', top: 64, left: 0, right: 0,
             background: '#0F0F10',
             borderBottom: '1px solid #3A3A3C',
             zIndex: 49,
