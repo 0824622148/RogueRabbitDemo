@@ -71,18 +71,18 @@ function ZoomModal({ src, alt, label, onClose }: { src: string; alt: string; lab
         display: 'flex', alignItems: 'center', justifyContent: 'center',
       }}
     >
-      <div style={{ position: 'absolute', top: 28, left: 36 }}>
-        <span className="rr-mono" style={{ color: '#E6E6E6', fontSize: 11, letterSpacing: '.2em' }}>
+      <div className="rr-zoom-bar">
+        <span className="rr-mono rr-zoom-label" style={{ color: '#E6E6E6', fontSize: 11, letterSpacing: '.2em' }}>
           {label}
         </span>
-      </div>
-      <div style={{ position: 'absolute', top: 28, right: 36, display: 'flex', gap: 28, alignItems: 'center' }}>
-        <span className="rr-mono" style={{ color: '#A6A6A8', fontSize: 10, letterSpacing: '.18em' }}>
-          SCROLL TO ZOOM · DRAG TO PAN · DBL-CLICK TO RESET
-        </span>
-        <span className="rr-mono" style={{ color: '#A6A6A8', fontSize: 10, letterSpacing: '.18em' }}>
-          ESC TO CLOSE
-        </span>
+        <div style={{ display: 'flex', gap: 28, alignItems: 'center' }}>
+          <span className="rr-mono rr-zoom-hints" style={{ color: '#A6A6A8', fontSize: 10, letterSpacing: '.18em' }}>
+            SCROLL TO ZOOM · DRAG TO PAN · DBL-CLICK TO RESET
+          </span>
+          <span className="rr-mono" style={{ color: '#A6A6A8', fontSize: 10, letterSpacing: '.18em' }}>
+            ESC TO CLOSE
+          </span>
+        </div>
       </div>
 
       <div

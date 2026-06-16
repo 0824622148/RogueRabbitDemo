@@ -280,6 +280,22 @@
 .rr-pill:hover { border-color: var(--bone); }
 .rr-pill--active { background: var(--bone); color: var(--raven); border-color: var(--bone); }
 
+/* ── Zoom modal top bar ───────────────────────── */
+.rr-zoom-bar {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  padding: 20px 36px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .rr-zoom-bar    { padding: 16px 20px; }
+  .rr-zoom-hints  { display: none; }
+}
+
 /* ── PDP view strip (tablet + mobile, replaces hidden thumb rail) ── */
 .rr-pdp-view-strip {
   display: none;
