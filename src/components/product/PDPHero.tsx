@@ -79,7 +79,7 @@ function ZoomModal({ src, alt, label, onClose }: { src: string; alt: string; lab
           <span className="rr-mono rr-zoom-hints" style={{ color: '#A6A6A8', fontSize: 10, letterSpacing: '.18em' }}>
             SCROLL TO ZOOM · DRAG TO PAN · DBL-CLICK TO RESET
           </span>
-          <span className="rr-mono" style={{ color: '#A6A6A8', fontSize: 10, letterSpacing: '.18em' }}>
+          <span className="rr-mono rr-zoom-esc" style={{ color: '#A6A6A8', fontSize: 10, letterSpacing: '.18em' }}>
             ESC TO CLOSE
           </span>
         </div>

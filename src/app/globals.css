@@ -294,6 +294,7 @@
 @media (max-width: 768px) {
   .rr-zoom-bar    { padding: 16px 20px; }
   .rr-zoom-hints  { display: none; }
+  .rr-zoom-esc    { display: none; }
 }
 
 /* ── PDP view strip (tablet + mobile, replaces hidden thumb rail) ── */
