@@ -268,25 +268,50 @@ export default function PDPHero({ colourways }: Props) {
           <div className="rr-vtext" style={{ alignSelf: 'center' }}>R/001 · {cw.name}</div>
         </div>
 
-        {/* Main image */}
-        <div
-          style={{ background: '#fff', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRight: '1px solid #3A3A3C' }}
-        >
-          <img
-            src={activeImage}
-            alt={`Rouge 01 ${cw.name} — ${view}`}
-            onClick={() => setZoomed(true)}
-            style={{ width: '75%', height: '75%', objectFit: 'contain', cursor: 'zoom-in' }}
-          />
-          <div className="rr-plus" style={{ top: 18, left: 18 }} />
-          <div className="rr-plus" style={{ top: 18, right: 18 }} />
-          <div className="rr-plus" style={{ bottom: 18, left: 18 }} />
-          <div className="rr-plus" style={{ bottom: 18, right: 18 }} />
-          <div style={{ position: 'absolute', top: 18, left: 40, color: '#0F0F10' }}>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.22em' }}>VIEW · {view}</div>
+        {/* Main image + mobile view strip */}
+        <div style={{ display: 'flex', flexDirection: 'column', borderRight: '1px solid #3A3A3C' }}>
+          <div
+            className="rr-pdp-main-image"
+            style={{ background: '#fff', position: 'relative', flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 400 }}
+          >
+            <img
+              src={activeImage}
+              alt={`Rouge 01 ${cw.name} — ${view}`}
+              onClick={() => setZoomed(true)}
+              style={{ width: '75%', height: '75%', objectFit: 'contain', cursor: 'zoom-in' }}
+            />
+            <div className="rr-plus" style={{ top: 18, left: 18 }} />
+            <div className="rr-plus" style={{ top: 18, right: 18 }} />
+            <div className="rr-plus" style={{ bottom: 18, left: 18 }} />
+            <div className="rr-plus" style={{ bottom: 18, right: 18 }} />
+            <div style={{ position: 'absolute', top: 18, left: 40, color: '#0F0F10' }}>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.22em' }}>VIEW · {view}</div>
+            </div>
+            <div style={{ position: 'absolute', bottom: 18, right: 40, color: '#0F0F10', cursor: 'zoom-in' }} onClick={() => setZoomed(true)}>
+              <span className="rr-chip" style={{ borderColor: '#0F0F10', color: '#0F0F10' }}>+ ZOOM</span>
+            </div>
           </div>
-          <div style={{ position: 'absolute', bottom: 18, right: 40, color: '#0F0F10', cursor: 'zoom-in' }} onClick={() => setZoomed(true)}>
-            <span className="rr-chip" style={{ borderColor: '#0F0F10', color: '#0F0F10' }}>+ ZOOM</span>
+
+          {/* View selector strip — hidden on desktop (thumb rail handles it), shown on tablet/mobile */}
+          <div className="rr-pdp-view-strip">
+            {VIEWS.map((v) => (
+              <button
+                key={v}
+                onClick={() => setView(v)}
+                style={{
+                  background: 'none', border: 'none', cursor: 'pointer',
+                  padding: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
+                  flexShrink: 0,
+                }}
+              >
+                <div className={`rr-thumb ${view === v ? 'rr-thumb--active' : ''}`} style={{ width: 64, height: 64 }}>
+                  <img src={cw.images.find(i => i.view === v)?.url ?? cw.image} alt={v} />
+                </div>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '.14em', color: view === v ? '#D90017' : '#A6A6A8' }}>
+                  {v}
+                </span>
+              </button>
+            ))}
           </div>
         </div>
 

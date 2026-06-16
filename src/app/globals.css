@@ -280,6 +280,11 @@
 .rr-pill:hover { border-color: var(--bone); }
 .rr-pill--active { background: var(--bone); color: var(--raven); border-color: var(--bone); }
 
+/* ── PDP view strip (tablet + mobile, replaces hidden thumb rail) ── */
+.rr-pdp-view-strip {
+  display: none;
+}
+
 /* ── Thumbnail strip ──────────────────────────── */
 .rr-thumb {
   width: 100%; aspect-ratio: 1; background: #fff; cursor: pointer;
@@ -358,6 +363,17 @@
   .rr-pdp-thumb-rail   { display: none; }
   .rr-pdp-lifestyle    { display: none; }
   .rr-pdp-purchase-col { padding: 32px 28px; }
+  .rr-pdp-view-strip {
+    display: flex;
+    gap: 16px;
+    padding: 16px 24px;
+    border-top: 1px solid #3A3A3C;
+    background: #0F0F10;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .rr-pdp-view-strip::-webkit-scrollbar { display: none; }
   .rr-story-grid       { grid-template-columns: 1fr; }
   .rr-footer-grid      { grid-template-columns: 1fr 1fr 1fr; }
   .rr-campaign-copy-pad { padding: 60px 40px; }
@@ -408,6 +424,7 @@
   .rr-pdp-lifestyle    { display: none; }
   .rr-pdp-main-image   { min-height: 320px; }
   .rr-pdp-purchase-col { padding: 28px 20px; }
+  .rr-pdp-view-strip   { padding: 14px 20px; gap: 14px; }
   .rr-story-grid       { grid-template-columns: 1fr; }
   .rr-story-pad-left   { padding: 48px 24px; }
   .rr-story-pad-right  { padding: 48px 24px; }
