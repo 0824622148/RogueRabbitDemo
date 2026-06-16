@@ -26,7 +26,7 @@ export default function FeaturedDrop({ products }: Props) {
           kicker="DROP · 003 · FEATURED"
           title="THE ROUGE 01."
         />
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16, paddingBottom: 8 }}>
+        <div className="rr-featured-nav" style={{ display: 'flex', alignItems: 'center', gap: 16, paddingBottom: 8 }}>
           <span className="rr-mono" style={{ color: '#A6A6A8', fontSize: 11, letterSpacing: '.18em' }}>
             {offset + 1} / {MAX_OFFSET + 1}
           </span>
@@ -61,8 +61,9 @@ export default function FeaturedDrop({ products }: Props) {
         </div>
       </div>
 
-      <div className="rr-section-inner-pad" style={{ overflow: 'hidden' }}>
+      <div className="rr-section-inner-pad rr-featured-outer" style={{ overflow: 'hidden' }}>
         <div
+          className="rr-featured-track"
           style={{
             display: 'flex',
             width: `${(TOTAL / VISIBLE) * 100}%`,
@@ -74,6 +75,7 @@ export default function FeaturedDrop({ products }: Props) {
             <Link
               key={p.id}
               href={`/shop/${p.slug}`}
+              className="rr-featured-card"
               style={{
                 flex: `0 0 ${100 / TOTAL}%`,
                 borderRight: '1px solid #3A3A3C',
@@ -88,7 +90,7 @@ export default function FeaturedDrop({ products }: Props) {
         </div>
       </div>
 
-      <div style={{ display: 'flex', gap: 8, justifyContent: 'center', marginTop: 28 }}>
+      <div className="rr-featured-dots" style={{ display: 'flex', gap: 8, justifyContent: 'center', marginTop: 28 }}>
         {Array.from({ length: MAX_OFFSET + 1 }).map((_, i) => (
           <button
             key={i}
@@ -101,6 +103,9 @@ export default function FeaturedDrop({ products }: Props) {
             }}
           />
         ))}
+      </div>
+      <div className="rr-featured-swipe-hint" style={{ display: 'none' }}>
+        <span className="rr-mono" style={{ color: '#3A3A3C', fontSize: 10 }}>← SWIPE →</span>
       </div>
 
     </section>

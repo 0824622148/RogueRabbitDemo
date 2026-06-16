@@ -434,6 +434,39 @@
   .rr-home-wrap > *:nth-child(8) { order: 8; }  /* Footer        */
 }
 
+/* ── FeaturedDrop: native swipe carousel on mobile ── */
+@media (max-width: 768px) {
+  .rr-featured-outer {
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+  .rr-featured-outer::-webkit-scrollbar { display: none; }
+
+  .rr-featured-track {
+    width: auto !important;
+    transform: none !important;
+    transition: none !important;
+    gap: 16px;
+  }
+
+  .rr-featured-card {
+    flex: 0 0 82% !important;
+    border-right: none !important;
+    scroll-snap-align: start;
+  }
+
+  .rr-featured-nav  { display: none !important; }
+  .rr-featured-dots { display: none !important; }
+  .rr-featured-swipe-hint {
+    display: flex !important;
+    justify-content: center;
+    margin-top: 16px;
+  }
+}
+
 /* ── Small mobile (max 480px) ─────────────────── */
 @media (max-width: 480px) {
   .rr-hero-title       { font-size: clamp(60px, 17vw, 86px); }
