@@ -52,7 +52,7 @@ export default async function ProductPage({ searchParams }: { searchParams: Prom
         <span className="rr-mono rr-breadcrumb-live">● 12 SELLING NOW</span>
       </div>
 
-      <PDPHero colourways={colourways} initialColourwayId={initialColourwayId} />
+      <PDPHero key={initialColourwayId ?? 'default'} colourways={colourways} initialColourwayId={initialColourwayId} />
       <StorySpecs />
       <OnFootStrip />
       <Recommended products={recommendedProducts} />
