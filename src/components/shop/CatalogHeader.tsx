@@ -19,12 +19,12 @@ export default function CatalogHeader() {
         </h1>
         <div>
           <p style={{ color: '#A6A6A8', fontSize: 14, lineHeight: 1.7, maxWidth: 460 }}>
-            Every piece in the active roster. 38 styles across footwear, apparel and accessories.
-            Numbered and dispatched from the warehouse the day it ships.
+            The Rouge 1 — 5 colourways, one silhouette. Built for the ones who move without
+            permission. Apparel and accessories dropping soon. Stay close.
           </p>
           <div style={{ display: 'flex', gap: 30, marginTop: 24, flexWrap: 'wrap' }}>
-            <StatItem n="38" l="STYLES" />
-            <StatItem n="04" l="DROPS · ACTIVE" />
+            <StatItem n="05" l="COLOURWAYS" />
+            <StatItem n="01" l="DROP · ACTIVE" />
             <StatItem n="07" l="SIZES · UNISEX" />
           </div>
         </div>

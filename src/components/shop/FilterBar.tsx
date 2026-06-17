@@ -27,7 +27,7 @@ export default function FilterBar() {
             className={`rr-pill ${active === f ? 'rr-pill--active' : ''}`}
           >
             {f}
-            {f === 'ALL' && <span style={{ opacity: 0.6 }}>· 38</span>}
+            {f === 'ALL' && <span style={{ opacity: 0.6 }}>· 05</span>}
           </button>
         ))}
       </div>
