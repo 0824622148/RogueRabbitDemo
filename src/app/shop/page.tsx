@@ -18,7 +18,7 @@ export default async function ShopPage() {
 
       <section className="rr-shop-layout" style={{ borderBottom: '1px solid #3A3A3C' }}>
         <div className="rr-shop-sidebar">
-          <SideRail />
+          <SideRail products={products} />
         </div>
         <div className="rr-3col-grid">
           {products.map((p, i) => (
@@ -39,7 +39,7 @@ export default async function ShopPage() {
 
       <section className="rr-shop-loadmore" style={{ padding: '70px 40px', textAlign: 'center' }}>
         <div className="rr-mono" style={{ marginBottom: 18 }}>SHOWING {products.length} OF {products.length}</div>
-        <button className="rr-btn rr-btn--ghost">LOAD NEXT 12 →</button>
+        <div className="rr-mono" style={{ opacity: 0.45, letterSpacing: '0.12em', fontSize: 13 }}>MORE DROPPING SOON</div>
       </section>
 
       <Footer />
