@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import SectionHead from '@/components/brand/SectionHead'
 import ProductCard from '@/components/brand/ProductCard'
 import type { Product } from '@/types'
@@ -20,7 +21,13 @@ export default function Recommended({ products }: Props) {
         }}
       >
         {products.map((p, i) => (
-          <ProductCard key={p.id} product={p} mediaHeight={360} indexLabel={`R/02${i + 1}`} />
+          <Link
+            key={p.id}
+            href={`/shop/${p.slug}${p.colourwayId ? `?colour=${p.colourwayId}` : ''}`}
+            style={{ display: 'block', textDecoration: 'none' }}
+          >
+            <ProductCard product={p} mediaHeight={360} indexLabel={`R/02${i + 1}`} />
+          </Link>
         ))}
       </div>
     </section>
