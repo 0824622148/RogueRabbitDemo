@@ -17,17 +17,21 @@ export default async function ProductPage({ searchParams }: { searchParams: Prom
   const { name, price, colourways } = data
   const initialColourwayId = typeof params.colour === 'string' ? params.colour : undefined
 
-  const recommendedProducts: Product[] = colourways.slice(0, 4).map(cw => ({
-    id: cw.sort_order,
-    name: `ROUGE 01 · ${cw.name}`,
-    slug: 'rouge-01',
-    colourwayId: cw.id,
-    cat: 'FOOTWEAR / DROP 003',
-    drop_label: 'DROP 003',
-    price,
-    image: cw.image,
-    mediaBg: '#fff',
-  }))
+  const activeId = initialColourwayId ?? colourways[0]?.id
+  const recommendedProducts: Product[] = colourways
+    .filter(cw => cw.id !== activeId)
+    .slice(0, 4)
+    .map(cw => ({
+      id: cw.sort_order,
+      name: `ROUGE 01 · ${cw.name}`,
+      slug: 'rouge-01',
+      colourwayId: cw.id,
+      cat: 'FOOTWEAR / DROP 003',
+      drop_label: 'DROP 003',
+      price,
+      image: cw.image,
+      mediaBg: '#fff',
+    }))
 
   return (
     <div style={{ background: '#0F0F10', color: '#E6E6E6', fontFamily: 'var(--font-body)' }}>
