@@ -32,7 +32,7 @@ const FOOTER_COLS = [
       { label: 'Shipping',         href: '/shipping-returns' },
       { label: 'Returns',          href: '/shipping-returns' },
       { label: 'Pre-Order Policy', href: '/preorder-policy' },
-      { label: 'Contact',          href: 'mailto:support@rougerabbit.co.za' },
+      { label: 'Contact',          href: '/contact' },
     ],
   },
   {
