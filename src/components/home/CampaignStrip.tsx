@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 export default function CampaignStrip() {
   return (
     <section
@@ -63,7 +65,9 @@ export default function CampaignStrip() {
             room who already know exactly who they are. Wear it loud. Or don&apos;t wear it at all.
           </p>
           <div style={{ marginTop: 36 }}>
-            <button className="rr-btn rr-btn--ghost">READ THE MANIFESTO →</button>
+            <Link href="/manifesto" style={{ textDecoration: 'none' }}>
+              <button className="rr-btn rr-btn--ghost">READ THE MANIFESTO →</button>
+            </Link>
           </div>
         </div>
       </div>
