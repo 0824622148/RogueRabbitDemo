@@ -14,7 +14,7 @@ const NAV_LINKS = [
   { label: 'JOURNAL',  href: '/journal' },
 ]
 
-export default function NavBar({ cartCount = 2 }: { cartCount?: number }) {
+export default function NavBar({ cartCount = 0 }: { cartCount?: number }) {
   const pathname = usePathname()
   const isActive = (href: string) =>
     href === '/shop'
@@ -159,15 +159,17 @@ export default function NavBar({ cartCount = 2 }: { cartCount?: number }) {
               <path d="M6.5 5.5C6.5 3.843 7.343 2.5 9 2.5C10.657 2.5 11.5 3.843 11.5 5.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
             </svg>
             <span className="rr-mono rr-nav-search-label" style={{ color: '#E6E6E6' }}>BAG</span>
-            <span
-              style={{
-                background: '#D90017', color: '#E6E6E6',
-                fontFamily: 'var(--font-mono)', fontSize: 10,
-                padding: '2px 6px', minWidth: 22, textAlign: 'center',
-              }}
-            >
-              {String(cartCount).padStart(2, '0')}
-            </span>
+            {cartCount > 0 && (
+              <span
+                style={{
+                  background: '#D90017', color: '#E6E6E6',
+                  fontFamily: 'var(--font-mono)', fontSize: 10,
+                  padding: '2px 6px', minWidth: 22, textAlign: 'center',
+                }}
+              >
+                {String(cartCount).padStart(2, '0')}
+              </span>
+            )}
           </div>
         </div>
       </header>
