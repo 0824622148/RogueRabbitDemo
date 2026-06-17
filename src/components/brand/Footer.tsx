@@ -11,18 +11,18 @@ const FOOTER_COLS = [
     items: [
       { label: 'New Arrivals',   href: '/shop' },
       { label: 'Footwear',       href: '/shop' },
-      { label: 'Apparel',        href: '/shop' },
-      { label: 'Accessories',    href: '/shop' },
-      { label: 'Sale',           href: '/shop' },
+      { label: 'Apparel',        href: '/shop/apparel' },
+      { label: 'Accessories',    href: '/shop/accessories' },
+      { label: 'Sale',           href: '/sale' },
     ],
   },
   {
     title: 'WORLD',
     items: [
-      { label: 'Drops Calendar', href: null },
-      { label: 'Lookbook',       href: null },
-      { label: 'Journal',        href: null },
-      { label: 'Stockists',      href: null },
+      { label: 'Drops Calendar', href: '/drops' },
+      { label: 'Lookbook',       href: '/lookbook' },
+      { label: 'Journal',        href: '/journal' },
+      { label: 'Stockists',      href: '/stockists' },
     ],
   },
   {
