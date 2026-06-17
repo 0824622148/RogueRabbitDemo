@@ -9,14 +9,17 @@ import { useWishlist } from '@/context/WishlistContext'
 const NAV_LINKS = [
   { label: 'NEW',      href: '/shop' },
   { label: 'SHOP',     href: '/shop' },
-  { label: 'DROPS',    href: '/shop' },
-  { label: 'LOOKBOOK', href: '/' },
-  { label: 'JOURNAL',  href: '/' },
+  { label: 'DROPS',    href: '/drops' },
+  { label: 'LOOKBOOK', href: '/lookbook' },
+  { label: 'JOURNAL',  href: '/journal' },
 ]
 
 export default function NavBar({ cartCount = 2 }: { cartCount?: number }) {
   const pathname = usePathname()
-  const isShop = pathname.startsWith('/shop')
+  const isActive = (href: string) =>
+    href === '/shop'
+      ? pathname.startsWith('/shop')
+      : pathname === href || pathname.startsWith(href + '/')
   const [menuOpen, setMenuOpen] = useState(false)
   const { count: wishlistCount, openDrawer } = useWishlist()
 
@@ -53,7 +56,7 @@ export default function NavBar({ cartCount = 2 }: { cartCount?: number }) {
                   cursor: 'pointer',
                   paddingBottom: 4,
                   textDecoration: 'none',
-                  borderBottom: label === 'SHOP' && isShop ? '1px solid #D90017' : '1px solid transparent',
+                  borderBottom: isActive(href) ? '1px solid #D90017' : '1px solid transparent',
                 }}
               >
                 {label}
