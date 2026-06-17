@@ -65,29 +65,52 @@ export default function Footer() {
           </p>
           <div style={{ display: 'flex', gap: 10, marginTop: 24 }}>
             {[
-              { icon: <FaInstagram size={16} />, href: 'https://www.instagram.com/rougerabbit.za?igsh=dmpjcWsyYnFkcjh5&utm_source=qr', label: 'Instagram' },
-              { icon: <FaTiktok size={15} />,    href: 'https://www.tiktok.com/@rouge_rabbitza',                                        label: 'TikTok' },
-              { icon: <FaYoutube size={16} />,   href: 'https://youtube.com/@rougerabbit',   label: 'YouTube' },
-              { icon: <FaXTwitter size={15} />,  href: 'https://x.com/rougerabbit',          label: 'X' },
-            ].map(({ icon, href, label }) => (
-              <a
-                key={label}
-                href={href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={label}
-                style={{
-                  width: 36, height: 36, border: '1px solid #3A3A3C',
-                  display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                  color: '#E6E6E6', cursor: 'pointer', textDecoration: 'none',
-                  transition: 'border-color .2s, color .2s',
-                }}
-                onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.borderColor = '#E6E6E6' }}
-                onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.borderColor = '#3A3A3C' }}
-              >
-                {icon}
-              </a>
-            ))}
+              { icon: <FaInstagram size={16} />, href: 'https://www.instagram.com/rougerabbit.za?igsh=dmpjcWsyYnFkcjh5&utm_source=qr', label: 'Instagram', soon: false },
+              { icon: <FaTiktok size={15} />,    href: 'https://www.tiktok.com/@rouge_rabbitza',                                        label: 'TikTok',   soon: false },
+              { icon: <FaYoutube size={16} />,   href: null,                                                                             label: 'YouTube',  soon: true },
+              { icon: <FaXTwitter size={15} />,  href: null,                                                                             label: 'X',        soon: true },
+            ].map(({ icon, href, label, soon }) =>
+              soon ? (
+                <div
+                  key={label}
+                  title="Coming soon"
+                  aria-label={`${label} — coming soon`}
+                  style={{
+                    position: 'relative',
+                    width: 36, height: 36, border: '1px solid #3A3A3C',
+                    display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                    color: '#3A3A3C', cursor: 'default', opacity: 0.5,
+                  }}
+                >
+                  {icon}
+                  <span style={{
+                    position: 'absolute', bottom: -18,
+                    fontFamily: 'var(--font-mono)', fontSize: 7, letterSpacing: '.14em',
+                    color: '#A6A6A8', whiteSpace: 'nowrap',
+                  }}>
+                    SOON
+                  </span>
+                </div>
+              ) : (
+                <a
+                  key={label}
+                  href={href!}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={label}
+                  style={{
+                    width: 36, height: 36, border: '1px solid #3A3A3C',
+                    display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                    color: '#E6E6E6', cursor: 'pointer', textDecoration: 'none',
+                    transition: 'border-color .2s, color .2s',
+                  }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.borderColor = '#E6E6E6' }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.borderColor = '#3A3A3C' }}
+                >
+                  {icon}
+                </a>
+              )
+            )}
           </div>
         </div>
 
