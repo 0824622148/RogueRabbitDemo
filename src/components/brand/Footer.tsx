@@ -1,14 +1,47 @@
 'use client'
 
+import Link from 'next/link'
 import RougeLogo from './RougeLogo'
 import { FaInstagram, FaYoutube } from 'react-icons/fa'
 import { FaTiktok, FaXTwitter } from 'react-icons/fa6'
 
 const FOOTER_COLS = [
-  { title: 'SHOP',    items: ['New Arrivals', 'Footwear', 'Apparel', 'Accessories', 'Sale'] },
-  { title: 'WORLD',   items: ['Drops Calendar', 'Lookbook', 'Journal', 'Stockists'] },
-  { title: 'SUPPORT', items: ['Sizing', 'Shipping', 'Returns', 'Contact'] },
-  { title: 'LEGAL',   items: ['Terms', 'Privacy', 'Cookies'] },
+  {
+    title: 'SHOP',
+    items: [
+      { label: 'New Arrivals',   href: '/shop' },
+      { label: 'Footwear',       href: '/shop' },
+      { label: 'Apparel',        href: '/shop' },
+      { label: 'Accessories',    href: '/shop' },
+      { label: 'Sale',           href: '/shop' },
+    ],
+  },
+  {
+    title: 'WORLD',
+    items: [
+      { label: 'Drops Calendar', href: null },
+      { label: 'Lookbook',       href: null },
+      { label: 'Journal',        href: null },
+      { label: 'Stockists',      href: null },
+    ],
+  },
+  {
+    title: 'SUPPORT',
+    items: [
+      { label: 'Sizing',           href: null },
+      { label: 'Shipping',         href: '/shipping-returns' },
+      { label: 'Returns',          href: '/shipping-returns' },
+      { label: 'Pre-Order Policy', href: '/preorder-policy' },
+      { label: 'Contact',          href: 'mailto:support@rougerabbit.co.za' },
+    ],
+  },
+  {
+    title: 'LEGAL',
+    items: [
+      { label: 'Terms & Conditions', href: '/terms' },
+      { label: 'Privacy Policy',     href: '/privacy' },
+    ],
+  },
 ]
 
 export default function Footer() {
@@ -62,9 +95,17 @@ export default function Footer() {
           <div key={title}>
             <div className="rr-overline" style={{ marginBottom: 18 }}>{title}</div>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 10 }}>
-              {items.map((item) => (
-                <li key={item}>
-                  <a style={{ color: '#E6E6E6', fontSize: 13, cursor: 'pointer', textDecoration: 'none' }}>{item}</a>
+              {items.map(({ label, href }) => (
+                <li key={label}>
+                  {href ? (
+                    href.startsWith('mailto:') || href.startsWith('http') ? (
+                      <a href={href} style={{ color: '#E6E6E6', fontSize: 13, textDecoration: 'none' }}>{label}</a>
+                    ) : (
+                      <Link href={href} style={{ color: '#E6E6E6', fontSize: 13, textDecoration: 'none' }}>{label}</Link>
+                    )
+                  ) : (
+                    <span style={{ color: '#E6E6E6', fontSize: 13, cursor: 'default' }}>{label}</span>
+                  )}
                 </li>
               ))}
             </ul>
