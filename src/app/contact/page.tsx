@@ -52,6 +52,8 @@ const FAQS = [
   },
 ]
 
+const px = 'clamp(20px, 5vw, 40px)'
+
 export default function ContactPage() {
   return (
     <div style={{ background: '#0F0F10', color: '#E6E6E6', fontFamily: 'var(--font-body)' }}>
@@ -61,7 +63,7 @@ export default function ContactPage() {
       <section
         style={{
           borderBottom: '1px solid #3A3A3C',
-          padding: 'clamp(60px, 8vw, 100px) 40px clamp(50px, 7vw, 80px)',
+          padding: `clamp(60px, 8vw, 100px) ${px} clamp(50px, 7vw, 80px)`,
         }}
       >
         <div style={{ maxWidth: 1100, margin: '0 auto' }}>
@@ -85,28 +87,28 @@ export default function ContactPage() {
               color: '#A6A6A8', margin: 0, marginTop: 24,
             }}
           >
-            We're a small independent team — responses may take up to one business day.
+            We&apos;re a small independent team — responses may take up to one business day.
             For the fastest reply, include your order reference number.
           </p>
         </div>
       </section>
 
       {/* ── CONTACT CARDS ─────────────────────────── */}
-      <section style={{ padding: 'clamp(50px, 6vw, 80px) 40px', borderBottom: '1px solid #3A3A3C' }}>
+      <section style={{ padding: `clamp(40px, 6vw, 80px) ${px}`, borderBottom: '1px solid #3A3A3C' }}>
         <div
           style={{
             maxWidth: 1100, margin: '0 auto',
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-            gap: 1,
             border: '1px solid #3A3A3C',
           }}
         >
           {/* Support */}
           <div
             style={{
-              padding: '44px 40px',
+              padding: 'clamp(28px, 4vw, 44px) clamp(24px, 4vw, 40px)',
               background: '#1E1E20',
+              borderBottom: '1px solid #3A3A3C',
               display: 'flex', flexDirection: 'column', gap: 16,
             }}
           >
@@ -120,7 +122,7 @@ export default function ContactPage() {
               style={{
                 marginTop: 8,
                 fontFamily: 'var(--font-display)',
-                fontSize: 'clamp(16px, 2.5vw, 22px)',
+                fontSize: 'clamp(15px, 2.5vw, 22px)',
                 color: '#E6E6E6',
                 textDecoration: 'none',
                 letterSpacing: '0.01em',
@@ -140,9 +142,8 @@ export default function ContactPage() {
           {/* Orders */}
           <div
             style={{
-              padding: '44px 40px',
+              padding: 'clamp(28px, 4vw, 44px) clamp(24px, 4vw, 40px)',
               background: '#0F0F10',
-              borderLeft: '1px solid #3A3A3C',
               display: 'flex', flexDirection: 'column', gap: 16,
             }}
           >
@@ -156,7 +157,7 @@ export default function ContactPage() {
               style={{
                 marginTop: 8,
                 fontFamily: 'var(--font-display)',
-                fontSize: 'clamp(16px, 2.5vw, 22px)',
+                fontSize: 'clamp(15px, 2.5vw, 22px)',
                 color: '#E6E6E6',
                 textDecoration: 'none',
                 letterSpacing: '0.01em',
@@ -180,7 +181,8 @@ export default function ContactPage() {
         <div
           style={{
             maxWidth: 1100, margin: '0 auto',
-            display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
           }}
         >
           {[
@@ -191,8 +193,9 @@ export default function ContactPage() {
             <div
               key={label}
               style={{
-                padding: '28px 40px',
+                padding: 'clamp(20px, 3vw, 28px) clamp(20px, 4vw, 40px)',
                 borderRight: '1px solid #3A3A3C',
+                borderBottom: '1px solid #3A3A3C',
               }}
             >
               <div className="rr-overline" style={{ color: '#A6A6A8', marginBottom: 8 }}>{label}</div>
@@ -203,9 +206,9 @@ export default function ContactPage() {
       </section>
 
       {/* ── FAQ ───────────────────────────────────── */}
-      <section style={{ padding: 'clamp(60px, 7vw, 100px) 40px' }}>
+      <section style={{ padding: `clamp(48px, 7vw, 100px) ${px}` }}>
         <div style={{ maxWidth: 860, margin: '0 auto' }}>
-          <div style={{ marginBottom: 48 }}>
+          <div style={{ marginBottom: 40 }}>
             <span className="rr-overline" style={{ color: '#D90017', display: 'block', marginBottom: 16 }}>
               FREQUENTLY ASKED
             </span>
@@ -224,8 +227,8 @@ export default function ContactPage() {
 
           <div
             style={{
-              marginTop: 56,
-              padding: '32px 36px',
+              marginTop: 48,
+              padding: 'clamp(24px, 3vw, 32px) clamp(20px, 3vw, 36px)',
               background: '#1E1E20',
               border: '1px solid #3A3A3C',
               display: 'flex',
@@ -238,23 +241,23 @@ export default function ContactPage() {
             <div>
               <div className="rr-overline" style={{ color: '#D90017', marginBottom: 8 }}>STILL HAVE A QUESTION?</div>
               <p style={{ margin: 0, fontSize: 13, color: '#A6A6A8', lineHeight: 1.7 }}>
-                Can't find what you're looking for? Our team is happy to help.
+                Can&apos;t find what you&apos;re looking for? Our team is happy to help.
               </p>
             </div>
             <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
               <a
                 href="mailto:support@rougerabbit.co.za"
                 className="rr-btn rr-btn--ghost"
-                style={{ textDecoration: 'none', padding: '14px 24px', fontSize: 11 }}
+                style={{ textDecoration: 'none', padding: '14px 20px', fontSize: 11 }}
               >
                 EMAIL SUPPORT
               </a>
               <Link
                 href="/shipping-returns"
                 className="rr-btn rr-btn--ghost"
-                style={{ textDecoration: 'none', padding: '14px 24px', fontSize: 11 }}
+                style={{ textDecoration: 'none', padding: '14px 20px', fontSize: 11 }}
               >
-                SHIPPING & RETURNS
+                SHIPPING &amp; RETURNS
               </Link>
             </div>
           </div>

@@ -53,7 +53,8 @@ function Modal({ onClose }: { onClose: () => void }) {
         onClick={e => e.stopPropagation()}
         style={{
           background: '#1E1E20', border: '1px solid #3A3A3C',
-          width: '100%', maxWidth: 400, padding: '36px 32px',
+          width: '100%', maxWidth: 400,
+          padding: 'clamp(24px, 4vw, 36px) clamp(18px, 4vw, 32px)',
           position: 'relative',
         }}
       >
