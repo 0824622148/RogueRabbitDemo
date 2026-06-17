@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 const FAQS = [
   {
     q: 'How do pre-orders work?',
-    a: 'Once you submit your pre-order, your spot is held. You'll receive EFT banking details immediately — payment must be completed within 24 hours to confirm your pair. Your edition number is then assigned and emailed to you. No payment is captured during the form itself.',
+    a: "Once you submit your pre-order, your spot is held. You'll receive EFT banking details immediately — payment must be completed within 24 hours to confirm your pair. Your edition number is then assigned and emailed to you. No payment is captured during the form itself.",
   },
   {
     q: 'When will my pre-order be ready for collection?',
@@ -28,7 +28,7 @@ const FAQS = [
   },
   {
     q: 'How do I find my size?',
-    a: 'The Rouge 01 runs true to size. Use the Sizing Guide on any product page or in the shop sidebar to compare UK, EU, and foot-length measurements. If you're between sizes, size up. Still unsure? Drop us an email.',
+    a: "The Rouge 01 runs true to size. Use the Sizing Guide on any product page or in the shop sidebar to compare UK, EU, and foot-length measurements. If you're between sizes, size up. Still unsure? Drop us an email.",
   },
   {
     q: 'Do you ship internationally?',
@@ -44,7 +44,7 @@ const FAQS = [
   },
   {
     q: 'How do I track my order?',
-    a: 'Once your order has been dispatched you will receive a tracking number via email or SMS. If you haven't received one within the expected processing window, contact orders@rougerabbit.co.za with your order reference number.',
+    a: "Once your order has been dispatched you will receive a tracking number via email or SMS. If you haven't received one within the expected processing window, contact orders@rougerabbit.co.za with your order reference number.",
   },
   {
     q: 'Is my personal information secure?',
