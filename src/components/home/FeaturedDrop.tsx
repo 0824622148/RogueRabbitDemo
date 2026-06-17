@@ -74,7 +74,7 @@ export default function FeaturedDrop({ products }: Props) {
           {products.map((p, i) => (
             <Link
               key={p.id}
-              href={`/shop/${p.slug}`}
+              href={`/shop/${p.slug}${p.colourwayId ? `?colour=${p.colourwayId}` : ''}`}
               className="rr-featured-card"
               style={{
                 flex: `0 0 ${100 / TOTAL}%`,
