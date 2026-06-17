@@ -18,7 +18,7 @@ export default function NewArrivals({ products }: Props) {
       />
       <div className="rr-4col-grid-gap rr-section-inner-pad">
         {products.map((p, i) => (
-          <Link key={p.id} href={`/shop/${p.slug}`} style={{ display: 'block', textDecoration: 'none' }}>
+          <Link key={p.id} href={`/shop/${p.slug}${p.colourwayId ? `?colour=${p.colourwayId}` : ''}`} style={{ display: 'block', textDecoration: 'none' }}>
             <ProductCard product={p} mediaHeight={340} indexLabel={`R/01${i + 1}`} />
           </Link>
         ))}

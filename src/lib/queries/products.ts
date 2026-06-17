@@ -25,6 +25,7 @@ function colourwayToProduct(p: any, cw: any, view: 'FRONT' | 'SIDE'): Product {
     id: cw.sort_order as number,
     name: `${p.name} · ${cw.name}`,
     slug: p.slug,
+    colourwayId: cw.id as string,
     cat: `${p.category} / ${p.drop_label}`,
     drop_label: p.drop_label,
     price: p.price as number,

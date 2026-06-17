@@ -24,7 +24,7 @@ export default async function ShopPage() {
           {products.map((p, i) => (
             <Link
               key={`${p.id}-${i}`}
-              href={`/shop/${p.slug}`}
+              href={`/shop/${p.slug}${p.colourwayId ? `?colour=${p.colourwayId}` : ''}`}
               style={{ cursor: 'pointer', display: 'block', textDecoration: 'none' }}
             >
               <ProductCard

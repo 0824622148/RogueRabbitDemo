@@ -19,6 +19,7 @@ const META_ROWS = [
 
 interface Props {
   colourways: ColourwayDB[]
+  initialColourwayId?: string
 }
 
 function ZoomModal({ src, alt, label, onClose }: { src: string; alt: string; label: string; onClose: () => void }) {
@@ -207,8 +208,9 @@ function SizeGuideModal({ gender, onClose }: { gender: 'MALE' | 'FEMALE'; onClos
   )
 }
 
-export default function PDPHero({ colourways }: Props) {
-  const [cw, setCw] = useState<ColourwayDB>(colourways[0])
+export default function PDPHero({ colourways, initialColourwayId }: Props) {
+  const initial = (initialColourwayId && colourways.find(c => c.id === initialColourwayId)) || colourways[0]
+  const [cw, setCw] = useState<ColourwayDB>(initial)
   const [gender, setGender] = useState<'MALE' | 'FEMALE'>('MALE')
   const [sz, setSz] = useState('')
   const [view, setView] = useState<View>('FRONT')

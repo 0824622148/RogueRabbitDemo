@@ -2,6 +2,7 @@ export interface Product {
   id: number
   name: string
   slug: string
+  colourwayId?: string
   cat: string
   drop_label: string
   price: number

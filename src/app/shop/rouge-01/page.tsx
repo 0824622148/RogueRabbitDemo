@@ -8,16 +8,20 @@ import Recommended from '@/components/product/Recommended'
 import { getProduct } from '@/lib/queries/products'
 import type { Product } from '@/types'
 
-export default async function ProductPage() {
-  const data = await getProduct('rouge-01')
+import type { SearchParams } from 'next/dist/server/request/search-params'
+
+export default async function ProductPage({ searchParams }: { searchParams: Promise<SearchParams> }) {
+  const [data, params] = await Promise.all([getProduct('rouge-01'), searchParams])
   if (!data) notFound()
 
   const { name, price, colourways } = data
+  const initialColourwayId = typeof params.colour === 'string' ? params.colour : undefined
 
   const recommendedProducts: Product[] = colourways.slice(0, 4).map(cw => ({
     id: cw.sort_order,
     name: `ROUGE 01 · ${cw.name}`,
     slug: 'rouge-01',
+    colourwayId: cw.id,
     cat: 'FOOTWEAR / DROP 003',
     drop_label: 'DROP 003',
     price,
@@ -48,7 +52,7 @@ export default async function ProductPage() {
         <span className="rr-mono rr-breadcrumb-live">● 12 SELLING NOW</span>
       </div>
 
-      <PDPHero colourways={colourways} />
+      <PDPHero colourways={colourways} initialColourwayId={initialColourwayId} />
       <StorySpecs />
       <OnFootStrip />
       <Recommended products={recommendedProducts} />
