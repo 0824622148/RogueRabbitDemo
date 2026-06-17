@@ -186,7 +186,6 @@ export default function ContactPage() {
           {[
             { label: 'HOURS', value: 'MON – FRI · 09:00 – 17:00 SAST' },
             { label: 'RESPONSE TIME', value: 'WITHIN 1 BUSINESS DAY' },
-            { label: 'LANGUAGE', value: 'ENGLISH · AFRIKAANS' },
             { label: 'BASED IN', value: 'SOUTH AFRICA' },
           ].map(({ label, value }) => (
             <div
