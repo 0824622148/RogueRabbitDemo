@@ -1,13 +1,27 @@
+import Link from 'next/link'
+
 interface SectionHeadProps {
   index: string
   kicker: string
   title: string
   action?: string
+  actionHref?: string
   dark?: boolean
 }
 
-export default function SectionHead({ index, kicker, title, action, dark = true }: SectionHeadProps) {
+export default function SectionHead({ index, kicker, title, action, actionHref, dark = true }: SectionHeadProps) {
   const textColor = dark ? '#E6E6E6' : '#0F0F10'
+  const actionStyle = {
+    fontFamily: 'var(--font-mono)',
+    fontSize: 11,
+    letterSpacing: '.22em',
+    color: textColor,
+    textTransform: 'uppercase' as const,
+    borderBottom: '1px solid currentColor',
+    paddingBottom: 4,
+    cursor: 'pointer',
+    textDecoration: 'none',
+  }
   return (
     <div
       className="rr-sectionhead-pad"
@@ -40,21 +54,9 @@ export default function SectionHead({ index, kicker, title, action, dark = true 
         </h2>
       </div>
       {action && (
-        <a
-          style={{
-            fontFamily: 'var(--font-mono)',
-            fontSize: 11,
-            letterSpacing: '.22em',
-            color: textColor,
-            textTransform: 'uppercase',
-            borderBottom: '1px solid currentColor',
-            paddingBottom: 4,
-            cursor: 'pointer',
-            textDecoration: 'none',
-          }}
-        >
-          {action} →
-        </a>
+        actionHref
+          ? <Link href={actionHref} style={actionStyle}>{action} →</Link>
+          : <a style={actionStyle}>{action} →</a>
       )}
     </div>
   )
