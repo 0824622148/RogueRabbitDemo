@@ -3,8 +3,6 @@ import NavBar from '@/components/brand/NavBar'
 import Footer from '@/components/brand/Footer'
 import ProductCard from '@/components/brand/ProductCard'
 import CatalogHeader from '@/components/shop/CatalogHeader'
-import FilterBar from '@/components/shop/FilterBar'
-import SideRail from '@/components/shop/SideRail'
 import { getProducts } from '@/lib/queries/products'
 
 export default async function ShopPage() {
@@ -14,12 +12,8 @@ export default async function ShopPage() {
     <div style={{ background: '#0F0F10', color: '#E6E6E6', fontFamily: 'var(--font-body)' }}>
       <NavBar />
       <CatalogHeader />
-      <FilterBar />
 
-      <section className="rr-shop-layout" style={{ borderBottom: '1px solid #3A3A3C' }}>
-        <div className="rr-shop-sidebar">
-          <SideRail products={products} />
-        </div>
+      <section style={{ borderBottom: '1px solid #3A3A3C', padding: '40px' }}>
         <div className="rr-3col-grid">
           {products.map((p, i) => (
             <Link

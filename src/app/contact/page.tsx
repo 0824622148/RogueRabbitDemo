@@ -87,7 +87,7 @@ export default function ContactPage() {
               color: '#A6A6A8', margin: 0, marginTop: 24,
             }}
           >
-            We&apos;re a small independent team — responses may take up to one business day.
+            We&apos;re a small independent team — responses may take up to 3 business days.
             For the fastest reply, include your order reference number.
           </p>
         </div>
@@ -134,7 +134,7 @@ export default function ContactPage() {
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 8 }}>
               <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#2A9D2A', flexShrink: 0 }} />
               <span className="rr-mono" style={{ fontSize: 10, color: '#A6A6A8', letterSpacing: '.14em' }}>
-                REPLY WITHIN 1 BUSINESS DAY
+                REPLY WITHIN 3 BUSINESS DAYS
               </span>
             </div>
           </div>
@@ -169,7 +169,7 @@ export default function ContactPage() {
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 8 }}>
               <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#2A9D2A', flexShrink: 0 }} />
               <span className="rr-mono" style={{ fontSize: 10, color: '#A6A6A8', letterSpacing: '.14em' }}>
-                REPLY WITHIN 1 BUSINESS DAY
+                REPLY WITHIN 3 BUSINESS DAYS
               </span>
             </div>
           </div>
@@ -187,7 +187,7 @@ export default function ContactPage() {
         >
           {[
             { label: 'HOURS', value: 'MON – FRI · 09:00 – 17:00 SAST' },
-            { label: 'RESPONSE TIME', value: 'WITHIN 1 BUSINESS DAY' },
+            { label: 'RESPONSE TIME', value: 'WITHIN 3 BUSINESS DAYS' },
             { label: 'BASED IN', value: 'SOUTH AFRICA' },
           ].map(({ label, value }) => (
             <div

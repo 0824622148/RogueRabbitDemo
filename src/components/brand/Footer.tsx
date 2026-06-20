@@ -145,7 +145,7 @@ export default function Footer() {
       >
         <span className="rr-mono">© 2026 ROUGE RABBIT · ALL RIGHTS RESERVED</span>
         <span className="rr-mono">REAL · RAW · ROUGE</span>
-        <span className="rr-mono">EST 2023 · INDEPENDENT</span>
+        <span className="rr-mono">EST 2026 · INDEPENDENT</span>
       </div>
     </footer>
   )
