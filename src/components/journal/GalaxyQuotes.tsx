@@ -117,6 +117,9 @@ export default function GalaxyQuotes() {
       {visible.map((quote, i) => {
         const pos = positions[i]
 
+        // Clear the bottom-left zone where "THE RABBIT RUN" headline lives
+        if (pos.x < 42 && pos.y > 8) return null
+
         return (
           <motion.div
             key={quote.id}
