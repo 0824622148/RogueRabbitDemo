@@ -230,7 +230,7 @@
 .rr-filterbar { padding: 18px 40px; }
 
 /* ── Wishlist heart on product card ───────────── */
-.rr-card-wishlist         { opacity: 0; }
+.rr-card-wishlist         { opacity: 0; z-index: 1; }
 .rr-card:hover .rr-card-wishlist { opacity: 1; }
 .rr-card-wishlist.rr-card-wishlist--active { opacity: 1; }
 
