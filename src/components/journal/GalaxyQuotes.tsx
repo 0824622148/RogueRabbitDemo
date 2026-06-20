@@ -58,18 +58,31 @@ function seededRand(seed: number, offset: number): number {
 
 function buildPosition(index: number, isMobile: boolean, isHighlight: boolean): QuotePosition {
   const r = (o: number) => seededRand(index, o)
-  const xMax = isMobile ? 85 : 92
-  const baseOpacity = 0.10 + r(3) * 0.45
+
+  // Divide the canvas into a grid so each quote gets its own cell
+  const cols = isMobile ? 2 : 5
+  const rows = isMobile ? 5 : 4
+  const col = index % cols
+  const row = Math.floor(index / cols) % rows
+
+  const cellW = (isMobile ? 82 : 90) / cols   // % of viewport width per cell
+  const cellH = 88 / rows                       // % of container height per cell
+  const pad   = 1.5                             // minimum inset from cell edge
+
+  const x = col * cellW + pad + r(0) * (cellW - pad * 2 - 12)
+  const y = row * cellH + pad + r(1) * (cellH - pad * 2 - 6)
+
+  const baseOpacity = 0.12 + r(3) * 0.42
 
   return {
-    x:        2 + r(0) * (xMax - 2),
-    y:        r(1) * 90,
-    size:     isMobile ? 10 + Math.floor(r(2) * 6) : 11 + Math.floor(r(2) * 10),
-    opacity:  isHighlight ? Math.max(0.35, baseOpacity) : baseOpacity,
-    rotation: (r(4) - 0.5) * 24,
+    x,
+    y,
+    size:     isMobile ? 10 + Math.floor(r(2) * 5) : 11 + Math.floor(r(2) * 9),
+    opacity:  isHighlight ? Math.max(0.38, baseOpacity) : baseOpacity,
+    rotation: (r(4) - 0.5) * 20,
     drift: {
-      x: (r(5) - 0.5) * 40,
-      y: (r(6) - 0.5) * 36,
+      x: (r(5) - 0.5) * 28,
+      y: (r(6) - 0.5) * 24,
     },
     duration: 6 + r(7) * 12,
     delay:    r(8) * 4,
