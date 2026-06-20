@@ -28,7 +28,7 @@ const FOOTER_COLS = [
   {
     title: 'SUPPORT',
     items: [
-      { label: 'Sizing',           href: null },
+      { label: 'Sizing Guide',      href: '/sizing-guide' },
       { label: 'Shipping',         href: '/shipping-returns' },
       { label: 'Returns',          href: '/shipping-returns' },
       { label: 'Pre-Order Policy', href: '/preorder-policy' },

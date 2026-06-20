@@ -196,6 +196,7 @@
   transition: transform .35s cubic-bezier(.2,.7,.2,1);
   color: var(--bone);
   font-family: var(--font-mono); font-size: 11px; letter-spacing: .18em; text-transform: uppercase;
+  pointer-events: none;
 }
 .rr-card:hover .rr-card__hover { transform: translateY(0); }
 
