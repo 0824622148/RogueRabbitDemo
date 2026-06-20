@@ -558,3 +558,20 @@
   .rr-footer-grid      { grid-template-columns: 1fr; }
   .rr-footer-brand     { grid-column: 1; }
 }
+
+/* ── Journal page responsive ──────────────────── */
+@media (max-width: 768px) {
+  .rr-journal-stats    { grid-template-columns: repeat(2, 1fr) !important; }
+  .rr-journal-code     { grid-template-columns: 1fr !important; }
+  .rr-journal-stories  { grid-template-columns: 1fr !important; }
+  .rr-journal-cta      { grid-template-columns: 1fr !important; }
+  .rr-journal-cta-visual { display: none !important; }
+  .rr-journal-code-left  { padding: 60px 24px !important; }
+  .rr-journal-code-right { padding: 60px 24px !important; border-top: 1px solid #3A3A3C !important; border-right: none !important; }
+  .rr-journal-cta-left   { padding: 60px 24px !important; border-right: none !important; }
+  .rr-pulse-label      { min-width: 160px !important; padding: 14px 16px !important; }
+}
+
+@media (max-width: 480px) {
+  .rr-journal-stats    { grid-template-columns: 1fr !important; }
+}
