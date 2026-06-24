@@ -6,24 +6,20 @@ const PF_HOST = SANDBOX
   : 'https://www.payfast.co.za'
 
 export const PAYFAST_URL = `${PF_HOST}/eng/process`
-const PAYFAST_VALIDATE_URL = `${PF_HOST}/eng/query/validate`
 
 function pfEncode(value: string): string {
   return encodeURIComponent(value).replace(/%20/g, '+')
 }
 
+// Builds signature from params in their insertion order (matching PayFast PHP example).
+// PayFast's ITN validation iterates $_POST in received order, so the order the fields
+// are inserted here must match the order they are submitted in the form.
 export function buildSignature(
   params: Record<string, string>,
   passphrase?: string,
 ): string {
-  const sorted = Object.keys(params)
-    .sort()
-    .reduce<Record<string, string>>((acc, key) => {
-      acc[key] = params[key]
-      return acc
-    }, {})
-
-  let paramString = Object.entries(sorted)
+  let paramString = Object.entries(params)
+    .filter(([, v]) => v !== '')
     .map(([k, v]) => `${k}=${pfEncode(v)}`)
     .join('&')
 
@@ -59,23 +55,30 @@ export function buildPayFastPayload(order: PayFastOrder): {
 
   const itemName = `ROUGE 01 - ${order.colourway} - ${order.size} ${order.gender}`.slice(0, 100)
 
+  // Field order matches PayFast's PHP integration example exactly.
+  // Insertion order is preserved in the form POST and must match what PayFast
+  // uses when rebuilding the signature during ITN/checkout validation.
   const fields: Record<string, string> = {
     merchant_id: merchantId,
     merchant_key: merchantKey,
     return_url: `${siteUrl}/preorder/success?ref=${order.reference}`,
     cancel_url: `${siteUrl}/preorder/cancel?ref=${order.reference}`,
     notify_url: `${siteUrl}/api/payfast/notify`,
-    m_payment_id: order.reference,
-    amount: order.amountDue.toFixed(2),
-    item_name: itemName,
     name_first: nameFirst,
     name_last: nameLast,
     email_address: order.email,
+    m_payment_id: order.reference,
+    amount: order.amountDue.toFixed(2),
+    item_name: itemName,
   }
 
-  // PayFast signature includes ALL form fields (including merchant_key).
-  // Only the 'signature' field itself is excluded.
   const signature = buildSignature(fields, passphrase || undefined)
+  const preHashString = Object.entries(fields)
+    .filter(([, v]) => v !== '')
+    .map(([k, v]) => `${k}=${pfEncode(v)}`)
+    .join('&') + (passphrase ? `&passphrase=${pfEncode(passphrase)}` : '')
+  console.log('[PAYFAST] pre-hash:', preHashString)
+  console.log('[PAYFAST] signature:', signature)
 
   return {
     url: PAYFAST_URL,
