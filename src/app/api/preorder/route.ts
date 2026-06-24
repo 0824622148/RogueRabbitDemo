@@ -14,7 +14,7 @@ import { buildPayFastPayload } from '@/lib/payfast'
 //   NEXT_PUBLIC_SITE_URL=https://rougerabbit.co.za
 
 const EARLY_ACCESS_CODE = process.env.EARLY_ACCESS_CODE ?? 'ROUGE30'
-const FULL_PRICE = 1800
+const FULL_PRICE = 20 // TEMP: test price — change back to 1800 before launch
 const DISCOUNT_PCT = 0.30
 const RESEND_FROM = 'Rouge Rabbit <orders@rougerabbit.co.za>'
 

@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import type { ColourwayDB, Size } from '@/types'
 
 const EARLY_ACCESS_CODE = 'ROUGE30'
-const FULL_PRICE = 1800
+const FULL_PRICE = 20 // TEMP: test price — change back to 1800 before launch
 const DISCOUNT_PCT = 0.30
 const DISCOUNTED_PRICE = Math.round(FULL_PRICE * (1 - DISCOUNT_PCT))
 
