@@ -73,9 +73,9 @@ export function buildPayFastPayload(order: PayFastOrder): {
     email_address: order.email,
   }
 
-  // PayFast requires merchant_key to be EXCLUDED from the signature hash.
-  const { merchant_key: _mk, ...sigFields } = fields
-  const signature = buildSignature(sigFields, passphrase || undefined)
+  // PayFast signature includes ALL form fields (including merchant_key).
+  // Only the 'signature' field itself is excluded.
+  const signature = buildSignature(fields, passphrase || undefined)
 
   return {
     url: PAYFAST_URL,
