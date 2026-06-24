@@ -138,6 +138,14 @@ export async function POST(request: NextRequest) {
     </div>`,
   )
 
+  // Debug: verify env vars are being read (remove after confirming)
+  console.log('[PAYFAST ENV]', {
+    merchant_id: process.env.PAYFAST_MERCHANT_ID,
+    merchant_key_last4: process.env.PAYFAST_MERCHANT_KEY?.slice(-4),
+    sandbox: process.env.PAYFAST_SANDBOX,
+    site_url: process.env.NEXT_PUBLIC_SITE_URL,
+  })
+
   // Build PayFast redirect payload — returns null if env vars not configured (local dev)
   let payfast: { url: string; fields: Record<string, string> } | null = null
   if (process.env.PAYFAST_MERCHANT_ID) {
