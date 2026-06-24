@@ -48,10 +48,10 @@ export function buildPayFastPayload(order: PayFastOrder): {
   url: string
   fields: Record<string, string>
 } {
-  const merchantId = process.env.PAYFAST_MERCHANT_ID!
-  const merchantKey = process.env.PAYFAST_MERCHANT_KEY!
-  const passphrase = process.env.PAYFAST_PASSPHRASE || ''
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? ''
+  const merchantId = (process.env.PAYFAST_MERCHANT_ID ?? '').trim()
+  const merchantKey = (process.env.PAYFAST_MERCHANT_KEY ?? '').trim()
+  const passphrase = (process.env.PAYFAST_PASSPHRASE ?? '').trim()
+  const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? '').trim()
 
   const nameParts = order.name.trim().split(' ')
   const nameFirst = nameParts[0]
