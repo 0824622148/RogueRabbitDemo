@@ -77,16 +77,6 @@ export function buildPayFastPayload(order: PayFastOrder): {
   const { merchant_key: _mk, ...sigFields } = fields
   const signature = buildSignature(sigFields, passphrase || undefined)
 
-  console.log('[PAYFAST PAYLOAD]', {
-    url: PAYFAST_URL,
-    merchant_id: merchantId,
-    merchant_key_preview: merchantKey ? `${merchantKey.slice(0, 3)}...${merchantKey.slice(-3)}` : 'MISSING',
-    sandbox_env: process.env.PAYFAST_SANDBOX,
-    amount: fields.amount,
-    notify_url: fields.notify_url,
-    signature,
-  })
-
   return {
     url: PAYFAST_URL,
     fields: { ...fields, signature },
