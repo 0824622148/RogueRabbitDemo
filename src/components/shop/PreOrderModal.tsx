@@ -14,14 +14,6 @@ const COLLECTION_POINTS = [
   { id: 'dbn', label: 'DURBAN · GATEWAY' },
 ]
 
-const BANK = {
-  name: 'Standard Bank of South Africa',
-  accountName: 'Rouge Rabbit (Pty) Ltd',
-  accountNumber: '0000010279568248',
-  branchCode: '051001',
-  universalCode: '051001',
-}
-
 interface Props {
   initialColourway?: ColourwayDB
   initialSize?: string
@@ -105,6 +97,27 @@ export default function PreOrderModal({ initialColourway, initialSize, initialGe
         const data = await res.json()
         throw new Error(data.error || 'Something went wrong')
       }
+      const data = await res.json()
+      const { payfast } = data as { payfast: { url: string; fields: Record<string, string> } | null }
+
+      if (payfast) {
+        // Standard PayFast redirect — must be a form POST, not window.location
+        const form = document.createElement('form')
+        form.method = 'POST'
+        form.action = payfast.url
+        Object.entries(payfast.fields).forEach(([k, v]) => {
+          const input = document.createElement('input')
+          input.type = 'hidden'
+          input.name = k
+          input.value = v
+          form.appendChild(input)
+        })
+        document.body.appendChild(form)
+        form.submit()
+        return
+      }
+
+      // Fallback: PayFast not configured (local dev)
       setReference(ref)
       setStep('success')
     } catch (e: unknown) {
@@ -340,8 +353,7 @@ export default function PreOrderModal({ initialColourway, initialSize, initialGe
             </button>
 
             <p className="rr-mono" style={{ fontSize: 9, color: '#A6A6A8', marginTop: 14, lineHeight: 1.8, letterSpacing: '.1em' }}>
-              NO PAYMENT IS CAPTURED NOW. EFT BANKING DETAILS WILL BE PROVIDED ON THE NEXT SCREEN.
-              PAYMENT DUE WITHIN 24 HOURS TO SECURE YOUR PAIR.
+              YOU WILL BE REDIRECTED TO PAYFAST TO COMPLETE PAYMENT SECURELY.
               COLLECTION ONLY · DELIVERY COMING SOON.
             </p>
           </div>
@@ -349,59 +361,17 @@ export default function PreOrderModal({ initialColourway, initialSize, initialGe
 
         {step === 'success' && (
           <div style={{ padding: '32px 28px' }}>
-
-            <div style={{ marginBottom: 28 }}>
-              <div style={{
-                display: 'inline-flex', alignItems: 'center', gap: 10,
-                border: '1px solid #2A9D2A', padding: '8px 16px', marginBottom: 20,
-              }}>
-                <span style={{ color: '#2A9D2A', fontSize: 16 }}>✓</span>
-                <span className="rr-mono" style={{ color: '#2A9D2A', fontSize: 11, letterSpacing: '.16em' }}>PRE-ORDER RECEIVED</span>
-              </div>
-              <p className="rr-mono" style={{ color: '#A6A6A8', fontSize: 11, lineHeight: 1.8, margin: 0, letterSpacing: '.1em' }}>
-                YOUR SPOT HAS BEEN SECURED. COMPLETE THE EFT BELOW WITHIN 24 HOURS TO CONFIRM YOUR PAIR.
-                YOUR EDITION NUMBER WILL BE ASSIGNED AND SENT TO <span style={{ color: '#E6E6E6' }}>{email}</span>.
-              </p>
+            <div style={{
+              display: 'inline-flex', alignItems: 'center', gap: 10,
+              border: '1px solid #2A9D2A', padding: '8px 16px', marginBottom: 20,
+            }}>
+              <span style={{ color: '#2A9D2A', fontSize: 16 }}>✓</span>
+              <span className="rr-mono" style={{ color: '#2A9D2A', fontSize: 11, letterSpacing: '.16em' }}>ORDER RECEIVED</span>
             </div>
 
-            <div style={{ border: '1px solid #3A3A3C', padding: '20px', marginBottom: 20 }}>
-              <div className="rr-overline" style={{ color: '#D90017', marginBottom: 16 }}>ORDER SUMMARY</div>
-              {[
-                ['PRODUCT', 'ROUGE 01 · ' + cw.name],
-                ['SIZE', sz + ' · ' + gender],
-                ['COLLECTION', collection],
-                ['REFERENCE', reference],
-                ['AMOUNT DUE', `R${price}${codeApplied ? ` (30% EARLY ACCESS APPLIED)` : ''}`],
-              ].map(([k, v]) => (
-                <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid #3A3A3C' }}>
-                  <span className="rr-mono" style={{ color: '#A6A6A8', fontSize: 10, letterSpacing: '.14em' }}>{k}</span>
-                  <span className="rr-mono" style={{ color: '#E6E6E6', fontSize: 11, letterSpacing: '.12em', textAlign: 'right', maxWidth: '60%' }}>{v}</span>
-                </div>
-              ))}
-            </div>
-
-            <div style={{ background: '#0F0F10', border: '1px solid #3A3A3C', padding: '20px', marginBottom: 20 }}>
-              <div className="rr-overline" style={{ color: '#D90017', marginBottom: 16 }}>EFT BANKING DETAILS</div>
-              {[
-                ['BANK', BANK.name],
-                ['ACCOUNT NAME', BANK.accountName],
-                ['ACCOUNT NUMBER', BANK.accountNumber],
-                ['BRANCH CODE', BANK.branchCode],
-                ['UNIVERSAL CODE', BANK.universalCode],
-                ['REFERENCE', reference],
-                ['AMOUNT', `R${price}`],
-              ].map(([k, v]) => (
-                <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid #3A3A3C' }}>
-                  <span className="rr-mono" style={{ color: '#A6A6A8', fontSize: 10, letterSpacing: '.14em' }}>{k}</span>
-                  <span className="rr-mono" style={{ color: '#E6E6E6', fontSize: 11, letterSpacing: '.12em', fontWeight: k === 'REFERENCE' || k === 'AMOUNT' ? 500 : 400 }}>{v}</span>
-                </div>
-              ))}
-            </div>
-
-            <p className="rr-mono" style={{ fontSize: 9, color: '#A6A6A8', lineHeight: 1.8, letterSpacing: '.1em', marginBottom: 24 }}>
-              SCREENSHOT OR NOTE THE BANKING DETAILS ABOVE. USE YOUR REFERENCE NUMBER EXACTLY AS SHOWN.
-              PAYMENTS NOT RECEIVED WITHIN 24 HOURS WILL RELEASE YOUR SPOT.
-              QUESTIONS? WHATSAPP US BELOW.
+            <p className="rr-mono" style={{ color: '#A6A6A8', fontSize: 11, lineHeight: 1.8, margin: '0 0 24px', letterSpacing: '.1em' }}>
+              YOUR ORDER HAS BEEN PLACED. REFERENCE: <span style={{ color: '#E6E6E6' }}>{reference}</span>.
+              A CONFIRMATION EMAIL IS ON ITS WAY TO <span style={{ color: '#E6E6E6' }}>{email}</span>.
             </p>
 
             <button onClick={onClose} className="rr-btn rr-btn--ghost" style={{ width: '100%', justifyContent: 'center' }}>

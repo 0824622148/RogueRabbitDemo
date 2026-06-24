@@ -108,3 +108,6 @@ create table wishlist (
 alter table wishlist enable row level security;
 grant all on wishlist to service_role;
 grant usage, select on sequence wishlist_id_seq to service_role;
+
+-- Migration: PayFast integration
+alter table orders add column if not exists pf_payment_id text;

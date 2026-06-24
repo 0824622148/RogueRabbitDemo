@@ -1,24 +1,31 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { buildPayFastPayload } from '@/lib/payfast'
 
 // Set these in .env.local and Vercel environment variables before launch:
 //   RESEND_API_KEY=re_xxxxxxxxxxxx
 //   ADMIN_EMAIL=orders@rougerabbit.co.za
 //   EARLY_ACCESS_CODE=ROUGE30
 //   SUPABASE_SERVICE_ROLE_KEY=<from Supabase → Settings → API>
+//   PAYFAST_MERCHANT_ID=10000100
+//   PAYFAST_MERCHANT_KEY=46f0cd694581a
+//   PAYFAST_PASSPHRASE=
+//   PAYFAST_SANDBOX=true
+//   NEXT_PUBLIC_SITE_URL=https://rougerabbit.co.za
 
 const EARLY_ACCESS_CODE = process.env.EARLY_ACCESS_CODE ?? 'ROUGE30'
 const FULL_PRICE = 1800
 const DISCOUNT_PCT = 0.30
 const RESEND_FROM = 'Rouge Rabbit <orders@rougerabbit.co.za>'
 
-const BANK = {
-  name: 'Standard Bank of South Africa',
-  accountName: 'Rouge Rabbit (Pty) Ltd',
-  accountNumber: '0000010279568248',
-  branchCode: '051001',
-  universalCode: '051001',
-}
+// EFT bank details retained for reference only — payment now via PayFast
+// const BANK = {
+//   name: 'Standard Bank of South Africa',
+//   accountName: 'Rouge Rabbit (Pty) Ltd',
+//   accountNumber: '0000010279568248',
+//   branchCode: '051001',
+//   universalCode: '051001',
+// }
 
 function getServiceClient() {
   return createClient(
@@ -110,9 +117,9 @@ export async function POST(request: NextRequest) {
 
   await sendEmail(
     adminEmail,
-    `[PRE-ORDER] ${reference} — ${name} · ${colourway} ${size}`,
+    `[PRE-ORDER INITIATED] ${reference} — ${name} · ${colourway} ${size}`,
     `<div style="font-family:monospace;background:#0F0F10;color:#E6E6E6;padding:32px;">
-      <h2 style="color:#D90017;margin:0 0 24px;">NEW PRE-ORDER</h2>
+      <h2 style="color:#D90017;margin:0 0 24px;">NEW PRE-ORDER — AWAITING PAYMENT</h2>
       <table style="border-collapse:collapse;width:100%;">
         ${[
           ['Order ID', orderId ? `#${orderId}` : '—'],
@@ -125,59 +132,29 @@ export async function POST(request: NextRequest) {
           ['Collection Point', collection],
           ['Discount Applied', discountApplied ? 'YES — 30% ROUGE30' : 'No'],
           ['Amount Due', `R${price}`],
+          ['Status', 'AWAITING PAYFAST PAYMENT'],
         ].map(([k, v]) => `<tr><td style="padding:8px 16px 8px 0;color:#A6A6A8;white-space:nowrap;">${k}</td><td style="padding:8px 0;color:#E6E6E6;">${v}</td></tr>`).join('')}
       </table>
     </div>`,
   )
 
-  await sendEmail(
-    email,
-    `ROUGE 01 Pre-Order Confirmed · ${reference}`,
-    `<div style="font-family:monospace;background:#0F0F10;color:#E6E6E6;padding:32px;max-width:560px;">
-      <h1 style="color:#D90017;font-size:28px;margin:0 0 8px;">ROUGE RABBIT</h1>
-      <p style="color:#A6A6A8;margin:0 0 32px;letter-spacing:.1em;font-size:11px;">BUILT DIFFERENT.</p>
+  // Build PayFast redirect payload — returns null if env vars not configured (local dev)
+  let payfast: { url: string; fields: Record<string, string> } | null = null
+  if (process.env.PAYFAST_MERCHANT_ID) {
+    try {
+      payfast = buildPayFastPayload({
+        reference,
+        name,
+        email,
+        amountDue: price,
+        colourway,
+        size,
+        gender,
+      })
+    } catch (err) {
+      console.error('[PRE-ORDER] PayFast payload build failed:', err)
+    }
+  }
 
-      <h2 style="margin:0 0 20px;font-size:18px;">Your Pre-Order Is Confirmed.</h2>
-      <p style="color:#A6A6A8;line-height:1.8;font-size:12px;margin:0 0 28px;">
-        Hi ${name}, your spot for the ROUGE 01 ${colourway} has been reserved.
-        Complete your EFT within <strong style="color:#E6E6E6;">24 hours</strong> to secure your pair.
-        Your edition number will be confirmed once payment is received.
-      </p>
-
-      <div style="border:1px solid #3A3A3C;padding:20px;margin-bottom:24px;">
-        <p style="color:#D90017;font-size:10px;letter-spacing:.2em;margin:0 0 16px;">EFT BANKING DETAILS</p>
-        ${[
-          ['Bank', BANK.name],
-          ['Account Name', BANK.accountName],
-          ['Account Number', BANK.accountNumber],
-          ['Branch Code', BANK.branchCode],
-          ['Universal Code', BANK.universalCode],
-          ['Reference', reference],
-          ['Amount', `R${price}`],
-        ].map(([k, v]) => `<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #3A3A3C;font-size:11px;">
-          <span style="color:#A6A6A8;">${k}</span>
-          <span style="color:#E6E6E6;font-weight:${k === 'Reference' || k === 'Amount' ? '600' : '400'};">${v}</span>
-        </div>`).join('')}
-      </div>
-
-      <div style="border:1px solid #3A3A3C;padding:20px;margin-bottom:28px;">
-        <p style="color:#D90017;font-size:10px;letter-spacing:.2em;margin:0 0 16px;">YOUR ORDER</p>
-        ${[
-          ['Product', `ROUGE 01 · ${colourway}`],
-          ['Size', `${size} · ${gender}`],
-          ['Collection Point', collection],
-          ['Reference', reference],
-        ].map(([k, v]) => `<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #3A3A3C;font-size:11px;">
-          <span style="color:#A6A6A8;">${k}</span><span style="color:#E6E6E6;">${v}</span>
-        </div>`).join('')}
-      </div>
-
-      <p style="color:#A6A6A8;font-size:10px;line-height:1.8;letter-spacing:.1em;">
-        PAYMENT NOT RECEIVED WITHIN 24 HOURS WILL RELEASE YOUR SPOT.
-        QUESTIONS? REPLY TO THIS EMAIL OR WHATSAPP US.
-      </p>
-    </div>`,
-  )
-
-  return NextResponse.json({ success: true, orderId })
+  return NextResponse.json({ success: true, orderId, payfast })
 }

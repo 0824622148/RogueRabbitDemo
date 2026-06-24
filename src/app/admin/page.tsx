@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
+import OrderStatusButton from '@/components/admin/OrderStatusButton'
 
 export const dynamic = 'force-dynamic'
 
@@ -30,8 +31,12 @@ export default async function AdminPage() {
     db.from('members').select('*').order('created_at', { ascending: false }),
   ])
 
-  const totalRevenue = (orders ?? [])
-    .filter((o: any) => o.status !== 'cancelled')
+  const confirmedRevenue = (orders ?? [])
+    .filter((o: any) => o.status === 'paid')
+    .reduce((sum: number, o: any) => sum + (o.amount_due ?? 0), 0)
+
+  const pendingRevenue = (orders ?? [])
+    .filter((o: any) => o.status === 'pending')
     .reduce((sum: number, o: any) => sum + (o.amount_due ?? 0), 0)
 
   const cell: React.CSSProperties = {
@@ -83,15 +88,15 @@ export default async function AdminPage() {
       {/* Stats */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, marginBottom: 48 }}>
         {[
-          { label: 'TOTAL ORDERS', value: orders?.length ?? 0 },
-          { label: 'TOTAL MEMBERS', value: members?.length ?? 0 },
-          { label: 'REVENUE PIPELINE', value: `R${totalRevenue.toLocaleString('en-ZA')}` },
-        ].map(({ label, value }) => (
+          { label: 'TOTAL ORDERS', value: orders?.length ?? 0, accent: '#E6E6E6' },
+          { label: 'CONFIRMED REVENUE', value: `R${confirmedRevenue.toLocaleString('en-ZA')}`, accent: '#2A9D2A' },
+          { label: 'PIPELINE', value: `R${pendingRevenue.toLocaleString('en-ZA')}`, accent: '#A6A6A8' },
+        ].map(({ label, value, accent }) => (
           <div key={label} style={{ background: '#1E1E20', border: '1px solid #3A3A3C', padding: '24px 28px' }}>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '.2em', color: '#A6A6A8', marginBottom: 10 }}>
               {label}
             </div>
-            <div style={{ fontFamily: 'var(--font-display)', fontSize: 40, color: '#E6E6E6', letterSpacing: '.04em' }}>
+            <div style={{ fontFamily: 'var(--font-display)', fontSize: 40, color: accent, letterSpacing: '.04em' }}>
               {value}
             </div>
           </div>
@@ -107,7 +112,7 @@ export default async function AdminPage() {
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
             <thead>
               <tr>
-                {['REFERENCE', 'COLOURWAY', 'SIZE · GENDER', 'CITY', 'NAME', 'EMAIL', 'STATUS', 'AMOUNT', 'DATE'].map(h => (
+                {['REFERENCE', 'COLOURWAY', 'SIZE · GENDER', 'CITY', 'NAME', 'EMAIL', 'STATUS', 'AMOUNT', 'PAYMENT ID', 'DATE', 'ACTIONS'].map(h => (
                   <th key={h} style={{ ...th, textAlign: 'left' }}>{h}</th>
                 ))}
               </tr>
@@ -130,12 +135,16 @@ export default async function AdminPage() {
                     </span>
                   </td>
                   <td style={{ ...cell, color: '#D90017' }}>R{o.amount_due}</td>
+                  <td style={{ ...cell, color: '#A6A6A8', fontSize: 10 }}>{o.pf_payment_id ?? '—'}</td>
                   <td style={{ ...cell, color: '#A6A6A8' }}>{fmt(o.created_at)}</td>
+                  <td style={{ ...cell }}>
+                    <OrderStatusButton orderId={o.id} currentStatus={o.status} />
+                  </td>
                 </tr>
               ))}
               {!orders?.length && (
                 <tr>
-                  <td colSpan={9} style={{ ...cell, textAlign: 'center', color: '#3A3A3C' }}>
+                  <td colSpan={11} style={{ ...cell, textAlign: 'center', color: '#3A3A3C' }}>
                     NO ORDERS YET
                   </td>
                 </tr>
