@@ -77,28 +77,29 @@ export default function ManifestoPage() {
             lineHeight: 1.85, color: '#C8C8CA', marginBottom: 56,
           }}
         >
-          Rouge Rabbit was never built for the masses. It was built for the one — the one
-          in the room who dresses like they mean it. Who doesn&apos;t trend-chase. Who already
-          decided who they are before the algorithm had an opinion.
+          Rouge Rabbit was never created to follow. It was created to move.
         </p>
 
-        {/* Section — Who We Are */}
+        {/* Section — The Name */}
         <div style={{ marginBottom: 56 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: 24 }}>
             <span className="rr-mono" style={{ color: '#D90017', fontSize: 10, letterSpacing: '.22em' }}>01</span>
             <div style={{ flex: 1, height: 1, background: '#3A3A3C' }} />
           </div>
           <h2 className="rr-display" style={{ fontSize: 'clamp(32px, 5vw, 60px)', margin: '0 0 24px', lineHeight: 0.9 }}>
-            WHO WE ARE.
+            THE NAME.
           </h2>
           <p style={{ fontSize: 15, lineHeight: 1.85, color: '#C8C8CA', marginBottom: 16 }}>
-            South African. Independent. Made without permission.
+            Spelled <strong style={{ color: '#E6E6E6' }}>Rouge</strong>. Pronounced <strong style={{ color: '#E6E6E6' }}>Rogue</strong>.
+          </p>
+          <p style={{ fontSize: 15, lineHeight: 1.85, color: '#A6A6A8', marginBottom: 16 }}>
+            Because we were never meant to follow the rules.
+          </p>
+          <p style={{ fontSize: 15, lineHeight: 1.85, color: '#A6A6A8', marginBottom: 16 }}>
+            The <strong style={{ color: '#D90017' }}>Rouge</strong> represents the fire in our eyes — the relentless pursuit of something greater.
           </p>
           <p style={{ fontSize: 15, lineHeight: 1.85, color: '#A6A6A8', margin: 0 }}>
-            Born out of a corner of this continent the world consistently overlooks — and
-            consistently underestimates. We don&apos;t come from Paris or New York or Tokyo.
-            We come from here. From the streets and the dust and the noise. From cities that
-            move faster than they sleep. From a generation that&apos;s done waiting to be let in.
+            The <strong style={{ color: '#D90017' }}>Rogue</strong> represents our mindset — to refuse permission, reject the ordinary, and create our own path.
           </p>
         </div>
 
@@ -108,66 +109,22 @@ export default function ManifestoPage() {
             className="rr-display"
             style={{ fontSize: 'clamp(22px, 3.5vw, 36px)', color: '#E6E6E6', margin: 0, lineHeight: 1.15 }}
           >
-            &ldquo;We come from the places that were never on the mood board.&rdquo;
+            &ldquo;Together, they become a movement.&rdquo;
           </p>
         </div>
 
-        {/* Section — The Rabbit */}
+        {/* Section — Who We Move With */}
         <div style={{ marginBottom: 56 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: 24 }}>
             <span className="rr-mono" style={{ color: '#D90017', fontSize: 10, letterSpacing: '.22em' }}>02</span>
             <div style={{ flex: 1, height: 1, background: '#3A3A3C' }} />
           </div>
           <h2 className="rr-display" style={{ fontSize: 'clamp(32px, 5vw, 60px)', margin: '0 0 24px', lineHeight: 0.9 }}>
-            THE RABBIT.
+            WHO WE<br />MOVE WITH.
           </h2>
           <p style={{ fontSize: 15, lineHeight: 1.85, color: '#C8C8CA', marginBottom: 16 }}>
-            Is not a mascot. It&apos;s a marker.
+            We believe that greatness belongs to those who keep moving.
           </p>
-          <p style={{ fontSize: 15, lineHeight: 1.85, color: '#A6A6A8', marginBottom: 16 }}>
-            Every pair is numbered. Every drop is limited. When you wear the rabbit, you
-            wear something made for fewer than 250 people on earth. That&apos;s not exclusivity
-            for the sake of it — it&apos;s a statement. Value takes space. Scarcity is honest.
-          </p>
-          <p style={{ fontSize: 15, lineHeight: 1.85, color: '#A6A6A8', margin: 0 }}>
-            The rabbit doesn&apos;t follow. It moves first and fast, and it doesn&apos;t look back
-            to check who&apos;s keeping up.
-          </p>
-        </div>
-
-        {/* Section — What We Make */}
-        <div style={{ marginBottom: 56 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: 24 }}>
-            <span className="rr-mono" style={{ color: '#D90017', fontSize: 10, letterSpacing: '.22em' }}>03</span>
-            <div style={{ flex: 1, height: 1, background: '#3A3A3C' }} />
-          </div>
-          <h2 className="rr-display" style={{ fontSize: 'clamp(32px, 5vw, 60px)', margin: '0 0 24px', lineHeight: 0.9 }}>
-            WHAT WE MAKE.
-          </h2>
-          <p style={{ fontSize: 15, lineHeight: 1.85, color: '#C8C8CA', marginBottom: 16 }}>
-            Footwear that doesn&apos;t apologize.
-          </p>
-          <p style={{ fontSize: 15, lineHeight: 1.85, color: '#A6A6A8', marginBottom: 16 }}>
-            Knit uppers built tight. Soles cut clean. Silhouettes that don&apos;t borrow from
-            anything. Each drop is a chapter. Each colourway is a decision. Nothing is
-            accidental — not the shape, not the colour, not the count.
-          </p>
-          <p style={{ fontSize: 15, lineHeight: 1.85, color: '#A6A6A8', margin: 0 }}>
-            The Rouge 01 is Chapter One. The beginning of something without a visible ending.
-            Apparel and accessories follow. The world gets built one piece at a time.
-          </p>
-        </div>
-
-        {/* Section — What We Refuse */}
-        <div style={{ marginBottom: 56 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: 24 }}>
-            <span className="rr-mono" style={{ color: '#D90017', fontSize: 10, letterSpacing: '.22em' }}>04</span>
-            <div style={{ flex: 1, height: 1, background: '#3A3A3C' }} />
-          </div>
-          <h2 className="rr-display" style={{ fontSize: 'clamp(32px, 5vw, 60px)', margin: '0 0 24px', lineHeight: 0.9 }}>
-            WHAT WE REFUSE.
-          </h2>
-          {/* 2-col on mobile, 4-col on desktop */}
           <div
             style={{
               display: 'grid',
@@ -175,25 +132,64 @@ export default function ManifestoPage() {
               gap: 1, marginBottom: 28, border: '1px solid #3A3A3C',
             }}
           >
-            {['FAST.', 'SAFE.', 'DISPOSABLE.', 'FORGETTABLE.'].map((word) => (
+            {['THE ATHLETE.', 'THE CREATOR.', 'THE ENTREPRENEUR.', 'THE DREAMER.'].map((word) => (
               <div
                 key={word}
                 style={{ padding: 'clamp(14px, 2vw, 20px) clamp(16px, 2.5vw, 24px)', background: '#1E1E20' }}
               >
-                <span className="rr-display" style={{ fontSize: 'clamp(18px, 2.5vw, 22px)', color: '#3A3A3C' }}>
+                <span className="rr-display" style={{ fontSize: 'clamp(14px, 2vw, 18px)', color: '#3A3A3C' }}>
                   {word}
                 </span>
               </div>
             ))}
           </div>
           <p style={{ fontSize: 15, lineHeight: 1.85, color: '#A6A6A8', marginBottom: 16 }}>
-            We refuse to overstock. We refuse to markdown. We refuse to make the same
-            thing twice just because it sold. Rouge Rabbit lives or dies by the quality
-            of its decisions — not the volume of its output.
+            The athlete training before sunrise. The creator perfecting one more idea.
+            The entrepreneur building long after everyone else has gone home.
+            The artist, the student, the dreamer, the leader.
           </p>
           <p style={{ fontSize: 15, lineHeight: 1.85, color: '#A6A6A8', margin: 0 }}>
-            We don&apos;t chase the algorithm because the algorithm chases relevance.
-            We chase permanence.
+            The ones who move after dark.
+          </p>
+        </div>
+
+        {/* Section — How We Believe */}
+        <div style={{ marginBottom: 56 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: 24 }}>
+            <span className="rr-mono" style={{ color: '#D90017', fontSize: 10, letterSpacing: '.22em' }}>03</span>
+            <div style={{ flex: 1, height: 1, background: '#3A3A3C' }} />
+          </div>
+          <h2 className="rr-display" style={{ fontSize: 'clamp(32px, 5vw, 60px)', margin: '0 0 24px', lineHeight: 0.9 }}>
+            HOW WE<br />BELIEVE.
+          </h2>
+          <p style={{ fontSize: 15, lineHeight: 1.85, color: '#C8C8CA', marginBottom: 16 }}>
+            The world tells you to fit in. We were never meant to fit.
+          </p>
+          <p style={{ fontSize: 15, lineHeight: 1.85, color: '#A6A6A8', marginBottom: 16 }}>
+            We believe confidence doesn&apos;t need to shout. It&apos;s a quiet feed with a loud impression.
+            It&apos;s the discipline no one sees. The sacrifices no one applauds. The work that speaks for itself.
+          </p>
+          <p style={{ fontSize: 15, lineHeight: 1.85, color: '#A6A6A8', margin: 0 }}>
+            You should feel found, not sold to. Rouge Rabbit isn&apos;t here to tell you who to become.
+            We&apos;re here to remind you that you&apos;re already becoming.
+          </p>
+        </div>
+
+        {/* Section — What We Build */}
+        <div style={{ marginBottom: 56 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: 24 }}>
+            <span className="rr-mono" style={{ color: '#D90017', fontSize: 10, letterSpacing: '.22em' }}>04</span>
+            <div style={{ flex: 1, height: 1, background: '#3A3A3C' }} />
+          </div>
+          <h2 className="rr-display" style={{ fontSize: 'clamp(32px, 5vw, 60px)', margin: '0 0 24px', lineHeight: 0.9 }}>
+            WHAT WE BUILD.
+          </h2>
+          <p style={{ fontSize: 15, lineHeight: 1.85, color: '#C8C8CA', marginBottom: 16 }}>
+            Every collection tells a story. Every colourway represents a moment.
+            Every product is designed with intention.
+          </p>
+          <p style={{ fontSize: 15, lineHeight: 1.85, color: '#A6A6A8', margin: 0 }}>
+            Not because trends last. But because purpose does.
           </p>
         </div>
 
@@ -203,31 +199,29 @@ export default function ManifestoPage() {
             className="rr-display"
             style={{ fontSize: 'clamp(22px, 3.5vw, 36px)', color: '#E6E6E6', margin: 0, lineHeight: 1.15 }}
           >
-            &ldquo;We don&rsquo;t chase the algorithm. The algorithm chases relevance. We chase permanence.&rdquo;
+            &ldquo;Raw by Nature. Engineered for Those Who Refuse to Blend In.&rdquo;
           </p>
         </div>
 
-        {/* Section — For the Ones Who Get It */}
+        {/* Section — Where We're Going */}
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: 24 }}>
             <span className="rr-mono" style={{ color: '#D90017', fontSize: 10, letterSpacing: '.22em' }}>05</span>
             <div style={{ flex: 1, height: 1, background: '#3A3A3C' }} />
           </div>
           <h2 className="rr-display" style={{ fontSize: 'clamp(32px, 5vw, 60px)', margin: '0 0 24px', lineHeight: 0.9 }}>
-            FOR THE ONES<br />WHO GET IT.
+            WHERE<br />WE&apos;RE GOING.
           </h2>
           <p style={{ fontSize: 15, lineHeight: 1.85, color: '#C8C8CA', marginBottom: 16 }}>
-            You know who you are. You weren&apos;t waiting for a brand to tell you.
+            Born in South Africa. Built for the world.
           </p>
           <p style={{ fontSize: 15, lineHeight: 1.85, color: '#A6A6A8', marginBottom: 16 }}>
-            You dress like you have somewhere to be, even when you don&apos;t. You buy one
-            thing and you own it. You know the difference between hype and heritage. You
-            support the local because you understand that independence costs something —
-            and that something is worth paying.
+            We dream of becoming more than a clothing brand. We are building a symbol of movement.
+            A brand that stands beside the greatest in sport. A brand respected in luxury.
+            A brand that shapes culture through streetwear.
           </p>
           <p style={{ fontSize: 15, lineHeight: 1.85, color: '#A6A6A8', margin: 0 }}>
-            This is for you. The one in the back of the room. Wear it loud.
-            Or don&apos;t wear it at all.
+            Not by imitating anyone. But by becoming something the world has never seen before.
           </p>
         </div>
       </article>
@@ -259,13 +253,13 @@ export default function ManifestoPage() {
             className="rr-display"
             style={{ fontSize: 'clamp(28px, 5vw, 56px)', color: '#fff', margin: '0 0 12px', lineHeight: 1 }}
           >
-            REAL · RAW · ROUGE.
+            WE DON&apos;T CHASE THE LIGHT.
           </p>
           <p
             className="rr-display"
             style={{ fontSize: 'clamp(18px, 3vw, 32px)', color: 'rgba(255,255,255,0.65)', margin: '0 0 40px', lineHeight: 1.1 }}
           >
-            Built different. Won&apos;t stop.
+            We Become It.
           </p>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
             <Link href="/shop/rouge-01" style={{ textDecoration: 'none' }}>
