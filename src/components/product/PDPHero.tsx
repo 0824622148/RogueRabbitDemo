@@ -10,8 +10,8 @@ const VIEWS = ['FRONT', 'SIDE', 'BACK', 'TOP'] as const
 type View = typeof VIEWS[number]
 
 const META_ROWS = [
-  ['COLLECTION', 'ROSEBANK · V&A · GATEWAY'],
-  ['DELIVERY',   'COMING SOON'],
+  ['DELIVERY',   'DOOR-TO-DOOR · NATIONWIDE'],
+  ['COURIER',    'THE COURIER GUY'],
   ['RETURNS',    '30 DAYS · NO QUESTIONS'],
   ['EDITION',    'NUMBERED · 250 PAIRS'],
   ['RELEASE',    'JUL 31 · 2026'],

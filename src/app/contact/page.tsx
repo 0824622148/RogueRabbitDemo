@@ -12,15 +12,15 @@ export const metadata: Metadata = {
 const FAQS = [
   {
     q: 'How do pre-orders work?',
-    a: "Once you submit your pre-order, your spot is held. You'll receive EFT banking details immediately — payment must be completed within 24 hours to confirm your pair. Your edition number is then assigned and emailed to you. No payment is captured during the form itself.",
+    a: "Once you submit your pre-order, you're redirected to PayFast to pay securely online. As soon as your payment clears, your pair is confirmed and your edition number is assigned and emailed to you.",
   },
   {
-    q: 'When will my pre-order be ready for collection?',
-    a: 'DROP 003 is expected to be available from 31 July 2026. Once your payment clears we will send a collection confirmation with your chosen store (Rosebank, V&A Waterfront, or Gateway). Delivery to door is coming soon.',
+    q: 'When will my pre-order be delivered?',
+    a: 'DROP 003 is expected to ship from 31 July 2026. Once your payment clears, your order is booked with The Courier Guy and you will receive a tracking number by email. Door-to-door delivery anywhere in South Africa.',
   },
   {
     q: 'What payment methods do you accept?',
-    a: 'We currently accept EFT (Electronic Funds Transfer) only. All banking details are provided on your pre-order confirmation screen. Use your unique order reference as the payment reference to avoid delays.',
+    a: 'We accept secure online payments through PayFast — including card and instant EFT. You are redirected to PayFast to complete payment after submitting your pre-order.',
   },
   {
     q: 'Can I cancel or modify my pre-order?',
@@ -149,7 +149,7 @@ export default function ContactPage() {
           >
             <span className="rr-overline" style={{ color: '#D90017' }}>ORDER QUERIES</span>
             <p style={{ margin: 0, fontSize: 13, color: '#A6A6A8', lineHeight: 1.75 }}>
-              Pre-order status, payment confirmations, EFT queries, collection scheduling,
+              Pre-order status, payment confirmations, delivery &amp; tracking queries,
               and order modifications.
             </p>
             <a

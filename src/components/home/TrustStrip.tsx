@@ -1,6 +1,6 @@
 const TRUST_ITEMS = [
   ['NUMBERED EDITIONS',   "Each pair logged. Once it's gone, it's gone."],
-  ['DELIVERY COMING SOON', 'Pre-order now · dispatched on launch.'],
+  ['NATIONWIDE DELIVERY', 'Door-to-door by The Courier Guy.'],
   ['RETURNS · 30 DAYS',   "Don't love it? Send it back."],
   ['MEMBERS DROP FIRST',  'Sign up · 48h early access.'],
 ] as const
