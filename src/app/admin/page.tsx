@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js'
 import OrderStatusButton from '@/components/admin/OrderStatusButton'
+import BookCollectionButton from '@/components/admin/BookCollectionButton'
 
 export const dynamic = 'force-dynamic'
 
@@ -20,8 +21,12 @@ function fmt(dateStr: string) {
 const STATUS_COLOUR: Record<string, string> = {
   pending: '#A6A6A8',
   paid: '#2A9D2A',
+  shipped: '#3B82F6',
+  delivered: '#2A9D2A',
   cancelled: '#D90017',
 }
+
+const CONFIRMED_STATUSES = ['paid', 'shipped', 'delivered']
 
 export default async function AdminPage() {
   const db = getServiceClient()
@@ -32,7 +37,7 @@ export default async function AdminPage() {
   ])
 
   const confirmedRevenue = (orders ?? [])
-    .filter((o: any) => o.status === 'paid')
+    .filter((o: any) => CONFIRMED_STATUSES.includes(o.status))
     .reduce((sum: number, o: any) => sum + (o.amount_due ?? 0), 0)
 
   const pendingRevenue = (orders ?? [])
@@ -112,7 +117,7 @@ export default async function AdminPage() {
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
             <thead>
               <tr>
-                {['REFERENCE', 'COLOURWAY', 'SIZE · GENDER', 'CITY', 'NAME', 'EMAIL', 'STATUS', 'AMOUNT', 'PAYMENT ID', 'DATE', 'ACTIONS'].map(h => (
+                {['REFERENCE', 'COLOURWAY', 'SIZE · GENDER', 'DELIVERY ADDRESS', 'NAME', 'EMAIL', 'STATUS', 'AMOUNT', 'DELIVERY', 'TRACKING', 'PAYMENT ID', 'DATE', 'ACTIONS'].map(h => (
                   <th key={h} style={{ ...th, textAlign: 'left' }}>{h}</th>
                 ))}
               </tr>
@@ -123,7 +128,9 @@ export default async function AdminPage() {
                   <td style={cell}>{o.reference}</td>
                   <td style={cell}>{o.colourway}</td>
                   <td style={cell}>{o.size_value} · {o.gender}</td>
-                  <td style={cell}>{o.city.split(' · ')[0]}</td>
+                  <td style={{ ...cell, whiteSpace: 'normal', maxWidth: 220, color: '#A6A6A8' }}>
+                    {[o.address_line1, o.address_line2, o.suburb, o.city, o.province, o.postal_code].filter(Boolean).join(', ') || (o.city ?? '—')}
+                  </td>
                   <td style={cell}>{o.name}</td>
                   <td style={{ ...cell, color: '#A6A6A8' }}>{o.email}</td>
                   <td style={cell}>
@@ -135,16 +142,25 @@ export default async function AdminPage() {
                     </span>
                   </td>
                   <td style={{ ...cell, color: '#D90017' }}>R{o.amount_due}</td>
+                  <td style={{ ...cell, color: '#A6A6A8', fontSize: 10 }}>
+                    {o.ship_service_name || o.ship_service_code || '—'}{o.shipping_cost ? ` · R${o.shipping_cost}` : ''}
+                  </td>
+                  <td style={{ ...cell, color: '#A6A6A8', fontSize: 10 }}>{o.tracking_number ?? '—'}</td>
                   <td style={{ ...cell, color: '#A6A6A8', fontSize: 10 }}>{o.pf_payment_id ?? '—'}</td>
                   <td style={{ ...cell, color: '#A6A6A8' }}>{fmt(o.created_at)}</td>
                   <td style={{ ...cell }}>
-                    <OrderStatusButton orderId={o.id} currentStatus={o.status} />
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                      <OrderStatusButton orderId={o.id} currentStatus={o.status} />
+                      {o.status === 'paid' && !o.shiplogic_shipment_id && (
+                        <BookCollectionButton orderId={o.id} />
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))}
               {!orders?.length && (
                 <tr>
-                  <td colSpan={11} style={{ ...cell, textAlign: 'center', color: '#3A3A3C' }}>
+                  <td colSpan={13} style={{ ...cell, textAlign: 'center', color: '#3A3A3C' }}>
                     NO ORDERS YET
                   </td>
                 </tr>

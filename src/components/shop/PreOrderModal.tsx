@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import type { ColourwayDB, Size } from '@/types'
 
 const EARLY_ACCESS_CODE = 'ROUGE30'
@@ -8,11 +8,17 @@ const FULL_PRICE = 20 // TEMP: test price — change back to 1800 before launch
 const DISCOUNT_PCT = 0.30
 const DISCOUNTED_PRICE = Math.round(FULL_PRICE * (1 - DISCOUNT_PCT))
 
-const COLLECTION_POINTS = [
-  { id: 'jhb', label: 'JOHANNESBURG · ROSEBANK' },
-  { id: 'cpt', label: 'CAPE TOWN · V&A WATERFRONT' },
-  { id: 'dbn', label: 'DURBAN · GATEWAY' },
+const SA_PROVINCES = [
+  'Eastern Cape', 'Free State', 'Gauteng', 'KwaZulu-Natal', 'Limpopo',
+  'Mpumalanga', 'North West', 'Northern Cape', 'Western Cape',
 ]
+
+interface ShippingRate {
+  code: string
+  name: string
+  rate: number
+  deliveryEstimate: string | null
+}
 
 interface Props {
   initialColourway?: ColourwayDB
@@ -31,13 +37,27 @@ export default function PreOrderModal({ initialColourway, initialSize, initialGe
   const [cw, setCw] = useState<ColourwayDB>(initialColourway ?? colourways[0])
   const [gender, setGender] = useState<'MALE' | 'FEMALE'>(initialGender ?? 'MALE')
   const [sz, setSz] = useState(initialSize ?? '')
-  const [collection, setCollection] = useState('')
   const [earlyCode, setEarlyCode] = useState('')
   const [codeApplied, setCodeApplied] = useState(false)
   const [codeError, setCodeError] = useState(false)
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
+
+  // Delivery address
+  const [addressLine1, setAddressLine1] = useState('')
+  const [addressLine2, setAddressLine2] = useState('')
+  const [suburb, setSuburb] = useState('')
+  const [city, setCity] = useState('')
+  const [province, setProvince] = useState('')
+  const [postalCode, setPostalCode] = useState('')
+
+  // Live shipping rates
+  const [rates, setRates] = useState<ShippingRate[]>([])
+  const [selectedRate, setSelectedRate] = useState<ShippingRate | null>(null)
+  const [ratesLoading, setRatesLoading] = useState(false)
+  const [ratesError, setRatesError] = useState('')
+
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState('')
   const [reference, setReference] = useState('')
@@ -47,7 +67,15 @@ export default function PreOrderModal({ initialColourway, initialSize, initialGe
     .map(i => ({ v: i.size_value, oos: !i.in_stock }))
 
   const price = codeApplied ? DISCOUNTED_PRICE : FULL_PRICE
-  const canSubmit = name.trim() && email.trim() && phone.trim() && sz && collection
+  const shippingCost = selectedRate?.rate ?? 0
+  const total = price + shippingCost
+
+  const addressComplete = Boolean(
+    addressLine1.trim() && suburb.trim() && city.trim() && province && postalCode.trim(),
+  )
+  const canSubmit = Boolean(
+    name.trim() && email.trim() && phone.trim() && sz && addressComplete && selectedRate,
+  )
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
@@ -58,6 +86,42 @@ export default function PreOrderModal({ initialColourway, initialSize, initialGe
       document.body.style.overflow = ''
     }
   }, [onClose])
+
+  // Fetch live delivery rates once the address is complete (debounced).
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  useEffect(() => {
+    // Any address change invalidates a previously selected rate.
+    setSelectedRate(null)
+    setRates([])
+    setRatesError('')
+
+    if (!addressComplete) return
+
+    if (debounceRef.current) clearTimeout(debounceRef.current)
+    debounceRef.current = setTimeout(async () => {
+      setRatesLoading(true)
+      setRatesError('')
+      try {
+        const res = await fetch('/api/shipping/rates', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ addressLine1, addressLine2, suburb, city, province, postalCode }),
+        })
+        const data = await res.json()
+        if (!res.ok) throw new Error(data.error || 'Could not fetch delivery rates')
+        const fetched: ShippingRate[] = data.rates ?? []
+        setRates(fetched)
+        if (fetched.length === 1) setSelectedRate(fetched[0])
+      } catch (e: unknown) {
+        setRatesError(e instanceof Error ? e.message : 'Could not fetch delivery rates')
+      } finally {
+        setRatesLoading(false)
+      }
+    }, 600)
+
+    return () => { if (debounceRef.current) clearTimeout(debounceRef.current) }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [addressLine1, addressLine2, suburb, city, province, postalCode])
 
   const applyCode = () => {
     if (earlyCode.trim().toUpperCase() === EARLY_ACCESS_CODE) {
@@ -87,7 +151,15 @@ export default function PreOrderModal({ initialColourway, initialSize, initialGe
           colourwayId: cw.id,
           size: sz,
           gender,
-          collection,
+          addressLine1: addressLine1.trim(),
+          addressLine2: addressLine2.trim(),
+          suburb: suburb.trim(),
+          city: city.trim(),
+          province,
+          postalCode: postalCode.trim(),
+          serviceCode: selectedRate!.code,
+          serviceName: selectedRate!.name,
+          shippingCost,
           earlyAccessCode: earlyCode.trim() || null,
           discountApplied: codeApplied,
           finalPrice: price,
@@ -125,6 +197,12 @@ export default function PreOrderModal({ initialColourway, initialSize, initialGe
     } finally {
       setSubmitting(false)
     }
+  }
+
+  const inputStyle = {
+    width: '100%', background: '#0F0F10', border: '1px solid #3A3A3C',
+    color: '#E6E6E6', fontFamily: 'var(--font-body)', fontSize: 14,
+    padding: '12px 14px', outline: 'none', boxSizing: 'border-box' as const,
   }
 
   return (
@@ -243,30 +321,85 @@ export default function PreOrderModal({ initialColourway, initialSize, initialGe
               </div>
             </div>
 
+            <div style={{ borderTop: '1px solid #3A3A3C', marginBottom: 24 }} />
+
+            {/* Delivery address */}
             <div style={{ marginBottom: 24 }}>
-              <div className="rr-overline" style={{ marginBottom: 12, color: '#A6A6A8' }}>COLLECTION POINT</div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                {COLLECTION_POINTS.map((pt) => (
-                  <button
-                    key={pt.id}
-                    onClick={() => setCollection(pt.label)}
-                    style={{
-                      textAlign: 'left', padding: '12px 16px',
-                      border: `1px solid ${collection === pt.label ? '#D90017' : '#3A3A3C'}`,
-                      background: collection === pt.label ? 'rgba(217,0,23,.08)' : 'transparent',
-                      cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 12,
-                    }}
-                  >
-                    <div style={{
-                      width: 14, height: 14, borderRadius: '50%',
-                      border: `1px solid ${collection === pt.label ? '#D90017' : '#3A3A3C'}`,
-                      background: collection === pt.label ? '#D90017' : 'transparent',
-                      flexShrink: 0,
-                    }} />
-                    <span className="rr-mono" style={{ fontSize: 11, color: '#E6E6E6', letterSpacing: '.14em' }}>{pt.label}</span>
-                  </button>
-                ))}
+              <div className="rr-overline" style={{ marginBottom: 12, color: '#A6A6A8' }}>DELIVERY ADDRESS</div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                <input value={addressLine1} onChange={e => setAddressLine1(e.target.value)} placeholder="Street address" style={inputStyle} />
+                <input value={addressLine2} onChange={e => setAddressLine2(e.target.value)} placeholder="Apartment, unit, etc. (optional)" style={inputStyle} />
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                  <input value={suburb} onChange={e => setSuburb(e.target.value)} placeholder="Suburb" style={inputStyle} />
+                  <input value={city} onChange={e => setCity(e.target.value)} placeholder="City" style={inputStyle} />
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                  <select value={province} onChange={e => setProvince(e.target.value)} style={{ ...inputStyle, fontFamily: 'var(--font-mono)', fontSize: 12 }}>
+                    <option value="">Province</option>
+                    {SA_PROVINCES.map(p => <option key={p} value={p}>{p}</option>)}
+                  </select>
+                  <input value={postalCode} onChange={e => setPostalCode(e.target.value)} placeholder="Postal code" inputMode="numeric" style={inputStyle} />
+                </div>
               </div>
+            </div>
+
+            {/* Delivery options (live rates) */}
+            <div style={{ marginBottom: 24 }}>
+              <div className="rr-overline" style={{ marginBottom: 12, color: '#A6A6A8' }}>DELIVERY OPTION · THE COURIER GUY</div>
+
+              {!addressComplete && (
+                <p className="rr-mono" style={{ fontSize: 10, color: '#A6A6A8', letterSpacing: '.1em', margin: 0 }}>
+                  ENTER YOUR ADDRESS TO SEE DELIVERY OPTIONS.
+                </p>
+              )}
+
+              {addressComplete && ratesLoading && (
+                <p className="rr-mono" style={{ fontSize: 10, color: '#A6A6A8', letterSpacing: '.1em', margin: 0 }}>
+                  FETCHING LIVE RATES…
+                </p>
+              )}
+
+              {addressComplete && !ratesLoading && ratesError && (
+                <p className="rr-mono" style={{ fontSize: 10, color: '#D90017', letterSpacing: '.1em', margin: 0 }}>
+                  {ratesError.toUpperCase()}
+                </p>
+              )}
+
+              {addressComplete && !ratesLoading && !ratesError && rates.length > 0 && (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                  {rates.map((r) => {
+                    const active = selectedRate?.code === r.code
+                    return (
+                      <button
+                        key={r.code}
+                        onClick={() => setSelectedRate(r)}
+                        style={{
+                          textAlign: 'left', padding: '12px 16px',
+                          border: `1px solid ${active ? '#D90017' : '#3A3A3C'}`,
+                          background: active ? 'rgba(217,0,23,.08)' : 'transparent',
+                          cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 12,
+                        }}
+                      >
+                        <div style={{
+                          width: 14, height: 14, borderRadius: '50%',
+                          border: `1px solid ${active ? '#D90017' : '#3A3A3C'}`,
+                          background: active ? '#D90017' : 'transparent',
+                          flexShrink: 0,
+                        }} />
+                        <div style={{ flex: 1 }}>
+                          <span className="rr-mono" style={{ fontSize: 11, color: '#E6E6E6', letterSpacing: '.12em' }}>{r.name.toUpperCase()}</span>
+                          {r.deliveryEstimate && (
+                            <span className="rr-mono" style={{ display: 'block', fontSize: 9, color: '#A6A6A8', letterSpacing: '.1em', marginTop: 2 }}>
+                              EST. {r.deliveryEstimate}
+                            </span>
+                          )}
+                        </div>
+                        <span className="rr-mono" style={{ fontSize: 12, color: '#E6E6E6' }}>R{r.rate}</span>
+                      </button>
+                    )
+                  })}
+                </div>
+              )}
             </div>
 
             <div style={{ marginBottom: 28 }}>
@@ -322,14 +455,27 @@ export default function PreOrderModal({ initialColourway, initialSize, initialGe
                     value={value}
                     onChange={e => setter(e.target.value)}
                     placeholder={placeholder}
-                    style={{
-                      width: '100%', background: '#0F0F10', border: '1px solid #3A3A3C',
-                      color: '#E6E6E6', fontFamily: 'var(--font-body)', fontSize: 14,
-                      padding: '12px 14px', outline: 'none', boxSizing: 'border-box',
-                    }}
+                    style={inputStyle}
                   />
                 </div>
               ))}
+            </div>
+
+            {/* Order total */}
+            <div style={{ borderTop: '1px solid #3A3A3C', paddingTop: 16, marginBottom: 24 }}>
+              {[
+                ['SUBTOTAL', `R${price}`],
+                ['DELIVERY', selectedRate ? `R${shippingCost}` : '—'],
+              ].map(([k, v]) => (
+                <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '4px 0' }}>
+                  <span className="rr-mono" style={{ fontSize: 10, color: '#A6A6A8', letterSpacing: '.12em' }}>{k}</span>
+                  <span className="rr-mono" style={{ fontSize: 12, color: '#E6E6E6' }}>{v}</span>
+                </div>
+              ))}
+              <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0 0' }}>
+                <span className="rr-mono" style={{ fontSize: 11, color: '#E6E6E6', letterSpacing: '.12em' }}>TOTAL</span>
+                <span className="rr-mono" style={{ fontSize: 16, color: '#E6E6E6' }}>R{total}</span>
+              </div>
             </div>
 
             {submitError && (
@@ -348,13 +494,13 @@ export default function PreOrderModal({ initialColourway, initialSize, initialGe
                 cursor: !canSubmit || submitting ? 'default' : 'pointer',
               }}
             >
-              <span>{submitting ? 'PROCESSING...' : `SECURE MY PAIR · R${price}`}</span>
+              <span>{submitting ? 'PROCESSING...' : `SECURE MY PAIR · R${total}`}</span>
               {!submitting && <span>→</span>}
             </button>
 
             <p className="rr-mono" style={{ fontSize: 9, color: '#A6A6A8', marginTop: 14, lineHeight: 1.8, letterSpacing: '.1em' }}>
               YOU WILL BE REDIRECTED TO PAYFAST TO COMPLETE PAYMENT SECURELY.
-              COLLECTION ONLY · DELIVERY COMING SOON.
+              DELIVERED TO YOUR DOOR BY THE COURIER GUY.
             </p>
           </div>
         )}

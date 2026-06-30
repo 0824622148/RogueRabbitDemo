@@ -111,3 +111,21 @@ grant usage, select on sequence wishlist_id_seq to service_role;
 
 -- Migration: PayFast integration
 alter table orders add column if not exists pf_payment_id text;
+
+-- Migration: The Courier Guy (Shiplogic) door-to-door delivery
+alter table orders add column if not exists fulfilment_type      text default 'delivery'; -- 'delivery' (future: 'collection')
+alter table orders add column if not exists address_line1        text;
+alter table orders add column if not exists address_line2        text;
+alter table orders add column if not exists suburb               text;   -- Shiplogic local_area
+alter table orders add column if not exists province             text;   -- Shiplogic zone
+alter table orders add column if not exists postal_code          text;   -- Shiplogic code
+alter table orders add column if not exists ship_service_code    text;   -- chosen service_level.code
+alter table orders add column if not exists ship_service_name    text;
+alter table orders add column if not exists shipping_cost        int default 0;  -- rand, matches amount_due integer convention
+alter table orders add column if not exists shiplogic_shipment_id text;
+alter table orders add column if not exists tracking_number      text;
+
+-- Extend allowed order statuses for the fulfilment lifecycle
+alter table orders drop constraint if exists orders_status_check;
+alter table orders add constraint orders_status_check
+  check (status in ('pending', 'paid', 'shipped', 'delivered', 'cancelled'));

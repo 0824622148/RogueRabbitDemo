@@ -38,10 +38,13 @@ function customerConfirmHtml(order: Record<string, unknown>): string {
   const colourway = order.colourway as string
   const sizeValue = order.size_value as string
   const gender = order.gender as string
-  const city = order.city as string
   const reference = order.reference as string
   const amountDue = order.amount_due as number
   const discountApplied = order.early_access as boolean
+  const deliveryAddress = [
+    order.address_line1, order.address_line2, order.suburb,
+    order.city, order.province, order.postal_code,
+  ].filter(Boolean).join(', ')
 
   return `<div style="font-family:monospace;background:#0F0F10;color:#E6E6E6;padding:32px;max-width:560px;">
     <h1 style="color:#D90017;font-size:28px;margin:0 0 8px;">ROUGE RABBIT</h1>
@@ -62,7 +65,7 @@ function customerConfirmHtml(order: Record<string, unknown>): string {
       ${[
         ['Product', `ROUGE 01 · ${colourway}`],
         ['Size', `${sizeValue} · ${gender}`],
-        ['Collection Point', city],
+        ['Delivery To', deliveryAddress || '—'],
         ['Reference', reference],
         ['Amount Paid', `R${amountDue}${discountApplied ? ' (30% early access applied)' : ''}`],
       ].map(([k, v]) => `<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #3A3A3C;font-size:11px;">
@@ -86,12 +89,17 @@ function adminPaidHtml(order: Record<string, unknown>, pfPaymentId: string): str
   const colourway = order.colourway as string
   const sizeValue = order.size_value as string
   const gender = order.gender as string
-  const city = order.city as string
   const amountDue = order.amount_due as number
+  const shippingCost = (order.shipping_cost as number) ?? 0
+  const serviceName = (order.ship_service_name as string) || (order.ship_service_code as string) || '—'
   const discountApplied = order.early_access as boolean
+  const deliveryAddress = [
+    order.address_line1, order.address_line2, order.suburb,
+    order.city, order.province, order.postal_code,
+  ].filter(Boolean).join(', ')
 
   return `<div style="font-family:monospace;background:#0F0F10;color:#E6E6E6;padding:32px;">
-    <h2 style="color:#2A9D2A;margin:0 0 24px;">● PAYMENT RECEIVED</h2>
+    <h2 style="color:#2A9D2A;margin:0 0 24px;">● PAYMENT RECEIVED — READY TO SHIP</h2>
     <table style="border-collapse:collapse;width:100%;">
       ${[
         ['Order ID', `#${orderId}`],
@@ -102,10 +110,11 @@ function adminPaidHtml(order: Record<string, unknown>, pfPaymentId: string): str
         ['Phone', phone || '—'],
         ['Colourway', colourway],
         ['Size', `${sizeValue} · ${gender}`],
-        ['Collection Point', city],
+        ['Delivery Address', deliveryAddress || '—'],
+        ['Delivery Option', `${serviceName} — R${shippingCost}`],
         ['Discount Applied', discountApplied ? 'YES — 30% ROUGE30' : 'No'],
         ['Amount Paid', `R${amountDue}`],
-        ['Status', '● PAID'],
+        ['Status', '● PAID — BOOK COLLECTION IN ADMIN'],
       ].map(([k, v]) => `<tr><td style="padding:8px 16px 8px 0;color:#A6A6A8;white-space:nowrap;">${k}</td><td style="padding:8px 0;color:#E6E6E6;">${v}</td></tr>`).join('')}
     </table>
   </div>`

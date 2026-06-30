@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
-const VALID_STATUSES = ['pending', 'paid', 'cancelled']
+const VALID_STATUSES = ['pending', 'paid', 'shipped', 'delivered', 'cancelled']
 
 function getServiceClient() {
   return createClient(

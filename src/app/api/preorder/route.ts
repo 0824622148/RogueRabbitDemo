@@ -64,17 +64,27 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Invalid request body' }, { status: 400 })
   }
 
-  const { reference, name, email, phone, colourway, size, gender, collection, earlyAccessCode } =
-    body as Record<string, string>
+  const {
+    reference, name, email, phone, colourway, size, gender,
+    addressLine1, addressLine2, suburb, city, province, postalCode,
+    serviceCode, serviceName, earlyAccessCode,
+  } = body as Record<string, string>
 
-  if (!name || !email || !phone || !colourway || !size || !collection || !reference) {
+  if (
+    !name || !email || !phone || !colourway || !size || !reference ||
+    !addressLine1 || !suburb || !city || !province || !postalCode || !serviceCode
+  ) {
     return NextResponse.json({ error: 'All fields are required' }, { status: 422 })
   }
+
+  // Shipping cost is quoted live by Shiplogic on the client; coerce to a safe integer.
+  const shippingCost = Math.max(0, Math.round(Number((body as Record<string, unknown>).shippingCost) || 0))
 
   const discountApplied =
     typeof earlyAccessCode === 'string' &&
     earlyAccessCode.trim().toUpperCase() === EARLY_ACCESS_CODE
-  const price = discountApplied ? Math.round(FULL_PRICE * (1 - DISCOUNT_PCT)) : FULL_PRICE
+  const productPrice = discountApplied ? Math.round(FULL_PRICE * (1 - DISCOUNT_PCT)) : FULL_PRICE
+  const price = productPrice + shippingCost // total charged via PayFast
 
   // Persist order — critical; log but don't block if service key not yet configured
   let orderId: number | null = null
@@ -85,10 +95,19 @@ export async function POST(request: NextRequest) {
       colourway,
       gender: gender === 'FEMALE' ? 'F' : 'M',
       size_value: size,
-      city: collection,
+      city,
       name,
       email,
       phone,
+      fulfilment_type: 'delivery',
+      address_line1: addressLine1,
+      address_line2: addressLine2 || null,
+      suburb,
+      province,
+      postal_code: postalCode,
+      ship_service_code: serviceCode,
+      ship_service_name: serviceName || null,
+      shipping_cost: shippingCost,
       early_access: discountApplied,
       discount_pct: discountApplied ? 30 : 0,
       amount_due: price,
@@ -109,8 +128,10 @@ export async function POST(request: NextRequest) {
   console.log('[PRE-ORDER]', JSON.stringify({
     timestamp: new Date().toISOString(),
     orderId, reference, name, email, phone,
-    colourway, size, gender, collection,
-    discountApplied, amountDue: price,
+    colourway, size, gender,
+    delivery: { addressLine1, suburb, city, province, postalCode },
+    serviceCode, serviceName, shippingCost,
+    discountApplied, productPrice, amountDue: price,
   }))
 
   const adminEmail = process.env.ADMIN_EMAIL ?? 'orders@rougerabbit.co.za'
@@ -129,9 +150,10 @@ export async function POST(request: NextRequest) {
           ['Phone', phone],
           ['Colourway', colourway],
           ['Size', `${size} · ${gender}`],
-          ['Collection Point', collection],
+          ['Delivery Address', [addressLine1, addressLine2, suburb, city, province, postalCode].filter(Boolean).join(', ')],
+          ['Delivery Option', `${serviceName || serviceCode} — R${shippingCost}`],
           ['Discount Applied', discountApplied ? 'YES — 30% ROUGE30' : 'No'],
-          ['Amount Due', `R${price}`],
+          ['Amount Due', `R${price} (incl. R${shippingCost} delivery)`],
           ['Status', 'AWAITING PAYFAST PAYMENT'],
         ].map(([k, v]) => `<tr><td style="padding:8px 16px 8px 0;color:#A6A6A8;white-space:nowrap;">${k}</td><td style="padding:8px 0;color:#E6E6E6;">${v}</td></tr>`).join('')}
       </table>
