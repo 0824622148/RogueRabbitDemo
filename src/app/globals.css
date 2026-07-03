@@ -575,3 +575,44 @@
 @media (max-width: 480px) {
   .rr-journal-stats    { grid-template-columns: 1fr !important; }
 }
+
+/* ── Admin dashboard shell ────────────────────── */
+.rr-admin-shell   { min-height: 100vh; background: #0F0F10; }
+.rr-admin-sidebar {
+  position: fixed; top: 0; left: 0; bottom: 0; width: 232px; z-index: 60;
+  background: #131315; border-right: 1px solid #3A3A3C;
+  display: flex; flex-direction: column;
+}
+.rr-admin-main    { margin-left: 232px; min-height: 100vh; }
+.rr-admin-topbar  { display: none; }
+.rr-admin-overlay { display: none; }
+
+.rr-admin-navlink {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 22px; text-decoration: none;
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: .16em;
+  color: #A6A6A8; border-left: 2px solid transparent; text-transform: uppercase;
+  transition: color .12s, background .12s;
+}
+.rr-admin-navlink:hover  { color: #E6E6E6; background: #1A1A1C; }
+.rr-admin-navlink.active  { color: #E6E6E6; background: #1A1A1C; border-left-color: #D90017; }
+.rr-admin-navlink .rr-admin-navicon { display: inline-flex; font-size: 15px; }
+.rr-admin-close { display: none; }
+
+@media (max-width: 900px) {
+  .rr-admin-main    { margin-left: 0; padding-top: 56px; }
+  .rr-admin-topbar  {
+    display: flex; align-items: center; justify-content: space-between;
+    position: fixed; top: 0; left: 0; right: 0; height: 56px; z-index: 55;
+    padding: 0 18px; background: #131315; border-bottom: 1px solid #3A3A3C;
+  }
+  .rr-admin-sidebar {
+    transform: translateX(-100%); transition: transform .2s ease;
+  }
+  .rr-admin-sidebar.open { transform: translateX(0); }
+  .rr-admin-overlay.open {
+    display: block; position: fixed; inset: 0; z-index: 54;
+    background: rgba(0,0,0,.5);
+  }
+  .rr-admin-close { display: inline-flex; }
+}

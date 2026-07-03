@@ -129,3 +129,20 @@ alter table orders add column if not exists tracking_number      text;
 alter table orders drop constraint if exists orders_status_check;
 alter table orders add constraint orders_status_check
   check (status in ('pending', 'paid', 'shipped', 'delivered', 'cancelled'));
+
+-- Migration: Admin "email all members" campaigns
+-- Opt-out flag so marketing sends respect unsubscribes (POPIA compliance).
+alter table members add column if not exists unsubscribed boolean default false;
+
+-- Log of member email campaigns sent from the admin dashboard.
+create table if not exists campaigns (
+  id              serial primary key,
+  subject         text not null,
+  body            text not null,
+  recipient_count int  not null default 0,
+  sent_at         timestamptz default now()
+);
+
+alter table campaigns enable row level security;
+grant all on campaigns to service_role;
+grant usage, select on sequence campaigns_id_seq to service_role;
