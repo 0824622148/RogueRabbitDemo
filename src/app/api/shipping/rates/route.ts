@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getRates, isConfigured, type Address } from '@/lib/shiplogic'
+import { FULL_PRICE } from '@/lib/preorder'
 
 export const dynamic = 'force-dynamic'
 
 // Product value used as the declared value for insurance/rating.
-// Kept in sync with the pre-order full price.
-const DECLARED_VALUE = Number(process.env.SHIPLOGIC_DECLARED_VALUE ?? 1800)
+// Defaults to the pre-order full price so the two never drift.
+const DECLARED_VALUE = Number(process.env.SHIPLOGIC_DECLARED_VALUE ?? FULL_PRICE)
 
 export async function POST(request: NextRequest) {
   if (!isConfigured()) {

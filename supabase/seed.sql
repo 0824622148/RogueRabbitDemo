@@ -3,7 +3,7 @@
 
 -- ROUGE 01
 insert into products (name, slug, category, drop_label, price, badge, media_bg, image_contain, image_fit)
-values ('ROUGE 01', 'rouge-01', 'FOOTWEAR', 'DROP 003', 1800, 'NEW', '#fff', 1, 'contain');
+values ('ROUGE 01', 'rouge-01', 'FOOTWEAR', 'DROP 003', 1399, 'NEW', '#fff', 1, 'contain');
 
 -- 5 colourways
 insert into colourways (id, product_id, name, hex, sort_order) values

@@ -330,7 +330,7 @@ export default function PDPHero({ colourways, initialColourwayId }: Props) {
           </h1>
 
           <div style={{ display: 'flex', alignItems: 'baseline', gap: 14, marginTop: 24 }}>
-            <span className="rr-display" style={{ fontSize: 44 }}>R1800</span>
+            <span className="rr-display" style={{ fontSize: 44 }}>R{FULL_PRICE}</span>
             <span className="rr-mono">ZAR · TAX INCL.</span>
           </div>
 
