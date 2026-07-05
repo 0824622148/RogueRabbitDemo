@@ -114,7 +114,7 @@ export default function NavBar({ cartCount = 0 }: { cartCount?: number }) {
             <span className="rr-mono rr-nav-search-label" style={{ color: '#E6E6E6' }}>SEARCH</span>
           </button>
           <button
-            onClick={openSubscribe}
+            onClick={() => openSubscribe('navbar')}
             aria-label="Join the members list"
             style={{
               background: 'none', border: 'none', color: '#E6E6E6',

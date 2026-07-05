@@ -1,6 +1,6 @@
 'use client'
 
-import SubscribeForm from '@/components/brand/SubscribeForm'
+import SubscribeButton from '@/components/brand/SubscribeButton'
 
 export default function SplitCTA() {
   return (
@@ -29,7 +29,7 @@ export default function SplitCTA() {
           48-hour early access to every drop. Numbered pairs reserved. No spam, no noise.
         </p>
         <div style={{ marginTop: 36 }}>
-          <SubscribeForm source="homepage" variant="inline" tone="onRed" buttonLabel="JOIN" />
+          <SubscribeButton source="homepage" tone="onRed" label="GET IN EARLY" />
         </div>
         {/* Ghost R */}
         <div

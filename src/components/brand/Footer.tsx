@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import RougeLogo from './RougeLogo'
-import SubscribeForm from './SubscribeForm'
+import SubscribeButton from './SubscribeButton'
 import { FaInstagram, FaYoutube } from 'react-icons/fa'
 import { FaTiktok, FaXTwitter } from 'react-icons/fa6'
 
@@ -79,8 +79,8 @@ export default function Footer() {
             48-hour early access to every drop. Numbered pairs reserved for members.
           </p>
         </div>
-        <div style={{ flex: '1 1 320px', minWidth: 260, maxWidth: 460 }}>
-          <SubscribeForm source="footer" variant="inline" tone="onDark" buttonLabel="JOIN" />
+        <div style={{ flex: '1 1 320px', minWidth: 260, maxWidth: 460, display: 'flex', justifyContent: 'flex-start' }}>
+          <SubscribeButton source="footer" tone="onDark" label="JOIN THE LIST" />
         </div>
       </div>
 

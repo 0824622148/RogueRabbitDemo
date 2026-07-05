@@ -5,7 +5,7 @@ import { useSubscribeModal } from '@/context/SubscribeContext'
 import SubscribeForm from './SubscribeForm'
 
 export default function SubscribeModal() {
-  const { isOpen, closeSubscribe } = useSubscribeModal()
+  const { isOpen, source, closeSubscribe } = useSubscribeModal()
 
   return (
     <AnimatePresence>
@@ -71,17 +71,11 @@ export default function SubscribeModal() {
               GET IN EARLY.
             </h2>
             <p style={{ color: '#A6A6A8', fontSize: 12, lineHeight: 1.7, margin: '0 0 24px' }}>
-              48-hour early access to every drop. Numbered pairs reserved. No spam, no noise.
+              48-hour early access to every drop. Numbered pairs reserved. No spam, no noise —
+              just tell us where to send it.
             </p>
 
-            <SubscribeForm
-              source="navbar"
-              variant="stacked"
-              tone="onDark"
-              buttonLabel="JOIN"
-              placeholder="YOUR@EMAIL.COM"
-              autoFocus
-            />
+            <SubscribeForm source={source} buttonLabel="JOIN" autoFocus />
           </motion.div>
         </>
       )}

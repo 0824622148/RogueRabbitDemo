@@ -4,7 +4,9 @@ import { createContext, useCallback, useContext, useState } from 'react'
 
 interface SubscribeContextValue {
   isOpen: boolean
-  openSubscribe: () => void
+  /** Which touchpoint opened the modal — stored on the member row. */
+  source: string
+  openSubscribe: (source?: string) => void
   closeSubscribe: () => void
 }
 
@@ -18,11 +20,15 @@ export function useSubscribeModal() {
 
 export function SubscribeProvider({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = useState(false)
-  const openSubscribe = useCallback(() => setIsOpen(true), [])
+  const [source, setSource] = useState('navbar')
+  const openSubscribe = useCallback((from = 'navbar') => {
+    setSource(from)
+    setIsOpen(true)
+  }, [])
   const closeSubscribe = useCallback(() => setIsOpen(false), [])
 
   return (
-    <SubscribeContext.Provider value={{ isOpen, openSubscribe, closeSubscribe }}>
+    <SubscribeContext.Provider value={{ isOpen, source, openSubscribe, closeSubscribe }}>
       {children}
     </SubscribeContext.Provider>
   )

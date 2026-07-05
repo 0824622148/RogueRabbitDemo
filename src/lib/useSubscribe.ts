@@ -6,12 +6,19 @@ export type SubscribeStatus = 'idle' | 'loading' | 'success' | 'error'
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
+export interface SubscribeDetails {
+  name: string
+  email: string
+  /** Optional — sent only when provided. */
+  phone?: string
+}
+
 interface UseSubscribeResult {
   status: SubscribeStatus
   error: string
   /** True once a *new* member was created (vs already-subscribed). */
   isNew: boolean
-  subscribe: (email: string) => Promise<void>
+  subscribe: (details: SubscribeDetails) => Promise<void>
   reset: () => void
 }
 
@@ -25,9 +32,17 @@ export function useSubscribe(source: string): UseSubscribeResult {
   const [error, setError] = useState('')
   const [isNew, setIsNew] = useState(false)
 
-  const subscribe = useCallback(async (email: string) => {
-    const trimmed = email.trim().toLowerCase()
-    if (!EMAIL_RE.test(trimmed)) {
+  const subscribe = useCallback(async (details: SubscribeDetails) => {
+    const name = details.name.trim()
+    const email = details.email.trim().toLowerCase()
+    const phone = details.phone?.trim() || ''
+
+    if (!name) {
+      setStatus('error')
+      setError('Enter your name.')
+      return
+    }
+    if (!EMAIL_RE.test(email)) {
       setStatus('error')
       setError('Enter a valid email address.')
       return
@@ -39,7 +54,7 @@ export function useSubscribe(source: string): UseSubscribeResult {
       const res = await fetch('/api/members', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: trimmed, source }),
+        body: JSON.stringify({ name, email, phone: phone || undefined, source }),
       })
       if (!res.ok) {
         const data = await res.json().catch(() => null)
