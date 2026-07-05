@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import RougeLogo from './RougeLogo'
+import SubscribeForm from './SubscribeForm'
 import { FaInstagram, FaYoutube } from 'react-icons/fa'
 import { FaTiktok, FaXTwitter } from 'react-icons/fa6'
 
@@ -20,7 +21,7 @@ const FOOTER_COLS = [
     title: 'WORLD',
     items: [
       { label: 'Drops Calendar', href: '/drops' },
-      { label: 'Lookbook',       href: '/lookbook' },
+      { label: 'Influencers',    href: '/influencers' },
       { label: 'Journal',        href: '/journal' },
       { label: 'Stockists',      href: '/stockists' },
     ],
@@ -55,6 +56,34 @@ export default function Footer() {
         color: '#E6E6E6',
       }}
     >
+      {/* Newsletter / members signup */}
+      <div
+        className="rr-footer-join"
+        style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          alignItems: 'flex-end',
+          justifyContent: 'space-between',
+          gap: 24,
+          paddingBottom: 40,
+          marginBottom: 40,
+          borderBottom: '1px solid #3A3A3C',
+        }}
+      >
+        <div style={{ maxWidth: 420 }}>
+          <div className="rr-overline" style={{ color: '#D90017', marginBottom: 12 }}>[ JOIN THE LIST ]</div>
+          <h3 className="rr-display" style={{ fontSize: 'clamp(32px, 4vw, 44px)', lineHeight: 0.95, margin: 0 }}>
+            FIRST ACCESS.<br />NO NOISE.
+          </h3>
+          <p style={{ color: '#A6A6A8', fontSize: 13, lineHeight: 1.7, margin: '14px 0 0' }}>
+            48-hour early access to every drop. Numbered pairs reserved for members.
+          </p>
+        </div>
+        <div style={{ flex: '1 1 320px', minWidth: 260, maxWidth: 460 }}>
+          <SubscribeForm source="footer" variant="inline" tone="onDark" buttonLabel="JOIN" />
+        </div>
+      </div>
+
       <div className="rr-footer-grid">
         {/* Brand column — spans full width on mobile */}
         <div className="rr-footer-brand">

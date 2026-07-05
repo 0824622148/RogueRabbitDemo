@@ -5,12 +5,13 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import RougeLogo from './RougeLogo'
 import { useWishlist } from '@/context/WishlistContext'
+import { useSubscribeModal } from '@/context/SubscribeContext'
 
 const NAV_LINKS = [
   { label: 'NEW',      href: '/shop' },
   { label: 'SHOP',     href: '/shop' },
   { label: 'DROPS',    href: '/drops' },
-  { label: 'LOOKBOOK', href: '/lookbook' },
+  { label: 'INFLUENCERS', href: '/influencers' },
   { label: 'JOURNAL',  href: '/journal' },
 ]
 
@@ -22,6 +23,7 @@ export default function NavBar({ cartCount = 0 }: { cartCount?: number }) {
       : pathname === href || pathname.startsWith(href + '/')
   const [menuOpen, setMenuOpen] = useState(false)
   const { count: wishlistCount, openDrawer } = useWishlist()
+  const { openSubscribe } = useSubscribeModal()
 
   return (
     <>
@@ -112,6 +114,8 @@ export default function NavBar({ cartCount = 0 }: { cartCount?: number }) {
             <span className="rr-mono rr-nav-search-label" style={{ color: '#E6E6E6' }}>SEARCH</span>
           </button>
           <button
+            onClick={openSubscribe}
+            aria-label="Join the members list"
             style={{
               background: 'none', border: 'none', color: '#E6E6E6',
               display: 'inline-flex', alignItems: 'center', gap: 8,
@@ -122,7 +126,7 @@ export default function NavBar({ cartCount = 0 }: { cartCount?: number }) {
               <circle cx="7" cy="4.5" r="2.5" stroke="currentColor" strokeWidth="1.2" />
               <path d="M1.5 13C1.5 10 4 8.5 7 8.5C10 8.5 12.5 10 12.5 13" stroke="currentColor" strokeWidth="1.2" />
             </svg>
-            <span className="rr-mono rr-nav-account-label" style={{ color: '#E6E6E6' }}>ACCOUNT</span>
+            <span className="rr-mono rr-nav-account-label" style={{ color: '#E6E6E6' }}>JOIN</span>
           </button>
           <button
             onClick={openDrawer}
@@ -205,6 +209,26 @@ export default function NavBar({ cartCount = 0 }: { cartCount?: number }) {
               {label}
             </Link>
           ))}
+          <button
+            onClick={() => { setMenuOpen(false); openSubscribe() }}
+            style={{
+              display: 'block',
+              width: '100%',
+              textAlign: 'left',
+              padding: '18px 0',
+              background: 'none',
+              border: 'none',
+              borderBottom: '1px solid #3A3A3C',
+              fontFamily: 'var(--font-mono)',
+              fontSize: 13,
+              letterSpacing: '.22em',
+              color: '#D90017',
+              textTransform: 'uppercase',
+              cursor: 'pointer',
+            }}
+          >
+            Join →
+          </button>
         </div>
       )}
     </>

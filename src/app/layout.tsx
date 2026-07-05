@@ -5,6 +5,8 @@ import WhatsAppWidget from '@/components/brand/WhatsAppWidget'
 import { WishlistProvider } from '@/context/WishlistContext'
 import WishlistDrawer from '@/components/wishlist/WishlistDrawer'
 import WishlistEmailModal from '@/components/wishlist/WishlistEmailModal'
+import { SubscribeProvider } from '@/context/SubscribeContext'
+import SubscribeModal from '@/components/brand/SubscribeModal'
 
 const bebasNeue = Bebas_Neue({
   weight: '400',
@@ -55,12 +57,15 @@ export default function RootLayout({
           textRendering: 'optimizeLegibility',
         }}
       >
-        <WishlistProvider>
-          {children}
-          <WishlistDrawer />
-          <WishlistEmailModal />
-          <WhatsAppWidget />
-        </WishlistProvider>
+        <SubscribeProvider>
+          <WishlistProvider>
+            {children}
+            <WishlistDrawer />
+            <WishlistEmailModal />
+            <SubscribeModal />
+            <WhatsAppWidget />
+          </WishlistProvider>
+        </SubscribeProvider>
       </body>
     </html>
   )

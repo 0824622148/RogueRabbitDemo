@@ -151,7 +151,7 @@ export function WishlistProvider({ children }: { children: React.ReactNode }) {
       await fetch('/api/members', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: normalised }),
+        body: JSON.stringify({ email: normalised, source: 'wishlist' }),
       })
     } catch {
       // non-critical
