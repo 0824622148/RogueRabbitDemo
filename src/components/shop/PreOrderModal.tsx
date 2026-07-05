@@ -2,11 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import type { ColourwayDB, Size } from '@/types'
-
-const EARLY_ACCESS_CODE = 'ROUGE30'
-const FULL_PRICE = 20 // TEMP: test price — change back to 1800 before launch
-const DISCOUNT_PCT = 0.30
-const DISCOUNTED_PRICE = Math.round(FULL_PRICE * (1 - DISCOUNT_PCT))
+import { FULL_PRICE, DISCOUNTED_PRICE, EARLY_ACCESS_CODE, DELIVERY_FROM } from '@/lib/preorder'
 
 const SA_PROVINCES = [
   'Eastern Cape', 'Free State', 'Gauteng', 'KwaZulu-Natal', 'Limpopo',
@@ -62,6 +58,9 @@ export default function PreOrderModal({ initialColourway, initialSize, initialGe
   const [submitError, setSubmitError] = useState('')
   const [reference, setReference] = useState('')
 
+  // Pre-order terms acknowledgement (required before payment)
+  const [agreed, setAgreed] = useState(false)
+
   const sizes: Size[] = cw.inventory
     .filter(i => i.gender === (gender === 'MALE' ? 'M' : 'F'))
     .map(i => ({ v: i.size_value, oos: !i.in_stock }))
@@ -74,7 +73,7 @@ export default function PreOrderModal({ initialColourway, initialSize, initialGe
     addressLine1.trim() && suburb.trim() && city.trim() && province && postalCode.trim(),
   )
   const canSubmit = Boolean(
-    name.trim() && email.trim() && phone.trim() && sz && addressComplete && selectedRate,
+    name.trim() && email.trim() && phone.trim() && sz && addressComplete && selectedRate && agreed,
   )
 
   useEffect(() => {
@@ -478,6 +477,33 @@ export default function PreOrderModal({ initialColourway, initialSize, initialGe
               </div>
             </div>
 
+            {/* Pre-order acknowledgement — required before payment */}
+            <label
+              htmlFor="rr-preorder-agree"
+              style={{
+                display: 'flex', alignItems: 'flex-start', gap: 12,
+                border: `1px solid ${agreed ? '#D90017' : '#3A3A3C'}`,
+                background: agreed ? 'rgba(217,0,23,.06)' : 'transparent',
+                padding: '14px 16px', marginBottom: 20, cursor: 'pointer',
+              }}
+            >
+              <input
+                id="rr-preorder-agree"
+                type="checkbox"
+                checked={agreed}
+                onChange={e => setAgreed(e.target.checked)}
+                style={{ marginTop: 2, width: 16, height: 16, accentColor: '#D90017', flexShrink: 0, cursor: 'pointer' }}
+              />
+              <span style={{ fontSize: 12, color: '#E6E6E6', lineHeight: 1.6 }}>
+                I understand this is a <strong>pre-order</strong>. Delivery is expected from{' '}
+                <strong>{DELIVERY_FROM}</strong>, and the Rouge Rabbit team will be in touch to
+                confirm before dispatch.{' '}
+                <a href="/preorder-policy" target="_blank" rel="noopener noreferrer" style={{ color: '#D90017', textDecoration: 'underline' }}>
+                  Read the full pre-order policy
+                </a>.
+              </span>
+            </label>
+
             {submitError && (
               <div className="rr-mono" style={{ fontSize: 11, color: '#D90017', marginBottom: 16, letterSpacing: '.12em' }}>
                 {submitError}
@@ -500,7 +526,8 @@ export default function PreOrderModal({ initialColourway, initialSize, initialGe
 
             <p className="rr-mono" style={{ fontSize: 9, color: '#A6A6A8', marginTop: 14, lineHeight: 1.8, letterSpacing: '.1em' }}>
               YOU WILL BE REDIRECTED TO PAYFAST TO COMPLETE PAYMENT SECURELY.
-              DELIVERED TO YOUR DOOR BY THE COURIER GUY.
+              THIS IS A PRE-ORDER — DELIVERY FROM {DELIVERY_FROM.toUpperCase()}. THE TEAM WILL BE IN
+              TOUCH TO CONFIRM BEFORE DISPATCH. DELIVERED TO YOUR DOOR BY THE COURIER GUY.
             </p>
           </div>
         )}
@@ -516,8 +543,10 @@ export default function PreOrderModal({ initialColourway, initialSize, initialGe
             </div>
 
             <p className="rr-mono" style={{ color: '#A6A6A8', fontSize: 11, lineHeight: 1.8, margin: '0 0 24px', letterSpacing: '.1em' }}>
-              YOUR ORDER HAS BEEN PLACED. REFERENCE: <span style={{ color: '#E6E6E6' }}>{reference}</span>.
+              YOUR PRE-ORDER HAS BEEN PLACED. REFERENCE: <span style={{ color: '#E6E6E6' }}>{reference}</span>.
               A CONFIRMATION EMAIL IS ON ITS WAY TO <span style={{ color: '#E6E6E6' }}>{email}</span>.
+              DELIVERY FROM <span style={{ color: '#E6E6E6' }}>{DELIVERY_FROM.toUpperCase()}</span> — THE TEAM WILL
+              BE IN TOUCH TO CONFIRM BEFORE DISPATCH.
             </p>
 
             <button onClick={onClose} className="rr-btn rr-btn--ghost" style={{ width: '100%', justifyContent: 'center' }}>

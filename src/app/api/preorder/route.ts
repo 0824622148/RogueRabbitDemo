@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { buildPayFastPayload } from '@/lib/payfast'
+import { FULL_PRICE, DISCOUNT_PCT, EARLY_ACCESS_CODE as DEFAULT_EARLY_ACCESS_CODE } from '@/lib/preorder'
 
 // Set these in .env.local and Vercel environment variables before launch:
 //   RESEND_API_KEY=re_xxxxxxxxxxxx
@@ -13,9 +14,9 @@ import { buildPayFastPayload } from '@/lib/payfast'
 //   PAYFAST_SANDBOX=true
 //   NEXT_PUBLIC_SITE_URL=https://rougerabbit.co.za
 
-const EARLY_ACCESS_CODE = process.env.EARLY_ACCESS_CODE ?? 'ROUGE30'
-const FULL_PRICE = 20 // TEMP: test price — change back to 1800 before launch
-const DISCOUNT_PCT = 0.30
+// Price constants come from src/lib/preorder.ts (shared with the modal & PDP);
+// the early-access code may still be overridden via env.
+const EARLY_ACCESS_CODE = process.env.EARLY_ACCESS_CODE ?? DEFAULT_EARLY_ACCESS_CODE
 const RESEND_FROM = 'Rouge Rabbit <orders@rougerabbit.co.za>'
 
 // EFT bank details retained for reference only — payment now via PayFast

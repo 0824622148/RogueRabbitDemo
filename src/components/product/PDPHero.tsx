@@ -5,6 +5,7 @@ import Arrow from '@/components/brand/Arrow'
 import type { ColourwayDB, Size } from '@/types'
 import PreOrderModal from '@/components/shop/PreOrderModal'
 import { useWishlist } from '@/context/WishlistContext'
+import { FULL_PRICE } from '@/lib/preorder'
 
 const VIEWS = ['FRONT', 'SIDE', 'BACK', 'TOP'] as const
 type View = typeof VIEWS[number]
@@ -400,7 +401,7 @@ export default function PDPHero({ colourways, initialColourwayId }: Props) {
               style={{ justifyContent: 'space-between', padding: '20px 26px' }}
               onClick={() => setPreOrder(true)}
             >
-              <span>PRE-ORDER NOW · R1800</span>
+              <span>PRE-ORDER NOW · R{FULL_PRICE}</span>
               <Arrow size={16} />
             </button>
             <button

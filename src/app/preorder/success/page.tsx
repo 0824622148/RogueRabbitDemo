@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import NavBar from '@/components/brand/NavBar'
 import Footer from '@/components/brand/Footer'
+import { DELIVERY_FROM } from '@/lib/preorder'
 
 export const metadata: Metadata = {
   title: 'Payment Confirmed — Rouge Rabbit',
@@ -43,7 +44,8 @@ export default async function PreorderSuccessPage({
 
           <p className="rr-mono" style={{ fontSize: 11, color: '#A6A6A8', lineHeight: 1.9, letterSpacing: '.1em', margin: '0 0 32px' }}>
             A CONFIRMATION EMAIL IS ON ITS WAY TO YOUR INBOX.
-            YOUR EDITION NUMBER WILL BE ASSIGNED ONCE THE PRE-ORDER CLOSES.
+            THIS IS A PRE-ORDER — DELIVERY IS EXPECTED FROM {DELIVERY_FROM.toUpperCase()}.
+            THE ROUGE RABBIT TEAM WILL BE IN TOUCH TO CONFIRM BEFORE YOUR ORDER IS DISPATCHED.
           </p>
 
           {ref && (

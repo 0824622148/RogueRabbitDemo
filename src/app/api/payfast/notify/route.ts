@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { validateITN } from '@/lib/payfast'
+import { DELIVERY_FROM } from '@/lib/preorder'
 
 export const dynamic = 'force-dynamic'
 
@@ -55,10 +56,18 @@ function customerConfirmHtml(order: Record<string, unknown>): string {
       <span style="color:#2A9D2A;font-size:11px;letter-spacing:.16em;">PAYMENT CONFIRMED</span>
     </div>
 
-    <p style="color:#A6A6A8;line-height:1.8;font-size:12px;margin:0 0 28px;">
+    <p style="color:#A6A6A8;line-height:1.8;font-size:12px;margin:0 0 20px;">
       Hi ${name}, your ROUGE 01 ${colourway} is secured.
       Your edition number will be assigned once the pre-order closes and emailed to you.
     </p>
+
+    <div style="border:1px solid #D90017;padding:16px 20px;margin-bottom:28px;">
+      <p style="color:#D90017;font-size:10px;letter-spacing:.2em;margin:0 0 10px;">PRE-ORDER · WHAT HAPPENS NEXT</p>
+      <p style="color:#E6E6E6;line-height:1.8;font-size:12px;margin:0;">
+        This is a pre-order. Delivery is expected from <strong>${DELIVERY_FROM}</strong>.
+        The Rouge Rabbit team will be in touch to confirm before your order is dispatched.
+      </p>
+    </div>
 
     <div style="border:1px solid #3A3A3C;padding:20px;margin-bottom:24px;">
       <p style="color:#D90017;font-size:10px;letter-spacing:.2em;margin:0 0 16px;">ORDER SUMMARY</p>

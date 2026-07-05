@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import PolicyLayout from '@/components/brand/PolicyLayout'
+import { DELIVERY_FROM } from '@/lib/preorder'
 
 export const metadata: Metadata = {
   title: 'Pre-Order Policy — Rouge Rabbit',
@@ -16,7 +17,7 @@ const S = {
 
 export default function PreorderPolicyPage() {
   return (
-    <PolicyLayout title="Pre-Order Policy" lastUpdated="June 2026">
+    <PolicyLayout title="Pre-Order Policy" lastUpdated="July 2026">
 
       <p style={S.p}>
         Thank you for supporting Rouge Rabbit. By placing a pre-order, you are securing your
@@ -27,11 +28,10 @@ export default function PreorderPolicyPage() {
       <div style={{ padding: '20px 24px', background: '#1E1E20', border: '1px solid #3A3A3C', marginBottom: 32 }}>
         <p style={{ ...S.p, margin: 0, fontSize: 13, color: '#A6A6A8' }}>
           <strong style={{ color: '#E6E6E6' }}>Pre-Order Notice —</strong> Your pair is reserved
-          once payment has been successfully completed. Manufacturing begins after the pre-order
-          campaign closes and requires approximately{' '}
-          <strong style={{ color: '#E6E6E6' }}>4–6 weeks</strong> for production and quality
-          control. Once production is complete, your order will be shipped within South Africa
-          and tracking details will be provided.
+          once payment has been successfully completed. Deliveries begin from{' '}
+          <strong style={{ color: '#E6E6E6' }}>{DELIVERY_FROM}</strong>. Ahead of dispatch, the
+          Rouge Rabbit team will be in touch to confirm your delivery details. Your order will
+          then be shipped within South Africa and tracking details will be provided.
         </p>
       </div>
 
@@ -45,28 +45,31 @@ export default function PreorderPolicyPage() {
         estimated production and delivery timelines outlined below.
       </p>
 
-      <h2 style={S.h2}>Pre-Order Production Timeline</h2>
-      <p style={S.p}>Once the pre-order campaign closes, manufacturing will begin.</p>
-
-      <h3 style={S.h3}>Estimated Production Time</h3>
-      <ul style={S.ul}>
-        <li>
-          Manufacturing requires approximately{' '}
-          <strong style={{ color: '#E6E6E6' }}>4–6 weeks</strong> after the official pre-order
-          campaign closes.
-        </li>
-        <li>
-          Production timelines are estimates and may vary due to material sourcing,
-          manufacturing schedules, quality control processes, or unforeseen circumstances.
-        </li>
-      </ul>
+      <h2 style={S.h2}>Pre-Order Delivery Timeline</h2>
       <p style={S.p}>
-        Rouge Rabbit is committed to keeping customers updated throughout the production
-        process.
+        Deliveries for this pre-order begin from{' '}
+        <strong style={{ color: '#E6E6E6' }}>{DELIVERY_FROM}</strong>. Placing a pre-order now
+        secures your pair ahead of general availability.
       </p>
 
+      <h3 style={S.h3}>Before Dispatch</h3>
+      <ul style={S.ul}>
+        <li>
+          Deliveries are scheduled to begin from{' '}
+          <strong style={{ color: '#E6E6E6' }}>{DELIVERY_FROM}</strong>.
+        </li>
+        <li>
+          The Rouge Rabbit team will contact you to confirm your delivery details before your
+          order is dispatched.
+        </li>
+        <li>
+          Timelines are estimates and may vary due to stock availability, courier schedules, or
+          unforeseen circumstances. We will communicate any significant delays as soon as possible.
+        </li>
+      </ul>
+
       <h2 style={S.h2}>Shipping Timeline</h2>
-      <p style={S.p}>Once manufacturing is complete:</p>
+      <p style={S.p}>Once your order is ready for dispatch:</p>
       <ul style={S.ul}>
         <li>Orders will undergo final quality inspection.</li>
         <li>Orders will be packaged and prepared for dispatch.</li>
@@ -86,8 +89,8 @@ export default function PreorderPolicyPage() {
       </p>
       <ul style={S.ul}>
         <li>Pre-order confirmation</li>
-        <li>Production commencement</li>
-        <li>Production progress updates</li>
+        <li>A personal follow-up from the team to confirm delivery details</li>
+        <li>Delivery scheduling updates</li>
         <li>Shipping confirmation and tracking information</li>
       </ul>
       <p style={S.p}>
@@ -97,17 +100,17 @@ export default function PreorderPolicyPage() {
 
       <h2 style={S.h2}>Cancellations</h2>
 
-      <h3 style={S.h3}>Before Manufacturing Begins</h3>
+      <h3 style={S.h3}>Before Dispatch</h3>
       <p style={S.p}>
         Customers may request cancellation of their pre-order within{' '}
-        <strong style={{ color: '#E6E6E6' }}>7 days</strong> of placing their order, provided
-        manufacturing has not commenced.
+        <strong style={{ color: '#E6E6E6' }}>7 days</strong> of placing their order, provided the
+        order has not yet been dispatched.
       </p>
 
-      <h3 style={S.h3}>After Manufacturing Begins</h3>
+      <h3 style={S.h3}>After Dispatch</h3>
       <p style={S.p}>
-        Once manufacturing has started, pre-orders cannot be cancelled as products are being
-        produced specifically to fulfill customer orders.
+        Once your order has been dispatched, it can no longer be cancelled. Returns are handled
+        under our standard returns policy.
       </p>
 
       <h2 style={S.h2}>Refunds</h2>
@@ -115,8 +118,7 @@ export default function PreorderPolicyPage() {
       <ul style={S.ul}>
         <li>Rouge Rabbit is unable to fulfill the order.</li>
         <li>
-          Manufacturing delays exceed 10 weeks beyond the stated production timeline without
-          customer approval.
+          Delivery is delayed significantly beyond the stated timeline without your approval.
         </li>
         <li>The product arrives damaged or defective and cannot be replaced.</li>
       </ul>
