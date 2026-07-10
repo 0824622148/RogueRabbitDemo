@@ -11,7 +11,7 @@ insert into colourways (id, product_id, name, hex, sort_order) values
 ('car', 1, 'CARDINAL', '#D90017', 2),
 ('ice', 1, 'ICE',      '#9DC9E7', 3),
 ('ros', 1, 'ROSE',     '#F3B0B9', 4),
-('brn', 1, 'BEIGE',    '#C4A882', 5);
+('brn', 1, 'DUNE',     '#C4A882', 5);
 
 -- 20 product images (4 views × 5 colourways)
 insert into product_images (colourway_id, view, url) values
