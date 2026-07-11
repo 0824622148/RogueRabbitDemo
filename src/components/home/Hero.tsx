@@ -112,7 +112,7 @@ export default function Hero() {
               borderTop: '1px solid #3A3A3C', flexWrap: 'wrap',
             }}
           >
-            <Stat n="04" l="COLOURWAYS" />
+            <Stat n="05" l="COLOURWAYS" />
             <Stat n="07" l="SIZES" />
             <Stat n="250" l="UNITS · NUMBERED" />
             <Stat n="48H" l="EARLY ACCESS" />
