@@ -16,7 +16,7 @@ export default function InfluencersHero() {
         style={{
           position: 'absolute',
           inset: 0,
-          backgroundImage: "url('/assets/podcast-studio-hero.png')",
+          backgroundImage: "url('/assets/influencers-hero.png')",
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           opacity: 0.55,
