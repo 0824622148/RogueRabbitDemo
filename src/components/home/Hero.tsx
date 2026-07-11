@@ -113,7 +113,7 @@ export default function Hero() {
             }}
           >
             <Stat n="05" l="COLOURWAYS" />
-            <Stat n="07" l="SIZES" />
+            <Stat n="08" l="SIZES" />
             <Stat n="250" l="UNITS · NUMBERED" />
             <Stat n="48H" l="EARLY ACCESS" />
           </div>

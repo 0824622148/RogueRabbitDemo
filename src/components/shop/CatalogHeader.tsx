@@ -25,7 +25,7 @@ export default function CatalogHeader() {
           <div style={{ display: 'flex', gap: 30, marginTop: 24, flexWrap: 'wrap' }}>
             <StatItem n="05" l="COLOURWAYS" />
             <StatItem n="01" l="DROP · ACTIVE" />
-            <StatItem n="07" l="SIZES · UNISEX" />
+            <StatItem n="08" l="SIZES · UNISEX" />
           </div>
         </div>
       </div>
