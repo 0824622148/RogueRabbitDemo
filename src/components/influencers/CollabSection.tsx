@@ -29,12 +29,12 @@ export default function CollabSection({ collab, index }: CollabSectionProps) {
       >
         <VideoFacade
           poster={collab.poster}
-          title={`${collab.name} — ${collab.collabTitle}`}
+          title={`${collab.name} — Rouge Rabbit testimonial`}
           youtubeId={collab.youtubeId}
         />
       </div>
 
-      {/* Right: collab copy */}
+      {/* Right: influencer copy */}
       <div
         className="rr-journal-code-right"
         style={{
@@ -44,7 +44,7 @@ export default function CollabSection({ collab, index }: CollabSectionProps) {
           justifyContent: 'center',
         }}
       >
-        {/* Index + name + location */}
+        {/* Index + eyebrow */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 20 }}>
           <span
             style={{
@@ -56,81 +56,124 @@ export default function CollabSection({ collab, index }: CollabSectionProps) {
           >
             [ {String(index + 1).padStart(2, '0')} ]
           </span>
-          <span className="rr-overline">
-            {collab.name} · {collab.location}
-          </span>
+          <span className="rr-overline">ROUGE RABBIT · AMBASSADOR</span>
         </div>
 
+        {/* Name */}
         <h2
           className="rr-display"
           style={{
-            fontSize: 'clamp(34px, 4vw, 60px)',
-            lineHeight: 0.95,
+            fontSize: 'clamp(48px, 6vw, 88px)',
+            lineHeight: 0.9,
             color: '#E6E6E6',
             margin: '0 0 28px',
+            display: 'flex',
+            alignItems: 'baseline',
+            gap: 14,
+            flexWrap: 'wrap',
           }}
         >
-          {collab.collabTitle}
+          {collab.name}
+          <span style={{ fontSize: '0.4em' }}>{collab.emoji}</span>
         </h2>
 
-        <p
-          style={{
-            fontFamily: 'var(--font-body)',
-            fontSize: 15,
-            lineHeight: 1.8,
-            color: '#E6E6E6',
-            margin: '0 0 28px',
-            maxWidth: 460,
-          }}
-        >
-          {collab.collabDescription}
-        </p>
+        {/* Bio */}
+        {collab.bio.map((para, i) => (
+          <p
+            key={i}
+            style={{
+              fontFamily: 'var(--font-body)',
+              fontSize: 15,
+              lineHeight: 1.8,
+              color: '#E6E6E6',
+              margin: '0 0 18px',
+              maxWidth: 480,
+            }}
+          >
+            {para}
+          </p>
+        ))}
 
-        {/* About the influencer */}
-        <div
-          className="rr-mono"
-          style={{ fontSize: 10, letterSpacing: '0.28em', color: '#D90017', marginBottom: 12 }}
-        >
-          ABOUT {collab.name}
-        </div>
-        <p
-          style={{
-            fontFamily: 'var(--font-body)',
-            fontSize: 13,
-            lineHeight: 1.8,
-            color: '#A6A6A8',
-            margin: '0 0 32px',
-            maxWidth: 460,
-          }}
-        >
-          {collab.bio}
-        </p>
-
-        {/* Social handles */}
-        <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap' }}>
-          {collab.socials.map((social) => (
-            <a
-              key={social.platform}
-              href={social.href}
-              target="_blank"
-              rel="noopener noreferrer"
+        {/* Fun fact */}
+        {collab.funFact && (
+          <div
+            style={{
+              borderLeft: '2px solid #D90017',
+              padding: '4px 0 4px 18px',
+              margin: '14px 0 8px',
+              maxWidth: 480,
+            }}
+          >
+            <div
               className="rr-mono"
+              style={{ fontSize: 10, letterSpacing: '0.28em', color: '#D90017', marginBottom: 8 }}
+            >
+              FUN FACT
+            </div>
+            <p
               style={{
-                fontSize: 11,
-                letterSpacing: '0.18em',
-                color: '#E6E6E6',
-                textDecoration: 'none',
-                borderBottom: '1px solid #3A3A3C',
-                paddingBottom: 4,
-                display: 'inline-flex',
-                gap: 8,
+                fontFamily: 'var(--font-body)',
+                fontSize: 13,
+                lineHeight: 1.75,
+                color: '#A6A6A8',
+                margin: 0,
               }}
             >
-              <span style={{ color: '#D90017' }}>{social.platform.toUpperCase()}</span>
-              {social.handle}
-            </a>
-          ))}
+              {collab.funFact}
+            </p>
+          </div>
+        )}
+
+        {/* Motto */}
+        <div style={{ marginTop: 28 }}>
+          <div
+            className="rr-mono"
+            style={{ fontSize: 10, letterSpacing: '0.28em', color: '#D90017', marginBottom: 12 }}
+          >
+            MOTTO
+          </div>
+          <blockquote
+            style={{
+              fontFamily: 'var(--font-body)',
+              fontSize: 'clamp(18px, 2vw, 26px)',
+              fontWeight: 600,
+              lineHeight: 1.35,
+              color: '#E6E6E6',
+              margin: 0,
+              maxWidth: 480,
+            }}
+          >
+            &ldquo;{collab.motto}&rdquo;
+          </blockquote>
         </div>
+
+        {/* Social handles (optional) */}
+        {collab.socials && collab.socials.length > 0 && (
+          <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', marginTop: 32 }}>
+            {collab.socials.map((social) => (
+              <a
+                key={social.platform}
+                href={social.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rr-mono"
+                style={{
+                  fontSize: 11,
+                  letterSpacing: '0.18em',
+                  color: '#E6E6E6',
+                  textDecoration: 'none',
+                  borderBottom: '1px solid #3A3A3C',
+                  paddingBottom: 4,
+                  display: 'inline-flex',
+                  gap: 8,
+                }}
+              >
+                <span style={{ color: '#D90017' }}>{social.platform.toUpperCase()}</span>
+                {social.handle}
+              </a>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   )

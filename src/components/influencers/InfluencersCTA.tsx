@@ -96,18 +96,17 @@ export default function InfluencersCTA() {
         }}
       >
         <Image
-          src="/uploads/editorial-campaign-03.png"
-          alt=""
+          src="/assets/podcast-studio-outdoor.png"
+          alt="Rouge Rabbit podcast studio activation"
           fill
-          style={{ objectFit: 'cover', objectPosition: 'top', filter: 'brightness(0.18)' }}
-          aria-hidden="true"
+          style={{ objectFit: 'cover', objectPosition: 'center', filter: 'brightness(0.72)' }}
         />
 
         <div
           style={{
             position: 'absolute',
             inset: 0,
-            background: 'linear-gradient(to right, #0F0F10 0%, transparent 60%)',
+            background: 'linear-gradient(to right, #0F0F10 0%, rgba(15,15,16,0.15) 42%, transparent 70%)',
           }}
         />
 

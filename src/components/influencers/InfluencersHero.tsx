@@ -16,10 +16,10 @@ export default function InfluencersHero() {
         style={{
           position: 'absolute',
           inset: 0,
-          backgroundImage: "url('/assets/hero-city-night.png')",
+          backgroundImage: "url('/assets/podcast-studio-hero.png')",
           backgroundSize: 'cover',
-          backgroundPosition: 'center 30%',
-          opacity: 0.4,
+          backgroundPosition: 'center',
+          opacity: 0.55,
         }}
       />
 
@@ -66,9 +66,9 @@ export default function InfluencersHero() {
             margin: '0 0 10px',
           }}
         >
-          Five creators. Five cities. One rabbit. We&apos;re partnering with a new
-          generation of ambassadors — and giving you an early look at what&apos;s
-          cooking behind the scenes.
+          Four creators. One rabbit. We&apos;re partnering with a new generation
+          of ambassadors — get to know the personalities behind the movement
+          while their content cooks behind the scenes.
         </p>
 
         <p

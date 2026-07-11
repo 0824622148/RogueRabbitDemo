@@ -1,10 +1,11 @@
-// Influencer collab content.
+// Influencer content for the /influencers page.
 // Hardcoded module-level data, matching the rest of the app (see journal/*).
 //
 // To take a testimonial video live: replace `youtubeId: null` with the
 // YouTube video id (the part after `watch?v=`), e.g. youtubeId: 'dQw4w9WgXcQ'.
 // While it is null the section shows the "TESTIMONIAL · DROPPING SOON" teaser.
 // Drop real poster stills into /public/assets and point `poster` at them.
+// `socials` is optional — add handles/links per influencer when available.
 
 export type Social = {
   platform: 'Instagram' | 'TikTok' | 'YouTube' | 'X'
@@ -15,93 +16,67 @@ export type Social = {
 export type Collab = {
   id: string
   name: string
-  handle: string
-  location: string
-  collabTitle: string
-  collabDescription: string
-  bio: string
-  socials: Social[]
+  emoji: string
+  bio: string[]
+  funFact?: string
+  motto: string
+  socials?: Social[]
   poster: string
   youtubeId: string | null
 }
 
 export const COLLABS: Collab[] = [
   {
-    id: 'khanya',
-    name: 'KHANYA',
-    handle: '@khanya',
-    location: 'CAPE TOWN',
-    collabTitle: 'THE CAPE TOWN CAPSULE',
-    collabDescription:
-      'Shot between the city bowl and the Atlantic, this collab pairs Khanya’s eye for clean, monochrome fits with the Rouge silhouette. A capsule built for the ones who move first and explain later.',
-    bio: 'Khanya is a Cape Town creative and stylist whose feed reads like a mood board for modern South African streetwear. She has been repping the rabbit since day one.',
-    socials: [
-      { platform: 'Instagram', handle: '@khanya', href: 'https://www.instagram.com/rougerabbit.za' },
-      { platform: 'TikTok', handle: '@khanya', href: 'https://www.tiktok.com/@rouge_rabbitza' },
+    id: 'ghost',
+    name: 'GHOST',
+    emoji: '🖤',
+    bio: [
+      "I'm someone who's driven by growth, purpose, and making the most out of every opportunity that comes my way. I enjoy challenging myself, meeting new people, and constantly learning because I believe there's always room to improve.",
+      "I believe success comes from consistency, discipline, and staying true to who you are. I love bringing positive energy wherever I go and living life with intention while inspiring others to do the same.",
     ],
+    funFact: 'I never back down from a challenge if it means becoming a better version of myself.',
+    motto: 'Don’t procrastinate your destination.',
     poster: '/assets/ig-01.png',
     youtubeId: null,
   },
   {
-    id: 'sipho',
-    name: 'SIPHO',
-    handle: '@sipho',
-    location: 'SOWETO',
-    collabTitle: 'KASI TO THE WORLD',
-    collabDescription:
-      'Sipho brings the energy of the streets he grew up on. This collab is a love letter to the kasi — loud, honest and unapologetic. Filmed on home turf, worn where it started.',
-    bio: 'Dancer, hype man and community builder out of Soweto. Sipho turns every fit into a moment and every corner into a stage.',
-    socials: [
-      { platform: 'Instagram', handle: '@sipho', href: 'https://www.instagram.com/rougerabbit.za' },
+    id: 'billings',
+    name: 'BILLINGS',
+    emoji: '🫡',
+    bio: [
+      "I'm a confident, driven individual whose journey from humble beginnings has shaped a deep sense of resilience, ambition, and authenticity. My background taught me strength, discipline, and the importance of carrying yourself with purpose, no matter where life begins.",
+      "I'm inspired by growth, style, and the power of transformation—both personally and creatively.",
     ],
+    funFact:
+      'I bring a mix of street-rooted strength and refined vision into everything I do, which is a big part of my personal style and presence. (My pants are always sagging 🙂‍↔️)',
+    motto: 'Turn your story into your power, and your vision into your legacy.',
     poster: '/assets/ig-02.png',
     youtubeId: null,
   },
   {
-    id: 'ayanda',
-    name: 'AYANDA',
-    handle: '@ayanda',
-    location: 'DURBAN',
-    collabTitle: 'EAST COAST HEAT',
-    collabDescription:
-      'Warm light, salt air and slow motion — Ayanda’s collab leans into the laid-back confidence of the east coast. Sneakers that keep up whether you’re on the promenade or off the grid.',
-    bio: 'Durban-based content creator known for effortless, sun-soaked visuals. Ayanda has a gift for making the everyday look aspirational.',
-    socials: [
-      { platform: 'Instagram', handle: '@ayanda', href: 'https://www.instagram.com/rougerabbit.za' },
-      { platform: 'TikTok', handle: '@ayanda', href: 'https://www.tiktok.com/@rouge_rabbitza' },
+    id: 'tamryn',
+    name: 'TAMRYN',
+    emoji: '✨',
+    bio: [
+      "Just a girl with big dreams, high standards, and an even bigger personality. I'm ambitious, confident, and always chasing the next level while looking good doing it.",
+      "I believe in working hard, celebrating every win, and creating a life that's as beautiful as it is meaningful. Whether I'm setting goals, making memories, or turning heads, I bring determination, class, and a little sparkle wherever I go. 💫",
+      'Unapologetically myself, endlessly motivated, and always ready for what’s next.',
     ],
+    motto: "The goal isn't to be noticed. The goal is to be unforgettable.",
     poster: '/assets/ig-03.png',
     youtubeId: null,
   },
   {
-    id: 'thabo',
-    name: 'THABO',
-    handle: '@thabo',
-    location: 'JOHANNESBURG',
-    collabTitle: 'AFTER DARK IN JOZI',
-    collabDescription:
-      'A night-shift collab shot across Joburg after hours. Thabo’s testimonial is about the ones who build while the city sleeps — and the pair that carries them through it.',
-    bio: 'Photographer and night-life documentarian capturing Joburg’s underground scene. Thabo shoots what most people miss.',
-    socials: [
-      { platform: 'Instagram', handle: '@thabo', href: 'https://www.instagram.com/rougerabbit.za' },
+    id: 'josh',
+    name: 'JOSH',
+    emoji: '😝',
+    bio: [
+      "I'm outgoing, energetic, and always up for a good time. I enjoy fashion, trying new things, and making the most of every moment with the people around me. Whether it's a new experience or a spontaneous adventure, I'm always ready to jump in.",
+      'I believe life is meant to be lived with confidence, good energy, and plenty of laughter.',
     ],
+    funFact: 'Despite what everyone says... I can survive without Red Bull. 😜',
+    motto: "Life's better when you live it with confidence, laughter, and no fear.",
     poster: '/assets/ig-04.png',
-    youtubeId: null,
-  },
-  {
-    id: 'lerato',
-    name: 'LERATO',
-    handle: '@lerato',
-    location: 'PRETORIA',
-    collabTitle: 'QUIET CONFIDENCE',
-    collabDescription:
-      'Lerato’s collab is understated on purpose — clean lines, muted tones, zero noise. A testimonial about letting the work speak and the fit follow.',
-    bio: 'Model and creative director from Pretoria with a minimalist, editorial approach. Lerato proves restraint is its own kind of loud.',
-    socials: [
-      { platform: 'Instagram', handle: '@lerato', href: 'https://www.instagram.com/rougerabbit.za' },
-      { platform: 'TikTok', handle: '@lerato', href: 'https://www.tiktok.com/@rouge_rabbitza' },
-    ],
-    poster: '/assets/ig-05.png',
     youtubeId: null,
   },
 ]
