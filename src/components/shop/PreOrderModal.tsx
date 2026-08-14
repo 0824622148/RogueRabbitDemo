@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useRef } from 'react'
 import type { ColourwayDB, Size } from '@/types'
-import { FULL_PRICE, DISCOUNTED_PRICE, EARLY_ACCESS_CODE, DELIVERY_FROM } from '@/lib/preorder'
+import { FULL_PRICE, DISCOUNTED_PRICE, DISCOUNT_AMOUNT, EARLY_ACCESS_CODE, DELIVERY_FROM } from '@/lib/preorder'
+import { formatRand } from '@/lib/money'
 
 const SA_PROVINCES = [
   'Eastern Cape', 'Free State', 'Gauteng', 'KwaZulu-Natal', 'Limpopo',
@@ -67,7 +68,7 @@ export default function PreOrderModal({ initialColourway, initialSize, initialGe
 
   const price = codeApplied ? DISCOUNTED_PRICE : FULL_PRICE
   const shippingCost = selectedRate?.rate ?? 0
-  const total = price + shippingCost
+  const total = Math.round((price + shippingCost) * 100) / 100
 
   const addressComplete = Boolean(
     addressLine1.trim() && suburb.trim() && city.trim() && province && postalCode.trim(),
@@ -256,10 +257,10 @@ export default function PreOrderModal({ initialColourway, initialSize, initialGe
                 </h2>
               </div>
               <div style={{ textAlign: 'right' }}>
-                <div className="rr-mono" style={{ fontSize: 20, color: '#E6E6E6' }}>R{price}</div>
+                <div className="rr-mono" style={{ fontSize: 20, color: '#E6E6E6' }}>{formatRand(price)}</div>
                 {codeApplied && (
                   <div className="rr-mono" style={{ fontSize: 12, color: '#A6A6A8', textDecoration: 'line-through' }}>
-                    R{FULL_PRICE}
+                    {formatRand(FULL_PRICE)}
                   </div>
                 )}
               </div>
@@ -393,7 +394,7 @@ export default function PreOrderModal({ initialColourway, initialSize, initialGe
                             </span>
                           )}
                         </div>
-                        <span className="rr-mono" style={{ fontSize: 12, color: '#E6E6E6' }}>R{r.rate}</span>
+                        <span className="rr-mono" style={{ fontSize: 12, color: '#E6E6E6' }}>{formatRand(r.rate)}</span>
                       </button>
                     )
                   })}
@@ -429,7 +430,7 @@ export default function PreOrderModal({ initialColourway, initialSize, initialGe
               </div>
               {codeApplied && (
                 <div className="rr-mono" style={{ fontSize: 10, color: '#2A9D2A', marginTop: 8, letterSpacing: '.12em' }}>
-                  ✓ 30% EARLY ACCESS DISCOUNT APPLIED — R{FULL_PRICE - DISCOUNTED_PRICE} OFF
+                  ✓ 30% EARLY ACCESS DISCOUNT APPLIED — {formatRand(DISCOUNT_AMOUNT)} OFF
                 </div>
               )}
               {codeError && (
@@ -463,8 +464,8 @@ export default function PreOrderModal({ initialColourway, initialSize, initialGe
             {/* Order total */}
             <div style={{ borderTop: '1px solid #3A3A3C', paddingTop: 16, marginBottom: 24 }}>
               {[
-                ['SUBTOTAL', `R${price}`],
-                ['DELIVERY', selectedRate ? `R${shippingCost}` : '—'],
+                ['SUBTOTAL', formatRand(price)],
+                ['DELIVERY', selectedRate ? formatRand(shippingCost) : '—'],
               ].map(([k, v]) => (
                 <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '4px 0' }}>
                   <span className="rr-mono" style={{ fontSize: 10, color: '#A6A6A8', letterSpacing: '.12em' }}>{k}</span>
@@ -473,7 +474,7 @@ export default function PreOrderModal({ initialColourway, initialSize, initialGe
               ))}
               <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0 0' }}>
                 <span className="rr-mono" style={{ fontSize: 11, color: '#E6E6E6', letterSpacing: '.12em' }}>TOTAL</span>
-                <span className="rr-mono" style={{ fontSize: 16, color: '#E6E6E6' }}>R{total}</span>
+                <span className="rr-mono" style={{ fontSize: 16, color: '#E6E6E6' }}>{formatRand(total)}</span>
               </div>
             </div>
 
@@ -520,7 +521,7 @@ export default function PreOrderModal({ initialColourway, initialSize, initialGe
                 cursor: !canSubmit || submitting ? 'default' : 'pointer',
               }}
             >
-              <span>{submitting ? 'PROCESSING...' : `SECURE MY PAIR · R${total}`}</span>
+              <span>{submitting ? 'PROCESSING...' : `SECURE MY PAIR · ${formatRand(total)}`}</span>
               {!submitting && <span>→</span>}
             </button>
 

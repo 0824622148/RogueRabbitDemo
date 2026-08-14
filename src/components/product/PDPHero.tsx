@@ -6,6 +6,7 @@ import type { ColourwayDB, Size } from '@/types'
 import PreOrderModal from '@/components/shop/PreOrderModal'
 import { useWishlist } from '@/context/WishlistContext'
 import { FULL_PRICE } from '@/lib/preorder'
+import { formatRand } from '@/lib/money'
 
 const VIEWS = ['FRONT', 'SIDE', 'BACK', 'TOP'] as const
 type View = typeof VIEWS[number]
@@ -330,7 +331,7 @@ export default function PDPHero({ colourways, initialColourwayId }: Props) {
           </h1>
 
           <div style={{ display: 'flex', alignItems: 'baseline', gap: 14, marginTop: 24 }}>
-            <span className="rr-display" style={{ fontSize: 44 }}>R{FULL_PRICE}</span>
+            <span className="rr-display" style={{ fontSize: 44 }}>{formatRand(FULL_PRICE)}</span>
             <span className="rr-mono">ZAR · TAX INCL.</span>
           </div>
 
@@ -401,7 +402,7 @@ export default function PDPHero({ colourways, initialColourwayId }: Props) {
               style={{ justifyContent: 'space-between', padding: '20px 26px' }}
               onClick={() => setPreOrder(true)}
             >
-              <span>PRE-ORDER NOW · R{FULL_PRICE}</span>
+              <span>PRE-ORDER NOW · {formatRand(FULL_PRICE)}</span>
               <Arrow size={16} />
             </button>
             <button

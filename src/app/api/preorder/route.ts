@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { buildPayFastPayload } from '@/lib/payfast'
-import { FULL_PRICE, DISCOUNT_PCT, EARLY_ACCESS_CODE as DEFAULT_EARLY_ACCESS_CODE } from '@/lib/preorder'
+import { FULL_PRICE, DISCOUNTED_PRICE, EARLY_ACCESS_CODE as DEFAULT_EARLY_ACCESS_CODE } from '@/lib/preorder'
+import { formatRand } from '@/lib/money'
 
 // Set these in .env.local and Vercel environment variables before launch:
 //   RESEND_API_KEY=re_xxxxxxxxxxxx
@@ -84,8 +85,10 @@ export async function POST(request: NextRequest) {
   const discountApplied =
     typeof earlyAccessCode === 'string' &&
     earlyAccessCode.trim().toUpperCase() === EARLY_ACCESS_CODE
-  const productPrice = discountApplied ? Math.round(FULL_PRICE * (1 - DISCOUNT_PCT)) : FULL_PRICE
-  const price = productPrice + shippingCost // total charged via PayFast
+  const productPrice = discountApplied ? DISCOUNTED_PRICE : FULL_PRICE
+  // Total charged via PayFast. Rounded to cents so float addition can't drift
+  // away from the amount stored on the order (the ITN compares the two).
+  const price = Math.round((productPrice + shippingCost) * 100) / 100
 
   // Persist order — critical; log but don't block if service key not yet configured
   let orderId: number | null = null
@@ -152,9 +155,9 @@ export async function POST(request: NextRequest) {
           ['Colourway', colourway],
           ['Size', `${size} · ${gender}`],
           ['Delivery Address', [addressLine1, addressLine2, suburb, city, province, postalCode].filter(Boolean).join(', ')],
-          ['Delivery Option', `${serviceName || serviceCode} — R${shippingCost}`],
+          ['Delivery Option', `${serviceName || serviceCode} — ${formatRand(shippingCost)}`],
           ['Discount Applied', discountApplied ? 'YES — 30% ROUGE30' : 'No'],
-          ['Amount Due', `R${price} (incl. R${shippingCost} delivery)`],
+          ['Amount Due', `${formatRand(price)} (incl. ${formatRand(shippingCost)} delivery)`],
           ['Status', 'AWAITING PAYFAST PAYMENT'],
         ].map(([k, v]) => `<tr><td style="padding:8px 16px 8px 0;color:#A6A6A8;white-space:nowrap;">${k}</td><td style="padding:8px 0;color:#E6E6E6;">${v}</td></tr>`).join('')}
       </table>

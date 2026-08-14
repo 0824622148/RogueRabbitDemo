@@ -8,6 +8,11 @@ import NewArrivals from '@/components/home/NewArrivals'
 import SplitCTA from '@/components/home/SplitCTA'
 import { getProducts } from '@/lib/queries/products'
 
+// Card prices come from Supabase products.price. Without this the page is
+// prerendered once at build time and a price change in the DB stays invisible
+// until the next deploy. 5 minutes keeps it effectively static but self-healing.
+export const revalidate = 300
+
 export default async function HomePage() {
   const [sideProducts, frontProducts] = await Promise.all([
     getProducts('SIDE'),

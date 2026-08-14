@@ -11,11 +11,11 @@ export default async function AdminDashboardPage() {
 
   const confirmedRevenue = orders
     .filter((o) => CONFIRMED_STATUSES.includes(o.status))
-    .reduce((sum, o) => sum + (o.amount_due ?? 0), 0)
+    .reduce((sum, o) => sum + Number(o.amount_due ?? 0), 0)
 
   const pendingRevenue = orders
     .filter((o) => o.status === 'pending')
-    .reduce((sum, o) => sum + (o.amount_due ?? 0), 0)
+    .reduce((sum, o) => sum + Number(o.amount_due ?? 0), 0)
 
   // "Needs attention" — the two operational queues.
   const toConfirm = orders.filter((o) => o.status === 'pending')

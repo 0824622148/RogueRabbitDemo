@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useWishlist } from '@/context/WishlistContext'
+import { formatRand } from '@/lib/money'
 
 export default function WishlistDrawer() {
   const { isOpen, closeDrawer, items, isLoading, removeItem } = useWishlist()
@@ -143,7 +144,7 @@ export default function WishlistDrawer() {
                         fontFamily: 'var(--font-mono)', fontSize: 11,
                         color: '#A6A6A8', marginBottom: 12,
                       }}>
-                        R{item.price}
+                        {formatRand(item.price)}
                       </div>
                       <Link
                         href={`/shop/${item.slug}`}

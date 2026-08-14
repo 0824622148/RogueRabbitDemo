@@ -72,7 +72,7 @@ create table orders (
   phone        text,
   early_access boolean default false,
   discount_pct int default 0,
-  amount_due   int not null,
+  amount_due   numeric(10,2) not null,
   status       text default 'pending' check (status in ('pending', 'paid', 'cancelled')),
   created_at   timestamptz default now()
 );
@@ -121,7 +121,7 @@ alter table orders add column if not exists province             text;   -- Ship
 alter table orders add column if not exists postal_code          text;   -- Shiplogic code
 alter table orders add column if not exists ship_service_code    text;   -- chosen service_level.code
 alter table orders add column if not exists ship_service_name    text;
-alter table orders add column if not exists shipping_cost        int default 0;  -- rand, matches amount_due integer convention
+alter table orders add column if not exists shipping_cost        numeric(10,2) default 0;  -- rand + cents, matches amount_due
 alter table orders add column if not exists shiplogic_shipment_id text;
 alter table orders add column if not exists tracking_number      text;
 

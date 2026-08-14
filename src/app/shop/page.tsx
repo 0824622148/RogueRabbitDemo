@@ -5,6 +5,11 @@ import ProductCard from '@/components/brand/ProductCard'
 import CatalogHeader from '@/components/shop/CatalogHeader'
 import { getProducts } from '@/lib/queries/products'
 
+// Card prices come from Supabase products.price. Without this the page is
+// prerendered once at build time and a price change in the DB stays invisible
+// until the next deploy. 5 minutes keeps it effectively static but self-healing.
+export const revalidate = 300
+
 export default async function ShopPage() {
   const products = await getProducts('FRONT')
 

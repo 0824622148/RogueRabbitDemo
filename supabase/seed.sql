@@ -3,7 +3,7 @@
 
 -- ROUGE 01
 insert into products (name, slug, category, drop_label, price, badge, media_bg, image_contain, image_fit)
-values ('ROUGE 01', 'rouge-01', 'FOOTWEAR', 'DROP 003', 1399, 'NEW', '#fff', 1, 'contain');
+values ('ROUGE 01', 'rouge-01', 'FOOTWEAR', 'DROP 003', 1499.99, 'NEW', '#fff', 1, 'contain');
 
 -- 5 colourways
 insert into colourways (id, product_id, name, hex, sort_order) values
@@ -41,14 +41,14 @@ insert into inventory (colourway_id, gender, size_value, in_stock, sort_order)
 select c.id, 'M', s.size, true, s.ord
 from colourways c
 cross join (values
-  ('US 6', 1), ('US 7', 2), ('US 8', 3), ('US 9', 4),
-  ('US 10', 5), ('US 11', 6), ('US 12', 7), ('US 13', 8)
+  ('UK 6', 1), ('UK 7', 2), ('UK 8', 3), ('UK 9', 4),
+  ('UK 10', 5), ('UK 11', 6), ('UK 12', 7), ('UK 13', 8)
 ) as s(size, ord);
 
 insert into inventory (colourway_id, gender, size_value, in_stock, sort_order)
 select c.id, 'F', s.size, true, s.ord
 from colourways c
 cross join (values
-  ('US 4', 1), ('US 5', 2), ('US 6', 3), ('US 7', 4),
-  ('US 8', 5), ('US 9', 6), ('US 10', 7), ('US 11', 8)
+  ('UK 3', 1), ('UK 4', 2), ('UK 5', 3), ('UK 6', 4),
+  ('UK 7', 5), ('UK 8', 6), ('UK 9', 7), ('UK 10', 8)
 ) as s(size, ord);

@@ -2,6 +2,7 @@
 
 import type { Product } from '@/types'
 import { useWishlist } from '@/context/WishlistContext'
+import { formatRand } from '@/lib/money'
 
 interface ProductCardProps {
   product: Product
@@ -99,7 +100,7 @@ export default function ProductCard({ product, mediaHeight = 360, indexLabel }: 
         </div>
         <div style={{ textAlign: 'right' }}>
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: 13, color: '#E6E6E6' }}>
-            R{product.price}
+            {formatRand(product.price)}
           </div>
           {product.compareAt && (
             <div
@@ -111,7 +112,7 @@ export default function ProductCard({ product, mediaHeight = 360, indexLabel }: 
                 marginTop: 2,
               }}
             >
-              R{product.compareAt}
+              {formatRand(product.compareAt)}
             </div>
           )}
         </div>

@@ -5,13 +5,16 @@
  */
 
 /** Full pre-order price in Rand. */
-export const FULL_PRICE = 1399
+export const FULL_PRICE = 1499.99
 
 /** Early-access discount (ROUGE30). */
 export const DISCOUNT_PCT = 0.30
 
-/** Discounted price when the early-access code is applied (= 979). */
-export const DISCOUNTED_PRICE = Math.round(FULL_PRICE * (1 - DISCOUNT_PCT))
+/** Discounted price when the early-access code is applied (= 1049.99). */
+export const DISCOUNTED_PRICE = Math.round(FULL_PRICE * (1 - DISCOUNT_PCT) * 100) / 100
+
+/** Rand saved by the early-access code (= 450.00). */
+export const DISCOUNT_AMOUNT = Math.round((FULL_PRICE - DISCOUNTED_PRICE) * 100) / 100
 
 /** Early-access code (env may override on the server). */
 export const EARLY_ACCESS_CODE = 'ROUGE30'

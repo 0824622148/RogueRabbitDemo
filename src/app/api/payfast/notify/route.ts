@@ -2,6 +2,7 @@ import { NextRequest } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { validateITN } from '@/lib/payfast'
 import { DELIVERY_FROM } from '@/lib/preorder'
+import { formatRand } from '@/lib/money'
 
 export const dynamic = 'force-dynamic'
 
@@ -40,7 +41,7 @@ function customerConfirmHtml(order: Record<string, unknown>): string {
   const sizeValue = order.size_value as string
   const gender = order.gender as string
   const reference = order.reference as string
-  const amountDue = order.amount_due as number
+  const amountDue = Number(order.amount_due)
   const discountApplied = order.early_access as boolean
   const deliveryAddress = [
     order.address_line1, order.address_line2, order.suburb,
@@ -76,7 +77,7 @@ function customerConfirmHtml(order: Record<string, unknown>): string {
         ['Size', `${sizeValue} · ${gender}`],
         ['Delivery To', deliveryAddress || '—'],
         ['Reference', reference],
-        ['Amount Paid', `R${amountDue}${discountApplied ? ' (30% early access applied)' : ''}`],
+        ['Amount Paid', `${formatRand(amountDue)}${discountApplied ? ' (30% early access applied)' : ''}`],
       ].map(([k, v]) => `<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #3A3A3C;font-size:11px;">
         <span style="color:#A6A6A8;">${k}</span>
         <span style="color:#E6E6E6;">${v}</span>
@@ -98,8 +99,8 @@ function adminPaidHtml(order: Record<string, unknown>, pfPaymentId: string): str
   const colourway = order.colourway as string
   const sizeValue = order.size_value as string
   const gender = order.gender as string
-  const amountDue = order.amount_due as number
-  const shippingCost = (order.shipping_cost as number) ?? 0
+  const amountDue = Number(order.amount_due)
+  const shippingCost = Number(order.shipping_cost ?? 0)
   const serviceName = (order.ship_service_name as string) || (order.ship_service_code as string) || '—'
   const discountApplied = order.early_access as boolean
   const deliveryAddress = [
@@ -120,9 +121,9 @@ function adminPaidHtml(order: Record<string, unknown>, pfPaymentId: string): str
         ['Colourway', colourway],
         ['Size', `${sizeValue} · ${gender}`],
         ['Delivery Address', deliveryAddress || '—'],
-        ['Delivery Option', `${serviceName} — R${shippingCost}`],
+        ['Delivery Option', `${serviceName} — ${formatRand(shippingCost)}`],
         ['Discount Applied', discountApplied ? 'YES — 30% ROUGE30' : 'No'],
-        ['Amount Paid', `R${amountDue}`],
+        ['Amount Paid', formatRand(amountDue)],
         ['Status', '● PAID — BOOK COLLECTION IN ADMIN'],
       ].map(([k, v]) => `<tr><td style="padding:8px 16px 8px 0;color:#A6A6A8;white-space:nowrap;">${k}</td><td style="padding:8px 0;color:#E6E6E6;">${v}</td></tr>`).join('')}
     </table>
@@ -152,7 +153,8 @@ export async function POST(request: NextRequest) {
     return new Response('OK', { status: 200 })
   }
 
-  const validation = await validateITN(params, order.amount_due, reference)
+  // amount_due is a numeric column — PostgREST may hand it back as a string.
+  const validation = await validateITN(params, Number(order.amount_due), reference)
   if (!validation.valid) {
     console.error('[ITN] Validation failed:', validation.reason, reference)
     return new Response('OK', { status: 200 })

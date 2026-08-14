@@ -17,9 +17,12 @@ export function fmtDate(dateStr: string) {
   })
 }
 
-/** Rand amount with thousands separators, e.g. rand(1800) -> "R1 800". */
+/** Rand amount with thousands separators and cents, e.g. rand(1499.99) -> "R1 499,99". */
 export function rand(amount: number | null | undefined) {
-  return `R${(amount ?? 0).toLocaleString('en-ZA')}`
+  return `R${Number(amount ?? 0).toLocaleString('en-ZA', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })}`
 }
 
 export const STATUS_COLOUR: Record<string, string> = {

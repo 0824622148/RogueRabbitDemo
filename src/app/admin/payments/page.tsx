@@ -14,7 +14,7 @@ export const dynamic = 'force-dynamic'
 export default async function PaymentsPage() {
   const orders = await getOrders()
   const pending = orders.filter((o) => o.status === 'pending')
-  const pendingTotal = pending.reduce((s, o) => s + (o.amount_due ?? 0), 0)
+  const pendingTotal = pending.reduce((s, o) => s + Number(o.amount_due ?? 0), 0)
 
   return (
     <div style={{ maxWidth: 1400, margin: '0 auto', padding: '40px 32px' }}>

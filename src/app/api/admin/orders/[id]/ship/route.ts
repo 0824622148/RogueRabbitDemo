@@ -126,7 +126,7 @@ export async function POST(
         email: order.email,
       },
       serviceLevelCode: order.ship_service_code ?? '',
-      declaredValue: order.amount_due - (order.shipping_cost ?? 0),
+      declaredValue: Math.round(Number(order.amount_due) - Number(order.shipping_cost ?? 0)),
     })
   } catch (err) {
     console.error('[SHIP] Shiplogic createShipment failed:', err)
