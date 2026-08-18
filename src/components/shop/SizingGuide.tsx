@@ -14,6 +14,7 @@ const SIZE_GUIDE = {
     { uk: 'UK 13', eu: 'EU 46', cm: '31.0 cm' },
   ],
   FEMALE: [
+    { uk: 'UK 3',  eu: 'EU 34', cm: '21.5 cm' },
     { uk: 'UK 4',  eu: 'EU 35', cm: '22.0 cm' },
     { uk: 'UK 5',  eu: 'EU 36', cm: '22.5 cm' },
     { uk: 'UK 6',  eu: 'EU 37', cm: '23.5 cm' },
@@ -21,7 +22,6 @@ const SIZE_GUIDE = {
     { uk: 'UK 8',  eu: 'EU 39', cm: '25.0 cm' },
     { uk: 'UK 9',  eu: 'EU 40', cm: '25.5 cm' },
     { uk: 'UK 10', eu: 'EU 41', cm: '26.5 cm' },
-    { uk: 'UK 11', eu: 'EU 42', cm: '27.0 cm' },
   ],
 }
 
