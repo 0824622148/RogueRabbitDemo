@@ -3,6 +3,7 @@
 import type { Product } from '@/types'
 import { useWishlist } from '@/context/WishlistContext'
 import { formatRand } from '@/lib/money'
+import { ORDERS_ON_HOLD, COMING_SOON_LABEL } from '@/lib/store-status'
 
 interface ProductCardProps {
   product: Product
@@ -79,7 +80,7 @@ export default function ProductCard({ product, mediaHeight = 360, indexLabel }: 
         </button>
 
         <div className="rr-card__hover">
-          <span>PRE-ORDER →</span>
+          <span>{ORDERS_ON_HOLD ? COMING_SOON_LABEL : 'PRE-ORDER →'}</span>
           <span>{product.sizes ? `${product.sizes} SIZES` : 'VIEW'}</span>
         </div>
       </div>
@@ -99,10 +100,11 @@ export default function ProductCard({ product, mediaHeight = 360, indexLabel }: 
           </h3>
         </div>
         <div style={{ textAlign: 'right' }}>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 13, color: '#E6E6E6' }}>
-            {formatRand(product.price)}
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 13, color: '#E6E6E6', whiteSpace: 'nowrap' }}>
+            {ORDERS_ON_HOLD ? COMING_SOON_LABEL : formatRand(product.price)}
           </div>
-          {product.compareAt && (
+          {/* Was-price is meaningless without a current price to compare against. */}
+          {!ORDERS_ON_HOLD && product.compareAt && (
             <div
               style={{
                 fontFamily: 'var(--font-mono)',

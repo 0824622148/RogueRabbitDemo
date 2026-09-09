@@ -3,6 +3,7 @@ import { createClient } from '@supabase/supabase-js'
 import { buildPayFastPayload } from '@/lib/payfast'
 import { FULL_PRICE, DISCOUNTED_PRICE, EARLY_ACCESS_CODE as DEFAULT_EARLY_ACCESS_CODE } from '@/lib/preorder'
 import { formatRand } from '@/lib/money'
+import { ORDERS_ON_HOLD, ORDERS_ON_HOLD_MESSAGE } from '@/lib/store-status'
 
 // Set these in .env.local and Vercel environment variables before launch:
 //   RESEND_API_KEY=re_xxxxxxxxxxxx
@@ -59,6 +60,12 @@ async function sendEmail(to: string, subject: string, html: string) {
 }
 
 export async function POST(request: NextRequest) {
+  // Trading hold. Checked before anything else so a direct API call can't slip
+  // past the disabled UI and start a payment we aren't ready to honour.
+  if (ORDERS_ON_HOLD) {
+    return NextResponse.json({ error: ORDERS_ON_HOLD_MESSAGE }, { status: 503 })
+  }
+
   let body: Record<string, unknown>
   try {
     body = await request.json()

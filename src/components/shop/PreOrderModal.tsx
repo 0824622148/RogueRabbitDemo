@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import type { ColourwayDB, Size } from '@/types'
 import { FULL_PRICE, DISCOUNTED_PRICE, DISCOUNT_AMOUNT, EARLY_ACCESS_CODE, DELIVERY_FROM } from '@/lib/preorder'
 import { formatRand } from '@/lib/money'
+import { ORDERS_ON_HOLD, COMING_SOON_LABEL } from '@/lib/store-status'
 
 const SA_PROVINCES = [
   'Eastern Cape', 'Free State', 'Gauteng', 'KwaZulu-Natal', 'Limpopo',
@@ -74,6 +75,7 @@ export default function PreOrderModal({ initialColourway, initialSize, initialGe
     addressLine1.trim() && suburb.trim() && city.trim() && province && postalCode.trim(),
   )
   const canSubmit = Boolean(
+    !ORDERS_ON_HOLD &&
     name.trim() && email.trim() && phone.trim() && sz && addressComplete && selectedRate && agreed,
   )
 
@@ -521,7 +523,11 @@ export default function PreOrderModal({ initialColourway, initialSize, initialGe
                 cursor: !canSubmit || submitting ? 'default' : 'pointer',
               }}
             >
-              <span>{submitting ? 'PROCESSING...' : `SECURE MY PAIR · ${formatRand(total)}`}</span>
+              <span>
+                {ORDERS_ON_HOLD
+                  ? COMING_SOON_LABEL
+                  : submitting ? 'PROCESSING...' : `SECURE MY PAIR · ${formatRand(total)}`}
+              </span>
               {!submitting && <span>→</span>}
             </button>
 

@@ -6,6 +6,7 @@ import StorySpecs from '@/components/product/StorySpecs'
 import OnFootStrip from '@/components/product/OnFootStrip'
 import Recommended from '@/components/product/Recommended'
 import { getProduct } from '@/lib/queries/products'
+import { ORDERS_ON_HOLD } from '@/lib/store-status'
 import type { Product } from '@/types'
 
 import type { SearchParams } from 'next/dist/server/request/search-params'
@@ -53,7 +54,7 @@ export default async function ProductPage({ searchParams }: { searchParams: Prom
         <span className="rr-breadcrumb-hide" style={{ color: '#3A3A3C' }}>/</span>
         <span className="rr-mono" style={{ color: '#E6E6E6' }}>{name}</span>
         <span style={{ flex: 1 }} />
-        <span className="rr-mono rr-breadcrumb-live">● 12 SELLING NOW</span>
+        {!ORDERS_ON_HOLD && <span className="rr-mono rr-breadcrumb-live">● 12 SELLING NOW</span>}
       </div>
 
       <PDPHero key={initialColourwayId ?? 'default'} colourways={colourways} initialColourwayId={initialColourwayId} />

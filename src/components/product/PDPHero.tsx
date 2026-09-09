@@ -7,6 +7,7 @@ import PreOrderModal from '@/components/shop/PreOrderModal'
 import { useWishlist } from '@/context/WishlistContext'
 import { FULL_PRICE } from '@/lib/preorder'
 import { formatRand } from '@/lib/money'
+import { ORDERS_ON_HOLD, COMING_SOON_LABEL, ORDERS_ON_HOLD_MESSAGE } from '@/lib/store-status'
 
 const VIEWS = ['FRONT', 'SIDE', 'BACK', 'TOP'] as const
 type View = typeof VIEWS[number]
@@ -229,7 +230,7 @@ export default function PDPHero({ colourways, initialColourwayId }: Props) {
 
   return (
     <>
-      {preOrder && (
+      {preOrder && !ORDERS_ON_HOLD && (
         <PreOrderModal
           initialColourway={cw}
           initialSize={sz}
@@ -331,8 +332,15 @@ export default function PDPHero({ colourways, initialColourwayId }: Props) {
           </h1>
 
           <div style={{ display: 'flex', alignItems: 'baseline', gap: 14, marginTop: 24 }}>
-            <span className="rr-display" style={{ fontSize: 44 }}>{formatRand(FULL_PRICE)}</span>
-            <span className="rr-mono">ZAR · TAX INCL.</span>
+            {ORDERS_ON_HOLD ? (
+              /* Slightly tighter than the 44px price — "COMING SOON" is a much longer string. */
+              <span className="rr-display" style={{ fontSize: 36 }}>{COMING_SOON_LABEL}</span>
+            ) : (
+              <>
+                <span className="rr-display" style={{ fontSize: 44 }}>{formatRand(FULL_PRICE)}</span>
+                <span className="rr-mono">ZAR · TAX INCL.</span>
+              </>
+            )}
           </div>
 
           {/* Colourway selector */}
@@ -397,14 +405,29 @@ export default function PDPHero({ colourways, initialColourwayId }: Props) {
 
           {/* CTAs */}
           <div style={{ marginTop: 32, display: 'flex', flexDirection: 'column', gap: 10 }}>
-            <button
-              className="rr-btn"
-              style={{ justifyContent: 'space-between', padding: '20px 26px' }}
-              onClick={() => setPreOrder(true)}
-            >
-              <span>PRE-ORDER NOW · {formatRand(FULL_PRICE)}</span>
-              <Arrow size={16} />
-            </button>
+            {ORDERS_ON_HOLD ? (
+              <>
+                <button
+                  className="rr-btn"
+                  style={{ justifyContent: 'center', padding: '20px 26px', opacity: 0.45, cursor: 'default' }}
+                  disabled
+                >
+                  <span>{COMING_SOON_LABEL}</span>
+                </button>
+                <p className="rr-mono" style={{ margin: 0, color: '#A6A6A8', lineHeight: 1.5 }}>
+                  {ORDERS_ON_HOLD_MESSAGE}
+                </p>
+              </>
+            ) : (
+              <button
+                className="rr-btn"
+                style={{ justifyContent: 'space-between', padding: '20px 26px' }}
+                onClick={() => setPreOrder(true)}
+              >
+                <span>PRE-ORDER NOW · {formatRand(FULL_PRICE)}</span>
+                <Arrow size={16} />
+              </button>
+            )}
             <button
               className="rr-btn rr-btn--ghost"
               style={{ justifyContent: 'center' }}
