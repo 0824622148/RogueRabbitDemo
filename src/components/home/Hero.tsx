@@ -122,7 +122,7 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* Right — hero image; on mobile it moves above the headline as a square */}
+        {/* Right — hero image; on mobile it moves above the headline, cropped to head-to-hem */}
         <div className="rr-hero-right" style={{ position: 'relative', height: '100%', minHeight: 500 }}>
           <div
             className="rr-hero-frame"
@@ -136,6 +136,8 @@ export default function Hero() {
             <img
               src="/assets/hero-air-down.jpg"
               alt="Bagged League x Rouge Rabbit Air Down tee"
+              className="rr-hero-img"
+              fetchPriority="high"
               style={{
                 width: '100%', height: '100%',
                 objectFit: 'cover', objectPosition: 'center 30%',
