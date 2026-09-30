@@ -6,24 +6,28 @@ import { usePathname } from 'next/navigation'
 import RougeLogo from './RougeLogo'
 import { useWishlist } from '@/context/WishlistContext'
 import { useSubscribeModal } from '@/context/SubscribeContext'
+import { useCart } from '@/context/CartContext'
 
 const NAV_LINKS = [
-  { label: 'NEW',      href: '/shop' },
   { label: 'SHOP',     href: '/shop' },
+  { label: 'FOOTWEAR', href: '/shop/footwear' },
+  { label: 'APPAREL',  href: '/shop/apparel' },
+  { label: 'ACCESSORIES', href: '/shop/accessories' },
   { label: 'DROPS',    href: '/drops' },
   { label: 'INFLUENCERS', href: '/influencers' },
   { label: 'JOURNAL',  href: '/journal' },
 ]
 
-export default function NavBar({ cartCount = 0 }: { cartCount?: number }) {
+export default function NavBar() {
   const pathname = usePathname()
   const isActive = (href: string) =>
     href === '/shop'
-      ? pathname.startsWith('/shop')
+      ? pathname === '/shop' || (pathname.startsWith('/shop/') && !pathname.startsWith('/shop/apparel') && !pathname.startsWith('/shop/accessories'))
       : pathname === href || pathname.startsWith(href + '/')
   const [menuOpen, setMenuOpen] = useState(false)
   const { count: wishlistCount, openDrawer } = useWishlist()
   const { openSubscribe } = useSubscribeModal()
+  const { count: cartCount, openCart } = useCart()
 
   return (
     <>
@@ -92,7 +96,7 @@ export default function NavBar({ cartCount = 0 }: { cartCount?: number }) {
 
         {/* Center — logo */}
         <Link href="/" style={{ cursor: 'pointer', display: 'inline-flex' }}>
-          <RougeLogo size={36} withWordmark wordmarkClass="rr-nav-wordmark" />
+          <RougeLogo size={30} className="rr-nav-logo" />
         </Link>
 
         {/* Right — icons */}
@@ -157,7 +161,15 @@ export default function NavBar({ cartCount = 0 }: { cartCount?: number }) {
               </span>
             )}
           </button>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, color: '#E6E6E6', cursor: 'pointer' }}>
+          <button
+            onClick={openCart}
+            aria-label={`Open bag${cartCount ? ` (${cartCount} items)` : ''}`}
+            style={{
+              background: 'none', border: 'none', color: '#E6E6E6',
+              display: 'inline-flex', alignItems: 'center', gap: 8,
+              cursor: 'pointer', padding: 0,
+            }}
+          >
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
               <path d="M3.5 5.5H14.5L13 15.5H5L3.5 5.5Z" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round" />
               <path d="M6.5 5.5C6.5 3.843 7.343 2.5 9 2.5C10.657 2.5 11.5 3.843 11.5 5.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
@@ -174,7 +186,7 @@ export default function NavBar({ cartCount = 0 }: { cartCount?: number }) {
                 {String(cartCount).padStart(2, '0')}
               </span>
             )}
-          </div>
+          </button>
         </div>
       </header>
 

@@ -356,6 +356,7 @@
 .rr-hero-section       { height: 820px; }
 .rr-hero-grid          { display: grid; grid-template-columns: 1fr 1fr; padding: 60px 80px; gap: 40px; align-items: center; height: 100%; }
 .rr-hero-title         { font-size: 180px; }
+.rr-hero-stats         { gap: 40px; }
 .rr-trust-grid         { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; padding: 26px 80px; }
 .rr-4col-grid          { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--steel); }
 .rr-4col-grid-gap      { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
@@ -471,7 +472,7 @@
   .rr-nav-hamburger    { display: flex; }
   .rr-nav-header       { padding: 14px 16px !important; }
   .rr-nav-right        { gap: 14px; }
-  .rr-nav-wordmark     { display: none; }
+  .rr-nav-logo         { height: 24px; width: auto; }
   .rr-nav-search-label { display: none; }
   .rr-nav-account-label { display: none; }
   .rr-filterbar        { padding: 14px 20px !important; gap: 12px; }
@@ -615,4 +616,30 @@
     background: rgba(0,0,0,.5);
   }
   .rr-admin-close { display: inline-flex; }
+}
+
+/* ═══════════════════════════════════════════════
+   APPAREL PDP · CHECKOUT
+   ═══════════════════════════════════════════════ */
+.rr-apdp-grid     { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); }
+.rr-apdp-gallery  { min-width: 0; }
+.rr-apdp-info     { padding: 48px 48px 56px; min-width: 0; }
+
+.rr-checkout-grid { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 0; }
+.rr-checkout-main { padding: 40px 48px 56px; border-right: 1px solid #3A3A3C; min-width: 0; }
+.rr-checkout-side { padding: 40px 40px 56px; min-width: 0; }
+.rr-checkout-row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+@media (max-width: 900px) {
+  .rr-apdp-grid     { grid-template-columns: 1fr; }
+  .rr-apdp-gallery  { border-right: none !important; border-bottom: 1px solid #3A3A3C; }
+  .rr-apdp-info     { padding: 28px 16px 40px; }
+  .rr-checkout-grid { grid-template-columns: 1fr; }
+  .rr-checkout-main { padding: 28px 16px 32px; border-right: none; border-bottom: 1px solid #3A3A3C; }
+  .rr-checkout-side { padding: 28px 16px 40px; }
+  .rr-catalog-grid-pad { padding: 16px !important; }
+}
+
+@media (max-width: 480px) {
+  .rr-checkout-row2 { grid-template-columns: 1fr; }
 }

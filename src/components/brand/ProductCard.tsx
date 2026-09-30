@@ -3,7 +3,7 @@
 import type { Product } from '@/types'
 import { useWishlist } from '@/context/WishlistContext'
 import { formatRand } from '@/lib/money'
-import { ORDERS_ON_HOLD, COMING_SOON_LABEL } from '@/lib/store-status'
+import { isOnHold, COMING_SOON_LABEL } from '@/lib/store-status'
 
 interface ProductCardProps {
   product: Product
@@ -16,12 +16,21 @@ export default function ProductCard({ product, mediaHeight = 360, indexLabel }: 
   const isDark = mediaBg !== '#fff'
   const idxColor = isDark ? '#E6E6E6' : '#0F0F10'
   const { addItem, removeItem, isWishlisted } = useWishlist()
-  const wishlisted = isWishlisted(product.id)
+  // Cards built without a category (e.g. the ROUGE 01 recommendations) are footwear.
+  const category = product.category ?? 'FOOTWEAR'
+  const onHold = isOnHold(category)
+  const ctaLabel = onHold ? COMING_SOON_LABEL : category === 'FOOTWEAR' ? 'PRE-ORDER →' : 'SHOP NOW →'
+  // Wishlist rows reference products.id — product.id is only a display key.
+  const wishlistProductId = product.productId ?? product.id
+  const wishlistColourwayId = product.colourwayId ?? null
+  const wishlisted = isWishlisted(wishlistProductId, wishlistColourwayId)
 
   function handleWishlist(e: React.MouseEvent) {
     e.preventDefault()
     e.stopPropagation()
-    wishlisted ? removeItem(product.id) : addItem(product.id)
+    wishlisted
+      ? removeItem(wishlistProductId, wishlistColourwayId)
+      : addItem(wishlistProductId, wishlistColourwayId)
   }
 
   return (
@@ -80,7 +89,7 @@ export default function ProductCard({ product, mediaHeight = 360, indexLabel }: 
         </button>
 
         <div className="rr-card__hover">
-          <span>{ORDERS_ON_HOLD ? COMING_SOON_LABEL : 'PRE-ORDER →'}</span>
+          <span>{ctaLabel}</span>
           <span>{product.sizes ? `${product.sizes} SIZES` : 'VIEW'}</span>
         </div>
       </div>
@@ -101,10 +110,10 @@ export default function ProductCard({ product, mediaHeight = 360, indexLabel }: 
         </div>
         <div style={{ textAlign: 'right' }}>
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: 13, color: '#E6E6E6', whiteSpace: 'nowrap' }}>
-            {ORDERS_ON_HOLD ? COMING_SOON_LABEL : formatRand(product.price)}
+            {onHold ? COMING_SOON_LABEL : formatRand(product.price)}
           </div>
           {/* Was-price is meaningless without a current price to compare against. */}
-          {!ORDERS_ON_HOLD && product.compareAt && (
+          {!onHold && product.compareAt && (
             <div
               style={{
                 fontFamily: 'var(--font-mono)',

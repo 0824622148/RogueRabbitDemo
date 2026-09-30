@@ -12,11 +12,20 @@ export const revalidate = 300
 
 export default async function ShopPage() {
   const products = await getProducts('FRONT')
+  const categories = new Set(products.map((p) => p.category).filter(Boolean)).size
+  const pieces = new Set(products.map((p) => p.productId)).size
+  const pad = (n: number) => String(n).padStart(2, '0')
 
   return (
     <div style={{ background: '#0F0F10', color: '#E6E6E6', fontFamily: 'var(--font-body)' }}>
       <NavBar />
-      <CatalogHeader />
+      <CatalogHeader
+        stats={[
+          { n: pad(categories), l: 'CATEGORIES' },
+          { n: pad(pieces), l: 'PIECES' },
+          { n: pad(products.length), l: 'COLOURWAYS' },
+        ]}
+      />
 
       <section style={{ borderBottom: '1px solid #3A3A3C', padding: '40px' }}>
         <div className="rr-3col-grid">

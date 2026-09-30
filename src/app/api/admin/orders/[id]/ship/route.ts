@@ -1,38 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
+import { getServiceClient } from '@/lib/admin/service'
 import { createShipment, isConfigured } from '@/lib/shiplogic'
-
-const RESEND_FROM = 'Rouge Rabbit <orders@rougerabbit.co.za>'
-
-function getServiceClient() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
-  )
-}
-
-async function sendEmail(to: string, subject: string, html: string) {
-  const apiKey = process.env.RESEND_API_KEY
-  if (!apiKey) {
-    console.warn('[SHIP EMAIL] RESEND_API_KEY not set — skipping')
-    return
-  }
-  const res = await fetch('https://api.resend.com/emails', {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${apiKey}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ from: RESEND_FROM, to: [to], subject, html }),
-  })
-  if (!res.ok) {
-    console.error('[SHIP EMAIL] Resend error:', res.status, await res.text())
-  }
-}
+import { apparelParcel } from '@/lib/delivery'
+import { sendEmail, esc } from '@/lib/email'
 
 function customerShippedHtml(order: Record<string, unknown>, trackingNumber: string): string {
-  const name = order.name as string
-  const reference = order.reference as string
+  const name = esc(order.name)
+  const reference = esc(order.reference)
+  const what = order.order_type === 'shop' ? 'Rouge Rabbit order' : 'ROUGE 01'
   return `<div style="font-family:monospace;background:#0F0F10;color:#E6E6E6;padding:32px;max-width:560px;">
     <h1 style="color:#D90017;font-size:28px;margin:0 0 8px;">ROUGE RABBIT</h1>
     <p style="color:#A6A6A8;margin:0 0 32px;letter-spacing:.1em;font-size:11px;">BUILT DIFFERENT.</p>
@@ -40,14 +15,14 @@ function customerShippedHtml(order: Record<string, unknown>, trackingNumber: str
       <span style="color:#2A9D2A;font-size:11px;letter-spacing:.16em;">📦 ON ITS WAY</span>
     </div>
     <p style="color:#A6A6A8;line-height:1.8;font-size:12px;margin:0 0 28px;">
-      Hi ${name}, your ROUGE 01 is on its way with The Courier Guy.
+      Hi ${name}, your ${what} is on its way with The Courier Guy.
     </p>
     <div style="border:1px solid #3A3A3C;padding:20px;margin-bottom:24px;">
       <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #3A3A3C;font-size:11px;">
         <span style="color:#A6A6A8;">Reference</span><span style="color:#E6E6E6;">${reference}</span>
       </div>
       <div style="display:flex;justify-content:space-between;padding:7px 0;font-size:11px;">
-        <span style="color:#A6A6A8;">Tracking Number</span><span style="color:#E6E6E6;">${trackingNumber}</span>
+        <span style="color:#A6A6A8;">Tracking Number</span><span style="color:#E6E6E6;">${esc(trackingNumber)}</span>
       </div>
     </div>
     <p style="color:#A6A6A8;font-size:10px;line-height:1.8;letter-spacing:.1em;">
@@ -85,7 +60,15 @@ export async function POST(
     return NextResponse.json({ error: 'Order not found' }, { status: 404 })
   }
 
-  if (order.status !== 'paid') {
+  // Ennerdale orders are delivered by hand by the Rouge Rabbit team.
+  if (order.fulfilment_type === 'local_delivery') {
+    return NextResponse.json(
+      { error: 'Ennerdale local delivery — deliver by hand, do not book a courier' },
+      { status: 422 },
+    )
+  }
+
+  if (!order.paid_at || order.status !== 'paid') {
     return NextResponse.json(
       { error: `Order must be paid before booking (currently ${order.status})` },
       { status: 409 },
@@ -105,6 +88,14 @@ export async function POST(
       { error: 'Order is missing a complete delivery address' },
       { status: 422 },
     )
+  }
+
+  // Shop orders ship in a flyer sized to the number of units; pre-orders use
+  // the default ROUGE 01 shoe box.
+  let parcel
+  if (order.order_type === 'shop') {
+    const { data: items } = await db.from('order_items').select('qty').eq('order_id', order.id)
+    parcel = apparelParcel((items ?? []).reduce((s: number, i: { qty: number }) => s + Number(i.qty), 0))
   }
 
   let result
@@ -127,6 +118,7 @@ export async function POST(
       },
       serviceLevelCode: order.ship_service_code ?? '',
       declaredValue: Math.round(Number(order.amount_due) - Number(order.shipping_cost ?? 0)),
+      parcel,
     })
   } catch (err) {
     console.error('[SHIP] Shiplogic createShipment failed:', err)
@@ -144,6 +136,7 @@ export async function POST(
       tracking_number: result.trackingNumber,
     })
     .eq('id', id)
+    .eq('status', 'paid')
 
   if (updateError) {
     console.error('[SHIP] DB update failed after booking:', JSON.stringify(updateError))
@@ -160,7 +153,7 @@ export async function POST(
 
   await sendEmail(
     order.email,
-    `ROUGE 01 Shipped · ${order.reference}`,
+    `${order.order_type === 'shop' ? 'Your order has shipped' : 'ROUGE 01 Shipped'} · ${order.reference}`,
     customerShippedHtml(order, result.trackingNumber),
   )
 

@@ -1,45 +1,51 @@
 import PageHeader from '@/components/admin/PageHeader'
 import OrdersTable from '@/components/admin/OrdersTable'
-import { getOrders } from '@/lib/admin/queries'
-import { rand } from '@/lib/admin/format'
+import { getPaidOrders } from '@/lib/admin/queries'
+import { rand, PAID_STATUSES, ADMIN_STATUS_TABS } from '@/lib/admin/format'
 import { card } from '@/lib/admin/ui'
 
 export const dynamic = 'force-dynamic'
 
 /**
- * Payments queue. PayFast's ITN webhook auto-marks paid orders; this view is
- * where the team confirms payment was received and can manually MARK PAID if
- * a payment needs reconciling. Once paid, orders move to Deliveries.
+ * Confirmed payments. Every row here was verified by PayFast's ITN (signature,
+ * merchant, amount, and PayFast's own validate endpoint). There is no manual
+ * "mark paid" — a payment that isn't here was not confirmed by PayFast.
  */
 export default async function PaymentsPage() {
-  const orders = await getOrders()
-  const pending = orders.filter((o) => o.status === 'pending')
-  const pendingTotal = pending.reduce((s, o) => s + Number(o.amount_due ?? 0), 0)
+  const orders = await getPaidOrders()
+  const live = orders.filter((o) => PAID_STATUSES.includes(o.status))
+  const revenue = live.reduce((s, o) => s + Number(o.amount_due ?? 0), 0)
+  const delivery = live.reduce((s, o) => s + Number(o.shipping_cost ?? 0), 0)
+  const refunded = orders.filter((o) => o.status === 'cancelled')
+
+  const stat = (label: string, value: string, accent: string) => (
+    <div style={card}>
+      <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '.2em', color: '#A6A6A8', marginBottom: 10 }}>{label}</div>
+      <div style={{ fontFamily: 'var(--font-display)', fontSize: 38, color: accent }}>{value}</div>
+    </div>
+  )
 
   return (
     <div style={{ maxWidth: 1400, margin: '0 auto', padding: '40px 32px' }}>
-      <PageHeader title="Payments" subtitle="CONFIRM PAYFAST PAYMENTS RECEIVED" />
+      <PageHeader title="Payments" subtitle="CONFIRMED PAYFAST PAYMENTS" />
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16, marginBottom: 32 }}>
-        <div style={card}>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '.2em', color: '#A6A6A8', marginBottom: 10 }}>AWAITING PAYMENT</div>
-          <div style={{ fontFamily: 'var(--font-display)', fontSize: 38, color: '#D90017' }}>{pending.length}</div>
-        </div>
-        <div style={card}>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '.2em', color: '#A6A6A8', marginBottom: 10 }}>PENDING VALUE</div>
-          <div style={{ fontFamily: 'var(--font-display)', fontSize: 38, color: '#A6A6A8' }}>{rand(pendingTotal)}</div>
-        </div>
+        {stat('CONFIRMED PAYMENTS', String(live.length), '#2A9D2A')}
+        {stat('TOTAL RECEIVED', rand(revenue), '#2A9D2A')}
+        {stat('OF WHICH DELIVERY', rand(delivery), '#A6A6A8')}
+        {stat('REFUNDED / CANCELLED', String(refunded.length), '#D90017')}
       </div>
 
       <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.16em', color: '#A6A6A8', marginBottom: 16, lineHeight: 1.7 }}>
-        PAID ORDERS SHOW A PAYFAST PAYMENT ID. USE “MARK PAID” ONLY TO RECONCILE A CONFIRMED PAYMENT MANUALLY.
+        ONLY PAYMENTS VERIFIED BY PAYFAST APPEAR HERE. CHECKOUTS THAT WERE STARTED BUT NOT PAID ARE NEVER SHOWN.
+        <br />
+        TO REFUND: REFUND IN THE PAYFAST DASHBOARD, THEN CANCEL THE ORDER HERE TO RECORD IT.
       </div>
 
       <OrdersTable
         orders={orders}
-        statusTabs={['pending', 'paid']}
-        initialStatus="pending"
-        emptyLabel="NO ORDERS AWAITING PAYMENT"
+        statusTabs={ADMIN_STATUS_TABS}
+        emptyLabel="NO CONFIRMED PAYMENTS YET"
       />
     </div>
   )

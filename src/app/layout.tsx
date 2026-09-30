@@ -7,6 +7,8 @@ import WishlistDrawer from '@/components/wishlist/WishlistDrawer'
 import WishlistEmailModal from '@/components/wishlist/WishlistEmailModal'
 import { SubscribeProvider } from '@/context/SubscribeContext'
 import SubscribeModal from '@/components/brand/SubscribeModal'
+import { CartProvider } from '@/context/CartContext'
+import CartDrawer from '@/components/shop/CartDrawer'
 
 const bebasNeue = Bebas_Neue({
   weight: '400',
@@ -59,11 +61,14 @@ export default function RootLayout({
       >
         <SubscribeProvider>
           <WishlistProvider>
-            {children}
-            <WishlistDrawer />
-            <WishlistEmailModal />
-            <SubscribeModal />
-            <WhatsAppWidget />
+            <CartProvider>
+              {children}
+              <WishlistDrawer />
+              <CartDrawer />
+              <WishlistEmailModal />
+              <SubscribeModal />
+              <WhatsAppWidget />
+            </CartProvider>
           </WishlistProvider>
         </SubscribeProvider>
       </body>

@@ -26,19 +26,19 @@ export default function CampaignStrip() {
           }}
         >
           <img
-            src="/assets/girl-model.png"
-            alt="Rouge Rabbit Girl Model"
+            src="/assets/paint-shop-campaign.jpg"
+            alt="Bagged League x Rouge Rabbit Paint Shop tee, front and back"
             style={{
               position: 'absolute', inset: 0,
               width: '100%', height: '100%',
-              objectFit: 'cover',
+              objectFit: 'cover', objectPosition: 'center 25%',
             }}
           />
           <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.15)' }} />
           <div className="rr-plus" style={{ top: 20, left: 20 }} />
           <div className="rr-plus" style={{ bottom: 20, right: 20 }} />
           <div style={{ position: 'absolute', bottom: 24, left: 30 }}>
-            <div className="rr-mono" style={{ color: '#A6A6A8' }}>EDITORIAL · CAMPAIGN 03</div>
+            <div className="rr-mono" style={{ color: '#A6A6A8' }}>BL × RR · PAINT SHOP</div>
           </div>
         </div>
 

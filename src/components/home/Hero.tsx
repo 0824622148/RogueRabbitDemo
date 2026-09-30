@@ -32,10 +32,10 @@ export default function Hero() {
         }}
       >
         <span className="rr-mono" style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}>
-          R/001 — DROP 003 — F/W 26
+          BAGGED LEAGUE × ROUGE RABBIT
         </span>
         <span className="rr-mono" style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)', color: '#D90017' }}>
-          LIVE NOW
+          OUT NOW
         </span>
       </div>
 
@@ -84,7 +84,7 @@ export default function Hero() {
         {/* Left copy */}
         <div>
           <div style={{ marginBottom: 24 }}>
-            <span className="rr-mono">F/W 2026 · CHAPTER ONE</span>
+            <span className="rr-mono">BAGGED LEAGUE × ROUGE RABBIT · THE COLLAB</span>
           </div>
           <h1
             className="rr-display rr-hero-title"
@@ -94,16 +94,19 @@ export default function Hero() {
             <span style={{ color: '#D90017' }}>NATURE.</span>
           </h1>
           <p style={{ marginTop: 22, color: '#A6A6A8', maxWidth: 460, fontSize: 14, lineHeight: 1.7 }}>
-            The Rouge 01 silhouette — engineered for the ones who refuse to blend in.
-            Knit upper, cinematic sole, marked with the rabbit. Worn loud.
+            Inspired by Bagged League — the crew keeping stance culture low, clean and loud.
+            Two T-shirt drops, Air Dropped and Paint Shop, built for the ones who ride on air
+            and refuse to blend in. Marked with the rabbit. Worn loud.
           </p>
           <div style={{ display: 'flex', gap: 14, marginTop: 28, flexWrap: 'wrap' }}>
-            <Link href="/shop/rouge-01">
+            <Link href="/shop/apparel">
               <button className="rr-btn">
-                SHOP THE DROP <span className="arr"><Arrow size={14} /></span>
+                SHOP THE COLLAB <span className="arr"><Arrow size={14} /></span>
               </button>
             </Link>
-            <button className="rr-btn rr-btn--ghost">WATCH FILM ▸</button>
+            <Link href="/shop">
+              <button className="rr-btn rr-btn--ghost">VIEW ALL ▸</button>
+            </Link>
           </div>
           <div
             className="rr-hero-stats"
@@ -112,10 +115,10 @@ export default function Hero() {
               borderTop: '1px solid #3A3A3C', flexWrap: 'wrap',
             }}
           >
-            <Stat n="05" l="COLOURWAYS" />
-            <Stat n="08" l="SIZES" />
-            <Stat n="250" l="UNITS · NUMBERED" />
-            <Stat n="48H" l="EARLY ACCESS" />
+            <Stat n="02" l="T-SHIRT DROPS" />
+            <Stat n="BL×RR" l="THE COLLAB" />
+            <Stat n="FREE" l="ENNERDALE DELIVERY" />
+            <Stat n="SA" l="NATIONWIDE SHIPPING" />
           </div>
         </div>
 
@@ -124,17 +127,17 @@ export default function Hero() {
           <div
             style={{
               position: 'absolute', inset: '20px 0 20px 40px',
-              background: '#fff',
+              background: '#161618',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               overflow: 'hidden',
             }}
           >
             <img
-              src="/assets/ig-06.png"
-              alt="Rouge 01 Obsidian"
+              src="/assets/hero-air-down.jpg"
+              alt="Bagged League x Rouge Rabbit Air Down tee"
               style={{
-                width: '120%', height: '120%',
-                objectFit: 'contain',
+                width: '100%', height: '100%',
+                objectFit: 'cover', objectPosition: 'center 30%',
               }}
             />
             <div className="rr-plus" style={{ top: 12, left: 12 }} />

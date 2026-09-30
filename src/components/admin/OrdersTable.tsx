@@ -3,7 +3,7 @@
 import { useMemo, useState } from 'react'
 import OrderStatusButton from './OrderStatusButton'
 import BookCollectionButton from './BookCollectionButton'
-import { fmt, rand, STATUS_COLOUR } from '@/lib/admin/format'
+import { fmt, rand, statusLabel, STATUS_COLOUR, itemsLabel, isLocalDelivery } from '@/lib/admin/format'
 import { cell, th, tableWrap } from '@/lib/admin/ui'
 
 type Order = Record<string, any>
@@ -19,8 +19,8 @@ interface Props {
 }
 
 const COLUMNS = [
-  'REFERENCE', 'COLOURWAY', 'SIZE · GENDER', 'DELIVERY ADDRESS', 'NAME', 'EMAIL',
-  'STATUS', 'AMOUNT', 'DELIVERY', 'TRACKING', 'PAYMENT ID', 'DATE', 'ACTIONS',
+  'REFERENCE', 'ITEMS', 'DELIVERY ADDRESS', 'NAME', 'PHONE', 'EMAIL',
+  'STATUS', 'AMOUNT', 'DELIVERY', 'TRACKING', 'PAYMENT ID', 'PAID', 'ACTIONS',
 ]
 
 export default function OrdersTable({
@@ -38,7 +38,7 @@ export default function OrdersTable({
     return orders.filter((o) => {
       if (status !== 'all' && o.status !== status) return false
       if (!q) return true
-      return [o.reference, o.name, o.email]
+      return [o.reference, o.name, o.email, o.phone, o.postal_code]
         .filter(Boolean)
         .some((v: string) => v.toLowerCase().includes(q))
     })
@@ -65,7 +65,7 @@ export default function OrdersTable({
                 const count = orders.filter((o) => o.status === s).length
                 return (
                   <button key={s} style={tabStyle(status === s)} onClick={() => setStatus(s)}>
-                    {s.toUpperCase()} ({count})
+                    {statusLabel(s)} ({count})
                   </button>
                 )
               })}
@@ -75,7 +75,7 @@ export default function OrdersTable({
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="SEARCH REF / NAME / EMAIL"
+              placeholder="SEARCH REF / NAME / EMAIL / PHONE"
               style={{
                 marginLeft: 'auto', minWidth: 220, flex: '0 1 280px',
                 background: '#1E1E20', border: '1px solid #3A3A3C', color: '#E6E6E6',
@@ -97,38 +97,52 @@ export default function OrdersTable({
             </tr>
           </thead>
           <tbody>
-            {filtered.map((o) => (
+            {filtered.map((o) => {
+              const local = isLocalDelivery(o)
+              return (
               <tr key={o.id} style={{ background: '#0F0F10' }}>
                 <td style={cell}>{o.reference}</td>
-                <td style={cell}>{o.colourway}</td>
-                <td style={cell}>{o.size_value} · {o.gender}</td>
+                <td style={{ ...cell, whiteSpace: 'normal', maxWidth: 260 }}>{itemsLabel(o)}</td>
                 <td style={{ ...cell, whiteSpace: 'normal', maxWidth: 220, color: '#A6A6A8' }}>
                   {[o.address_line1, o.address_line2, o.suburb, o.city, o.province, o.postal_code].filter(Boolean).join(', ') || (o.city ?? '—')}
                 </td>
                 <td style={cell}>{o.name}</td>
+                <td style={cell}>
+                  {o.phone
+                    ? <a href={`https://wa.me/${String(o.phone).replace(/\D/g, '').replace(/^0/, '27')}`} target="_blank" rel="noopener noreferrer" style={{ color: '#E6E6E6' }}>{o.phone}</a>
+                    : '—'}
+                </td>
                 <td style={{ ...cell, color: '#A6A6A8' }}>{o.email}</td>
                 <td style={cell}>
                   <span style={{ color: STATUS_COLOUR[o.status] ?? '#A6A6A8', fontSize: 9, letterSpacing: '.16em' }}>
-                    ● {String(o.status).toUpperCase()}
+                    ● {local && o.status === 'shipped' ? 'OUT FOR DELIVERY' : statusLabel(o.status)}
                   </span>
                 </td>
                 <td style={{ ...cell, color: '#D90017' }}>{rand(o.amount_due)}</td>
-                <td style={{ ...cell, color: '#A6A6A8', fontSize: 10 }}>
-                  {o.ship_service_name || o.ship_service_code || '—'}{o.shipping_cost ? ` · ${rand(o.shipping_cost)}` : ''}
+                <td style={{ ...cell, color: local ? '#D90017' : '#A6A6A8', fontSize: 10 }}>
+                  {local
+                    ? 'FREE · LOCAL (ENNERDALE)'
+                    : `${o.ship_service_name || o.ship_service_code || '—'}${o.shipping_cost ? ` · ${rand(o.shipping_cost)}` : ''}`}
                 </td>
                 <td style={{ ...cell, color: '#A6A6A8', fontSize: 10 }}>{o.tracking_number ?? '—'}</td>
                 <td style={{ ...cell, color: '#A6A6A8', fontSize: 10 }}>{o.pf_payment_id ?? '—'}</td>
-                <td style={{ ...cell, color: '#A6A6A8' }}>{fmt(o.created_at)}</td>
+                <td style={{ ...cell, color: '#A6A6A8' }}>{fmt(o.paid_at ?? o.created_at)}</td>
                 <td style={cell}>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                    <OrderStatusButton orderId={o.id} currentStatus={o.status} />
-                    {o.status === 'paid' && !o.shiplogic_shipment_id && (
+                    {!local && o.status === 'paid' && !o.shiplogic_shipment_id && (
                       <BookCollectionButton orderId={o.id} />
                     )}
+                    <OrderStatusButton
+                      orderId={o.id}
+                      currentStatus={o.status}
+                      local={local}
+                      hasShipment={Boolean(o.shiplogic_shipment_id)}
+                    />
                   </div>
                 </td>
               </tr>
-            ))}
+              )
+            })}
             {!filtered.length && (
               <tr>
                 <td colSpan={COLUMNS.length} style={{ ...cell, textAlign: 'center', color: '#3A3A3C' }}>

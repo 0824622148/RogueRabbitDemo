@@ -1,5 +1,10 @@
 export interface Product {
+  /** Display/React key only — NOT a database id. Use productId for the DB. */
   id: number
+  /** products.id */
+  productId?: number
+  /** products.category, e.g. FOOTWEAR / APPAREL / ACCESSORIES */
+  category?: string
   name: string
   slug: string
   colourwayId?: string
@@ -24,9 +29,10 @@ export interface ProductImage {
 export interface InventoryItem {
   id: number
   colourway_id: string
-  gender: 'M' | 'F'
+  gender: 'M' | 'F' | 'U'
   size_value: string
   in_stock: boolean
+  stock_count?: number | null
   sort_order: number
 }
 

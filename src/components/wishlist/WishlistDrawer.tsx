@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useWishlist } from '@/context/WishlistContext'
 import { formatRand } from '@/lib/money'
-import { ORDERS_ON_HOLD, COMING_SOON_LABEL } from '@/lib/store-status'
+import { isOnHold, COMING_SOON_LABEL } from '@/lib/store-status'
 
 export default function WishlistDrawer() {
   const { isOpen, closeDrawer, items, isLoading, removeItem } = useWishlist()
@@ -145,7 +145,7 @@ export default function WishlistDrawer() {
                         fontFamily: 'var(--font-mono)', fontSize: 11,
                         color: '#A6A6A8', marginBottom: 12,
                       }}>
-                        {ORDERS_ON_HOLD ? COMING_SOON_LABEL : formatRand(item.price)}
+                        {isOnHold(item.category ?? 'FOOTWEAR') ? COMING_SOON_LABEL : formatRand(item.price)}
                       </div>
                       <Link
                         href={`/shop/${item.slug}`}
@@ -156,7 +156,9 @@ export default function WishlistDrawer() {
                           textDecoration: 'none',
                         }}
                       >
-                        {ORDERS_ON_HOLD ? COMING_SOON_LABEL : 'PRE-ORDER →'}
+                        {isOnHold(item.category ?? 'FOOTWEAR')
+                          ? COMING_SOON_LABEL
+                          : (item.category ?? 'FOOTWEAR') === 'FOOTWEAR' ? 'PRE-ORDER →' : 'SHOP NOW →'}
                       </Link>
                     </div>
 

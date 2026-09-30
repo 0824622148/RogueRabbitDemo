@@ -1,22 +1,25 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getRates, isConfigured, type Address } from '@/lib/shiplogic'
 import { FULL_PRICE } from '@/lib/preorder'
+import { quoteDelivery, toAddress, apparelParcel, DeliveryError, type DeliveryQuoteInput } from '@/lib/delivery'
+import { parseCartInput, priceCart, cartSubtotal, cartUnits, CartError } from '@/lib/cart-server'
 
 export const dynamic = 'force-dynamic'
 
-// Product value used as the declared value for insurance/rating.
-// Defaults to the pre-order full price so the two never drift. Rounded to whole
-// rand — the price carries cents, but Shiplogic rates on whole-rand cover.
-const DECLARED_VALUE = Math.round(Number(process.env.SHIPLOGIC_DECLARED_VALUE ?? FULL_PRICE))
+// ROUGE 01 declared value (insurance/rating) when no cart items are sent.
+// Rounded to whole rand — Shiplogic rates on whole-rand cover.
+const PREORDER_DECLARED_VALUE = Math.round(Number(process.env.SHIPLOGIC_DECLARED_VALUE ?? FULL_PRICE))
 
+/**
+ * Delivery options for an address.
+ *
+ * Body: address fields, plus optional `items: [{ inventoryId, qty }]` from the
+ * cart. With items, the parcel and declared value come from the cart; without,
+ * the ROUGE 01 shoe box and pre-order price are used.
+ *
+ * Ennerdale postal codes get the free local option only (no Shiplogic call).
+ * These rates are for display — checkout routes re-quote on the server.
+ */
 export async function POST(request: NextRequest) {
-  if (!isConfigured()) {
-    return NextResponse.json(
-      { error: 'Delivery rates are temporarily unavailable.' },
-      { status: 503 },
-    )
-  }
-
   let body: Record<string, unknown>
   try {
     body = await request.json()
@@ -34,30 +37,38 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  const delivery: Address = {
-    streetAddress: addressLine1,
-    line2: addressLine2,
-    suburb,
-    city,
-    province,
-    postalCode,
-    country: 'ZA',
+  let quote: DeliveryQuoteInput = { declaredValue: PREORDER_DECLARED_VALUE }
+
+  if (body.items !== undefined) {
+    const items = parseCartInput(body.items)
+    if (!items) {
+      return NextResponse.json({ error: 'Invalid bag contents' }, { status: 422 })
+    }
+    try {
+      const lines = await priceCart(items)
+      quote = {
+        parcel: apparelParcel(cartUnits(lines)),
+        declaredValue: Math.round(cartSubtotal(lines)),
+      }
+    } catch (err) {
+      if (err instanceof CartError) {
+        return NextResponse.json({ error: err.message }, { status: err.status })
+      }
+      throw err
+    }
   }
 
   try {
-    const rates = await getRates(delivery, DECLARED_VALUE)
-    if (rates.length === 0) {
-      return NextResponse.json(
-        { error: 'No delivery options available for this address.' },
-        { status: 422 },
-      )
-    }
+    const rates = await quoteDelivery(
+      toAddress({ addressLine1, addressLine2, suburb, city, province, postalCode }),
+      quote,
+    )
     return NextResponse.json({ rates })
   } catch (err) {
-    console.error('[SHIPPING RATES] Shiplogic error:', err)
-    return NextResponse.json(
-      { error: 'Could not fetch delivery rates. Please check your address and try again.' },
-      { status: 502 },
-    )
+    if (err instanceof DeliveryError) {
+      return NextResponse.json({ error: err.message }, { status: err.status })
+    }
+    console.error('[SHIPPING RATES] Unexpected error:', err)
+    return NextResponse.json({ error: 'Could not fetch delivery rates.' }, { status: 500 })
   }
 }

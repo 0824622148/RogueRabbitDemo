@@ -35,9 +35,11 @@ interface PayFastOrder {
   name: string
   email: string
   amountDue: number
-  colourway: string
-  size: string
-  gender: string
+  /** Shown on the PayFast page and statement. Truncated to 100 chars. */
+  itemName: string
+  /** Site-relative paths PayFast sends the customer back to (the reference is appended). */
+  returnPath: string
+  cancelPath: string
 }
 
 export function buildPayFastPayload(order: PayFastOrder): {
@@ -53,7 +55,8 @@ export function buildPayFastPayload(order: PayFastOrder): {
   const nameFirst = nameParts[0]
   const nameLast = nameParts.length > 1 ? nameParts.slice(1).join(' ') : nameParts[0]
 
-  const itemName = `ROUGE 01 - ${order.colourway} - ${order.size} ${order.gender}`.slice(0, 100)
+  const itemName = order.itemName.slice(0, 100)
+  const ref = encodeURIComponent(order.reference)
 
   // Field order matches PayFast's PHP integration example exactly.
   // Insertion order is preserved in the form POST and must match what PayFast
@@ -61,8 +64,8 @@ export function buildPayFastPayload(order: PayFastOrder): {
   const fields: Record<string, string> = {
     merchant_id: merchantId,
     merchant_key: merchantKey,
-    return_url: `${siteUrl}/preorder/success?ref=${order.reference}`,
-    cancel_url: `${siteUrl}/preorder/cancel?ref=${order.reference}`,
+    return_url: `${siteUrl}${order.returnPath}?ref=${ref}`,
+    cancel_url: `${siteUrl}${order.cancelPath}?ref=${ref}`,
     notify_url: `${siteUrl}/api/payfast/notify`,
     name_first: nameFirst,
     name_last: nameLast,
@@ -72,13 +75,8 @@ export function buildPayFastPayload(order: PayFastOrder): {
     item_name: itemName,
   }
 
+  // Never log the pre-hash string — it contains the passphrase.
   const signature = buildSignature(fields, passphrase || undefined)
-  const preHashString = Object.entries(fields)
-    .filter(([, v]) => v !== '')
-    .map(([k, v]) => `${k}=${pfEncode(v)}`)
-    .join('&') + (passphrase ? `&passphrase=${pfEncode(passphrase)}` : '')
-  console.log('[PAYFAST] pre-hash:', preHashString)
-  console.log('[PAYFAST] signature:', signature)
 
   return {
     url: PAYFAST_URL,
@@ -86,13 +84,81 @@ export function buildPayFastPayload(order: PayFastOrder): {
   }
 }
 
+// PayFast's published ITN source hosts. Their current IPs are resolved at
+// request time, and the published ranges below are accepted as well — see
+// https://developers.payfast.co.za/docs#step_4_confirm_payment
+const PAYFAST_HOSTS = ['www.payfast.co.za', 'sandbox.payfast.co.za', 'w1w.payfast.co.za', 'w2w.payfast.co.za']
+const PAYFAST_CIDRS = ['197.97.145.144/28', '41.74.179.192/27', '102.216.36.0/28', '102.216.36.128/28', '144.126.193.139/32']
+
+function ipv4ToInt(ip: string): number | null {
+  const parts = ip.split('.')
+  if (parts.length !== 4) return null
+  let n = 0
+  for (const p of parts) {
+    const v = Number(p)
+    if (!Number.isInteger(v) || v < 0 || v > 255) return null
+    n = (n << 8) + v
+  }
+  return n >>> 0
+}
+
+function inCidr(ip: string, cidr: string): boolean {
+  const [base, bitsStr] = cidr.split('/')
+  const ipN = ipv4ToInt(ip)
+  const baseN = ipv4ToInt(base)
+  const bits = Number(bitsStr)
+  if (ipN === null || baseN === null) return false
+  const mask = bits === 0 ? 0 : (~0 << (32 - bits)) >>> 0
+  return (ipN & mask) === (baseN & mask)
+}
+
+/** True if the request came from PayFast. `ip` is the client IP Vercel reports. */
+export async function isPayFastSource(ip: string | null): Promise<boolean> {
+  if (process.env.PAYFAST_SKIP_IP_CHECK === 'true') return true
+  if (!ip) return false
+  const clean = ip.trim().replace(/^::ffff:/, '')
+  if (PAYFAST_CIDRS.some((c) => inCidr(clean, c))) return true
+  try {
+    const { lookup } = await import('dns/promises')
+    const resolved = await Promise.all(
+      PAYFAST_HOSTS.map((h) => lookup(h, { all: true }).catch(() => [])),
+    )
+    return resolved.flat().some((r) => r.address === clean)
+  } catch {
+    return false
+  }
+}
+
+export interface ITNValidation {
+  valid: boolean
+  reason?: string
+  /**
+   * True when we couldn't reach PayFast to confirm. The route should answer
+   * non-200 so PayFast re-sends the notification later, rather than either
+   * accepting an unconfirmed payment or dropping a real one.
+   */
+  retry?: boolean
+}
+
+/**
+ * Every check must pass before an order is marked paid:
+ *   status COMPLETE, our merchant id, matching reference, exact amount,
+ *   valid signature, and PayFast's own server confirming the data (fails
+ *   closed — an unreachable validate endpoint means "try again", never "ok").
+ * The source-IP check is done by the route with isPayFastSource().
+ */
 export async function validateITN(
   params: Record<string, string>,
   expectedAmount: number,
   expectedReference: string,
-): Promise<{ valid: boolean; reason?: string }> {
+): Promise<ITNValidation> {
   if (params.payment_status !== 'COMPLETE') {
     return { valid: false, reason: `payment_status is ${params.payment_status}` }
+  }
+
+  const merchantId = (process.env.PAYFAST_MERCHANT_ID ?? '').trim()
+  if (!merchantId || params.merchant_id !== merchantId) {
+    return { valid: false, reason: 'merchant_id mismatch' }
   }
 
   if (params.m_payment_id !== expectedReference) {
@@ -106,18 +172,17 @@ export async function validateITN(
 
   // Verify signature
   const { signature, ...sigParams } = params
-  const passphrase = process.env.PAYFAST_PASSPHRASE || ''
+  const passphrase = (process.env.PAYFAST_PASSPHRASE ?? '').trim()
   const expectedSig = buildSignature(sigParams, passphrase || undefined)
   if (expectedSig !== signature) {
     return { valid: false, reason: 'signature mismatch' }
   }
 
-  // Validate with PayFast servers
+  // Confirm with PayFast's servers. Fails closed.
   try {
     const controller = new AbortController()
-    const timeout = setTimeout(() => controller.abort(), 5000)
-    const pfHost = SANDBOX ? 'https://sandbox.payfast.co.za' : 'https://www.payfast.co.za'
-    const validateUrl = `${pfHost}/eng/query/validate`
+    const timeout = setTimeout(() => controller.abort(), 8000)
+    const validateUrl = `${PF_HOST}/eng/query/validate`
 
     const rawBody = Object.entries(params)
       .map(([k, v]) => `${k}=${pfEncode(v)}`)
@@ -131,13 +196,13 @@ export async function validateITN(
     })
     clearTimeout(timeout)
 
-    const text = await res.text()
-    if (text.trim() !== 'VALID') {
-      return { valid: false, reason: `PayFast validate returned: ${text.trim()}` }
+    const text = (await res.text()).trim()
+    if (text !== 'VALID') {
+      return { valid: false, reason: `PayFast validate returned: ${text}` }
     }
   } catch (err) {
-    console.warn('[ITN] PayFast validate call failed:', err)
-    // Do not reject the ITN solely due to validate timeout — signature + amount already checked
+    console.error('[ITN] PayFast validate call failed — asking PayFast to retry:', err)
+    return { valid: false, reason: 'validate endpoint unreachable', retry: true }
   }
 
   return { valid: true }

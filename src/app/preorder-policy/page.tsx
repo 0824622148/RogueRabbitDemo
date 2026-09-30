@@ -147,10 +147,10 @@ export default function PreorderPolicyPage() {
 
       <h2 style={S.h2}>Shipping</h2>
       <p style={S.p}>Rouge Rabbit currently ships exclusively within South Africa.</p>
-      <h3 style={S.h3}>Free Shipping</h3>
+      <h3 style={S.h3}>Delivery Costs</h3>
       <ul style={S.ul}>
-        <li>Free Standard Shipping on orders over <strong style={{ color: '#E6E6E6' }}>R2,000</strong></li>
-        <li>Orders below R2,000 will incur a shipping fee calculated at checkout.</li>
+        <li><strong style={{ color: '#E6E6E6' }}>Free local delivery in Ennerdale</strong> (postal code 1830), delivered by the Rouge Rabbit team.</li>
+        <li>Everywhere else, delivery by The Courier Guy — the fee is calculated at checkout.</li>
       </ul>
 
       <div style={{ marginTop: 56, padding: '32px', background: '#1E1E20', border: '1px solid #3A3A3C' }}>

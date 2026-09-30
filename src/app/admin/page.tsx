@@ -1,43 +1,41 @@
 import Link from 'next/link'
 import PageHeader from '@/components/admin/PageHeader'
-import { getOrders, getMembers } from '@/lib/admin/queries'
-import { fmt, rand, STATUS_COLOUR, CONFIRMED_STATUSES } from '@/lib/admin/format'
+import { getPaidOrders, getMembers } from '@/lib/admin/queries'
+import { fmt, rand, statusLabel, STATUS_COLOUR, PAID_STATUSES, itemsLabel, isLocalDelivery } from '@/lib/admin/format'
 import { card, cell, th, tableWrap } from '@/lib/admin/ui'
 
 export const dynamic = 'force-dynamic'
 
+/**
+ * Store overview. Every figure here is built from verified-paid orders only —
+ * an order appears once PayFast's ITN has confirmed the payment, never before.
+ */
 export default async function AdminDashboardPage() {
-  const [orders, members] = await Promise.all([getOrders(), getMembers()])
+  const [orders, members] = await Promise.all([getPaidOrders(), getMembers()])
 
-  const confirmedRevenue = orders
-    .filter((o) => CONFIRMED_STATUSES.includes(o.status))
-    .reduce((sum, o) => sum + Number(o.amount_due ?? 0), 0)
+  const live = orders.filter((o) => PAID_STATUSES.includes(o.status))
+  const revenue = live.reduce((sum, o) => sum + Number(o.amount_due ?? 0), 0)
 
-  const pendingRevenue = orders
-    .filter((o) => o.status === 'pending')
-    .reduce((sum, o) => sum + Number(o.amount_due ?? 0), 0)
-
-  // "Needs attention" — the two operational queues.
-  const toConfirm = orders.filter((o) => o.status === 'pending')
-  const toShip = orders.filter((o) => o.status === 'paid' && !o.shiplogic_shipment_id)
+  // "Needs attention" — the two fulfilment queues.
+  const toBook = orders.filter((o) => o.status === 'paid' && !isLocalDelivery(o) && !o.shiplogic_shipment_id)
+  const toDeliver = orders.filter((o) => isLocalDelivery(o) && (o.status === 'paid' || o.status === 'shipped'))
 
   const stats = [
-    { label: 'TOTAL ORDERS', value: String(orders.length), accent: '#E6E6E6', href: '/admin/orders' },
-    { label: 'CONFIRMED REVENUE', value: rand(confirmedRevenue), accent: '#2A9D2A', href: '/admin/orders' },
-    { label: 'PIPELINE (PENDING)', value: rand(pendingRevenue), accent: '#A6A6A8', href: '/admin/payments' },
+    { label: 'PAID ORDERS', value: String(live.length), accent: '#E6E6E6', href: '/admin/orders' },
+    { label: 'REVENUE (VERIFIED)', value: rand(revenue), accent: '#2A9D2A', href: '/admin/payments' },
     { label: 'MEMBERS', value: String(members.length), accent: '#E6E6E6', href: '/admin/members' },
   ]
 
   const attention = [
-    { label: 'PAYMENTS TO CONFIRM', count: toConfirm.length, href: '/admin/payments', accent: '#D90017' },
-    { label: 'ORDERS TO BOOK FOR DELIVERY', count: toShip.length, href: '/admin/deliveries', accent: '#3B82F6' },
+    { label: 'COURIER ORDERS TO BOOK', count: toBook.length, href: '/admin/deliveries', accent: '#3B82F6' },
+    { label: 'ENNERDALE — DELIVER BY HAND', count: toDeliver.length, href: '/admin/deliveries#local', accent: '#D90017' },
   ]
 
   const recent = orders.slice(0, 6)
 
   return (
     <div style={{ maxWidth: 1400, margin: '0 auto', padding: '40px 32px' }}>
-      <PageHeader title="Dashboard" subtitle="STORE OVERVIEW" />
+      <PageHeader title="Dashboard" subtitle="STORE OVERVIEW · VERIFIED PAYMENTS ONLY" />
 
       {/* KPI cards */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16, marginBottom: 24 }}>
@@ -74,11 +72,11 @@ export default async function AdminDashboardPage() {
         ))}
       </div>
 
-      {/* Recent orders */}
+      {/* Recent paid orders */}
       <div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.2em', color: '#D90017' }}>
-            ● RECENT ORDERS
+            ● RECENT PAID ORDERS
           </div>
           <Link href="/admin/orders" style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.14em', color: '#A6A6A8', textDecoration: 'none' }}>
             VIEW ALL →
@@ -88,7 +86,7 @@ export default async function AdminDashboardPage() {
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
             <thead>
               <tr>
-                {['REFERENCE', 'NAME', 'COLOURWAY', 'STATUS', 'AMOUNT', 'DATE'].map((h) => (
+                {['REFERENCE', 'NAME', 'ITEMS', 'DELIVERY', 'STATUS', 'AMOUNT', 'PAID'].map((h) => (
                   <th key={h} style={th}>{h}</th>
                 ))}
               </tr>
@@ -98,19 +96,22 @@ export default async function AdminDashboardPage() {
                 <tr key={o.id} style={{ background: '#0F0F10' }}>
                   <td style={cell}>{o.reference}</td>
                   <td style={cell}>{o.name}</td>
-                  <td style={{ ...cell, color: '#A6A6A8' }}>{o.colourway}</td>
+                  <td style={{ ...cell, color: '#A6A6A8', whiteSpace: 'normal', maxWidth: 280 }}>{itemsLabel(o)}</td>
+                  <td style={{ ...cell, color: isLocalDelivery(o) ? '#D90017' : '#A6A6A8', fontSize: 10 }}>
+                    {isLocalDelivery(o) ? 'LOCAL · ENNERDALE' : 'COURIER'}
+                  </td>
                   <td style={cell}>
                     <span style={{ color: STATUS_COLOUR[o.status] ?? '#A6A6A8', fontSize: 9, letterSpacing: '.16em' }}>
-                      ● {String(o.status).toUpperCase()}
+                      ● {statusLabel(o.status)}
                     </span>
                   </td>
                   <td style={{ ...cell, color: '#D90017' }}>{rand(o.amount_due)}</td>
-                  <td style={{ ...cell, color: '#A6A6A8' }}>{fmt(o.created_at)}</td>
+                  <td style={{ ...cell, color: '#A6A6A8' }}>{fmt(o.paid_at)}</td>
                 </tr>
               ))}
               {!recent.length && (
                 <tr>
-                  <td colSpan={6} style={{ ...cell, textAlign: 'center', color: '#3A3A3C' }}>NO ORDERS YET</td>
+                  <td colSpan={7} style={{ ...cell, textAlign: 'center', color: '#3A3A3C' }}>NO PAID ORDERS YET</td>
                 </tr>
               )}
             </tbody>

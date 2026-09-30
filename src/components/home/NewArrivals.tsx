@@ -12,9 +12,10 @@ export default function NewArrivals({ products }: Props) {
     <section className="rr-section-pad" style={{ background: '#0F0F10' }}>
       <SectionHead
         index="02"
-        kicker="ROUGE 01 EDITION · NOW AVAILABLE · MORE DROPS COMING SEPTEMBER"
+        kicker="BAGGED LEAGUE × ROUGE RABBIT · AIR DOWN + PAINT SHOP · IN STOCK NOW"
         title="NEW ARRIVALS."
-        action="Shop Rouge 01"
+        action="Shop the collab"
+        actionHref="/shop/apparel"
       />
       <div className="rr-4col-grid-gap rr-section-inner-pad">
         {products.map((p, i) => (

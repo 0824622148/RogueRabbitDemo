@@ -1,5 +1,6 @@
 import { NextRequest } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { esc } from '@/lib/email'
 
 export const dynamic = 'force-dynamic'
 
@@ -99,26 +100,36 @@ export async function POST(request: NextRequest) {
     return new Response('OK', { status: 200 })
   }
 
-  // Idempotency / no backward transitions.
-  if (order.status === 'delivered' || (order.status === 'shipped' && newStatus === 'shipped')) {
+  // Only verified-paid orders in the courier pipeline move forward. Never
+  // revive a cancelled/refunded order, never go backwards.
+  const fromStatuses = newStatus === 'delivered' ? ['paid', 'shipped'] : ['paid']
+  if (!order.paid_at || !fromStatuses.includes(order.status)) {
     return new Response('OK', { status: 200 })
   }
 
-  const { error } = await db.from('orders').update({ status: newStatus }).eq('id', order.id)
+  const { data: moved, error } = await db
+    .from('orders')
+    .update({ status: newStatus })
+    .eq('id', order.id)
+    .in('status', fromStatuses)
+    .select('id')
   if (error) {
     console.error('[SL WEBHOOK] DB update failed:', JSON.stringify(error))
+    return new Response('OK', { status: 200 })
+  }
+  if (!moved?.length) {
     return new Response('OK', { status: 200 })
   }
 
   if (newStatus === 'delivered') {
     await sendEmail(
       order.email,
-      `ROUGE 01 Delivered · ${order.reference}`,
+      `${order.order_type === 'shop' ? 'Delivered' : 'ROUGE 01 Delivered'} · ${order.reference}`,
       `<div style="font-family:monospace;background:#0F0F10;color:#E6E6E6;padding:32px;max-width:560px;">
         <h1 style="color:#D90017;font-size:28px;margin:0 0 8px;">ROUGE RABBIT</h1>
         <p style="color:#2A9D2A;font-size:12px;letter-spacing:.16em;margin:0 0 20px;">✓ DELIVERED</p>
         <p style="color:#A6A6A8;line-height:1.8;font-size:12px;">
-          Hi ${order.name}, your ROUGE 01 (${order.reference}) has been delivered. Welcome to the pack.
+          Hi ${esc(order.name)}, your ${order.order_type === 'shop' ? 'Rouge Rabbit order' : 'ROUGE 01'} (${esc(order.reference)}) has been delivered. Welcome to the pack.
         </p>
       </div>`,
     )

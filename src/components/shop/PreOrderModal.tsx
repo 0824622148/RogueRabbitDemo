@@ -1,22 +1,12 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import type { ColourwayDB, Size } from '@/types'
 import { FULL_PRICE, DISCOUNTED_PRICE, DISCOUNT_AMOUNT, EARLY_ACCESS_CODE, DELIVERY_FROM } from '@/lib/preorder'
 import { formatRand } from '@/lib/money'
-import { ORDERS_ON_HOLD, COMING_SOON_LABEL } from '@/lib/store-status'
-
-const SA_PROVINCES = [
-  'Eastern Cape', 'Free State', 'Gauteng', 'KwaZulu-Natal', 'Limpopo',
-  'Mpumalanga', 'North West', 'Northern Cape', 'Western Cape',
-]
-
-interface ShippingRate {
-  code: string
-  name: string
-  rate: number
-  deliveryEstimate: string | null
-}
+import { SNEAKER_ORDERS_ON_HOLD, COMING_SOON_LABEL } from '@/lib/store-status'
+import DeliveryAddressFields, { EMPTY_ADDRESS, cleanAddress, type DeliveryAddress } from '@/components/checkout/DeliveryAddressFields'
+import DeliveryOptions, { useDeliveryRates } from '@/components/checkout/DeliveryOptions'
 
 interface Props {
   initialColourway?: ColourwayDB
@@ -24,10 +14,6 @@ interface Props {
   initialGender?: 'MALE' | 'FEMALE'
   colourways: ColourwayDB[]
   onClose: () => void
-}
-
-function genReference() {
-  return 'RR-' + Date.now().toString(36).toUpperCase().slice(-6)
 }
 
 export default function PreOrderModal({ initialColourway, initialSize, initialGender, colourways, onClose }: Props) {
@@ -42,19 +28,12 @@ export default function PreOrderModal({ initialColourway, initialSize, initialGe
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
 
-  // Delivery address
-  const [addressLine1, setAddressLine1] = useState('')
-  const [addressLine2, setAddressLine2] = useState('')
-  const [suburb, setSuburb] = useState('')
-  const [city, setCity] = useState('')
-  const [province, setProvince] = useState('')
-  const [postalCode, setPostalCode] = useState('')
-
-  // Live shipping rates
-  const [rates, setRates] = useState<ShippingRate[]>([])
-  const [selectedRate, setSelectedRate] = useState<ShippingRate | null>(null)
-  const [ratesLoading, setRatesLoading] = useState(false)
-  const [ratesError, setRatesError] = useState('')
+  // Delivery address + live options (free local delivery for Ennerdale)
+  const [address, setAddress] = useState<DeliveryAddress>(EMPTY_ADDRESS)
+  const {
+    rates, selectedRate, setSelectedRate,
+    loading: ratesLoading, error: ratesError, addressComplete,
+  } = useDeliveryRates(address)
 
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState('')
@@ -71,11 +50,8 @@ export default function PreOrderModal({ initialColourway, initialSize, initialGe
   const shippingCost = selectedRate?.rate ?? 0
   const total = Math.round((price + shippingCost) * 100) / 100
 
-  const addressComplete = Boolean(
-    addressLine1.trim() && suburb.trim() && city.trim() && province && postalCode.trim(),
-  )
   const canSubmit = Boolean(
-    !ORDERS_ON_HOLD &&
+    !SNEAKER_ORDERS_ON_HOLD &&
     name.trim() && email.trim() && phone.trim() && sz && addressComplete && selectedRate && agreed,
   )
 
@@ -88,42 +64,6 @@ export default function PreOrderModal({ initialColourway, initialSize, initialGe
       document.body.style.overflow = ''
     }
   }, [onClose])
-
-  // Fetch live delivery rates once the address is complete (debounced).
-  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-  useEffect(() => {
-    // Any address change invalidates a previously selected rate.
-    setSelectedRate(null)
-    setRates([])
-    setRatesError('')
-
-    if (!addressComplete) return
-
-    if (debounceRef.current) clearTimeout(debounceRef.current)
-    debounceRef.current = setTimeout(async () => {
-      setRatesLoading(true)
-      setRatesError('')
-      try {
-        const res = await fetch('/api/shipping/rates', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ addressLine1, addressLine2, suburb, city, province, postalCode }),
-        })
-        const data = await res.json()
-        if (!res.ok) throw new Error(data.error || 'Could not fetch delivery rates')
-        const fetched: ShippingRate[] = data.rates ?? []
-        setRates(fetched)
-        if (fetched.length === 1) setSelectedRate(fetched[0])
-      } catch (e: unknown) {
-        setRatesError(e instanceof Error ? e.message : 'Could not fetch delivery rates')
-      } finally {
-        setRatesLoading(false)
-      }
-    }, 600)
-
-    return () => { if (debounceRef.current) clearTimeout(debounceRef.current) }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [addressLine1, addressLine2, suburb, city, province, postalCode])
 
   const applyCode = () => {
     if (earlyCode.trim().toUpperCase() === EARLY_ACCESS_CODE) {
@@ -139,13 +79,11 @@ export default function PreOrderModal({ initialColourway, initialSize, initialGe
     if (!canSubmit || submitting) return
     setSubmitting(true)
     setSubmitError('')
-    const ref = genReference()
     try {
       const res = await fetch('/api/preorder', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          reference: ref,
           name: name.trim(),
           email: email.trim(),
           phone: phone.trim(),
@@ -153,18 +91,9 @@ export default function PreOrderModal({ initialColourway, initialSize, initialGe
           colourwayId: cw.id,
           size: sz,
           gender,
-          addressLine1: addressLine1.trim(),
-          addressLine2: addressLine2.trim(),
-          suburb: suburb.trim(),
-          city: city.trim(),
-          province,
-          postalCode: postalCode.trim(),
+          ...cleanAddress(address),
           serviceCode: selectedRate!.code,
-          serviceName: selectedRate!.name,
-          shippingCost,
           earlyAccessCode: earlyCode.trim() || null,
-          discountApplied: codeApplied,
-          finalPrice: price,
         }),
       })
       if (!res.ok) {
@@ -172,7 +101,10 @@ export default function PreOrderModal({ initialColourway, initialSize, initialGe
         throw new Error(data.error || 'Something went wrong')
       }
       const data = await res.json()
-      const { payfast } = data as { payfast: { url: string; fields: Record<string, string> } | null }
+      const { payfast, reference: ref } = data as {
+        payfast: { url: string; fields: Record<string, string> } | null
+        reference: string
+      }
 
       if (payfast) {
         // Standard PayFast redirect — must be a form POST, not window.location
@@ -325,84 +257,16 @@ export default function PreOrderModal({ initialColourway, initialSize, initialGe
 
             <div style={{ borderTop: '1px solid #3A3A3C', marginBottom: 24 }} />
 
-            {/* Delivery address */}
-            <div style={{ marginBottom: 24 }}>
-              <div className="rr-overline" style={{ marginBottom: 12, color: '#A6A6A8' }}>DELIVERY ADDRESS</div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                <input value={addressLine1} onChange={e => setAddressLine1(e.target.value)} placeholder="Street address" style={inputStyle} />
-                <input value={addressLine2} onChange={e => setAddressLine2(e.target.value)} placeholder="Apartment, unit, etc. (optional)" style={inputStyle} />
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                  <input value={suburb} onChange={e => setSuburb(e.target.value)} placeholder="Suburb" style={inputStyle} />
-                  <input value={city} onChange={e => setCity(e.target.value)} placeholder="City" style={inputStyle} />
-                </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                  <select value={province} onChange={e => setProvince(e.target.value)} style={{ ...inputStyle, fontFamily: 'var(--font-mono)', fontSize: 12 }}>
-                    <option value="">Province</option>
-                    {SA_PROVINCES.map(p => <option key={p} value={p}>{p}</option>)}
-                  </select>
-                  <input value={postalCode} onChange={e => setPostalCode(e.target.value)} placeholder="Postal code" inputMode="numeric" style={inputStyle} />
-                </div>
-              </div>
-            </div>
+            <DeliveryAddressFields value={address} onChange={setAddress} />
 
-            {/* Delivery options (live rates) */}
-            <div style={{ marginBottom: 24 }}>
-              <div className="rr-overline" style={{ marginBottom: 12, color: '#A6A6A8' }}>DELIVERY OPTION · THE COURIER GUY</div>
-
-              {!addressComplete && (
-                <p className="rr-mono" style={{ fontSize: 10, color: '#A6A6A8', letterSpacing: '.1em', margin: 0 }}>
-                  ENTER YOUR ADDRESS TO SEE DELIVERY OPTIONS.
-                </p>
-              )}
-
-              {addressComplete && ratesLoading && (
-                <p className="rr-mono" style={{ fontSize: 10, color: '#A6A6A8', letterSpacing: '.1em', margin: 0 }}>
-                  FETCHING LIVE RATES…
-                </p>
-              )}
-
-              {addressComplete && !ratesLoading && ratesError && (
-                <p className="rr-mono" style={{ fontSize: 10, color: '#D90017', letterSpacing: '.1em', margin: 0 }}>
-                  {ratesError.toUpperCase()}
-                </p>
-              )}
-
-              {addressComplete && !ratesLoading && !ratesError && rates.length > 0 && (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                  {rates.map((r) => {
-                    const active = selectedRate?.code === r.code
-                    return (
-                      <button
-                        key={r.code}
-                        onClick={() => setSelectedRate(r)}
-                        style={{
-                          textAlign: 'left', padding: '12px 16px',
-                          border: `1px solid ${active ? '#D90017' : '#3A3A3C'}`,
-                          background: active ? 'rgba(217,0,23,.08)' : 'transparent',
-                          cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 12,
-                        }}
-                      >
-                        <div style={{
-                          width: 14, height: 14, borderRadius: '50%',
-                          border: `1px solid ${active ? '#D90017' : '#3A3A3C'}`,
-                          background: active ? '#D90017' : 'transparent',
-                          flexShrink: 0,
-                        }} />
-                        <div style={{ flex: 1 }}>
-                          <span className="rr-mono" style={{ fontSize: 11, color: '#E6E6E6', letterSpacing: '.12em' }}>{r.name.toUpperCase()}</span>
-                          {r.deliveryEstimate && (
-                            <span className="rr-mono" style={{ display: 'block', fontSize: 9, color: '#A6A6A8', letterSpacing: '.1em', marginTop: 2 }}>
-                              EST. {r.deliveryEstimate}
-                            </span>
-                          )}
-                        </div>
-                        <span className="rr-mono" style={{ fontSize: 12, color: '#E6E6E6' }}>{formatRand(r.rate)}</span>
-                      </button>
-                    )
-                  })}
-                </div>
-              )}
-            </div>
+            <DeliveryOptions
+              rates={rates}
+              selectedRate={selectedRate}
+              onSelect={setSelectedRate}
+              loading={ratesLoading}
+              error={ratesError}
+              addressComplete={addressComplete}
+            />
 
             <div style={{ marginBottom: 28 }}>
               <div className="rr-overline" style={{ marginBottom: 12, color: '#A6A6A8' }}>EARLY ACCESS CODE (OPTIONAL)</div>
@@ -467,7 +331,7 @@ export default function PreOrderModal({ initialColourway, initialSize, initialGe
             <div style={{ borderTop: '1px solid #3A3A3C', paddingTop: 16, marginBottom: 24 }}>
               {[
                 ['SUBTOTAL', formatRand(price)],
-                ['DELIVERY', selectedRate ? formatRand(shippingCost) : '—'],
+                ['DELIVERY', selectedRate ? (shippingCost === 0 ? 'FREE' : formatRand(shippingCost)) : '—'],
               ].map(([k, v]) => (
                 <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '4px 0' }}>
                   <span className="rr-mono" style={{ fontSize: 10, color: '#A6A6A8', letterSpacing: '.12em' }}>{k}</span>
@@ -524,7 +388,7 @@ export default function PreOrderModal({ initialColourway, initialSize, initialGe
               }}
             >
               <span>
-                {ORDERS_ON_HOLD
+                {SNEAKER_ORDERS_ON_HOLD
                   ? COMING_SOON_LABEL
                   : submitting ? 'PROCESSING...' : `SECURE MY PAIR · ${formatRand(total)}`}
               </span>
@@ -534,7 +398,7 @@ export default function PreOrderModal({ initialColourway, initialSize, initialGe
             <p className="rr-mono" style={{ fontSize: 9, color: '#A6A6A8', marginTop: 14, lineHeight: 1.8, letterSpacing: '.1em' }}>
               YOU WILL BE REDIRECTED TO PAYFAST TO COMPLETE PAYMENT SECURELY.
               THIS IS A PRE-ORDER — DELIVERY FROM {DELIVERY_FROM.toUpperCase()}. THE TEAM WILL BE IN
-              TOUCH TO CONFIRM BEFORE DISPATCH. DELIVERED TO YOUR DOOR BY THE COURIER GUY.
+              TOUCH TO CONFIRM BEFORE DISPATCH. FREE DELIVERY IN ENNERDALE; NATIONWIDE WITH THE COURIER GUY.
             </p>
           </div>
         )}

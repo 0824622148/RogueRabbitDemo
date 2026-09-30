@@ -52,8 +52,14 @@ export default function ShippingReturnsPage() {
 
       <h3 style={S.h3}>Shipping Costs</h3>
       <ul style={S.ul}>
-        <li><strong style={{ color: '#E6E6E6' }}>Free Standard Shipping</strong> on all orders over <strong style={{ color: '#E6E6E6' }}>R2,000</strong></li>
-        <li>Orders below R2,000 will incur a shipping fee calculated at checkout.</li>
+        <li>
+          <strong style={{ color: '#E6E6E6' }}>Free local delivery in Ennerdale</strong> (postal code 1830).
+          These orders are delivered by the Rouge Rabbit team — we will WhatsApp you to arrange a time.
+        </li>
+        <li>
+          Everywhere else in South Africa, orders are delivered door-to-door by The Courier Guy.
+          The delivery fee is calculated live at checkout from your address.
+        </li>
       </ul>
 
       <h3 style={S.h3}>Order Tracking</h3>

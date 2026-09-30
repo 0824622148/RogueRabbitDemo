@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import NavBar from '@/components/brand/NavBar'
 import Footer from '@/components/brand/Footer'
+import CancelPreOrder from '@/components/shop/CancelPreOrder'
 
 export const metadata: Metadata = {
   title: 'Payment Cancelled — Rouge Rabbit',
@@ -44,6 +45,9 @@ export default async function PreorderCancelPage({
           <p className="rr-mono" style={{ fontSize: 11, color: '#A6A6A8', lineHeight: 1.9, letterSpacing: '.1em', margin: '0 0 32px' }}>
             YOUR SPOT HAS BEEN RELEASED. YOU CAN TRY AGAIN FROM THE PRODUCT PAGE BELOW.
           </p>
+
+          {/* Releases the order so it leaves the admin payments queue. */}
+          {ref && <CancelPreOrder reference={ref} />}
 
           {ref && (
             <div style={{

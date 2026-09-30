@@ -130,6 +130,19 @@ alter table orders drop constraint if exists orders_status_check;
 alter table orders add constraint orders_status_check
   check (status in ('pending', 'paid', 'shipped', 'delivered', 'cancelled'));
 
+-- Migration: checkout lifecycle (see 006_checkout_lifecycle.sql)
+-- Orders are created before the PayFast redirect; 'awaiting_payment' marks that
+-- pre-payment state so an abandoned or cancelled checkout is distinguishable
+-- from an order genuinely awaiting reconciliation. 'pending' is retained for
+-- rows created before this migration.
+alter table orders drop constraint if exists orders_status_check;
+alter table orders add constraint orders_status_check
+  check (status in ('awaiting_payment', 'pending', 'paid', 'shipped', 'delivered', 'cancelled'));
+
+alter table orders add column if not exists payment_started_at timestamptz;
+
+create index if not exists orders_status_idx on orders (status);
+
 -- Migration: Admin "email all members" campaigns
 -- Opt-out flag so marketing sends respect unsubscribes (POPIA compliance).
 alter table members add column if not exists unsubscribed boolean default false;
@@ -146,3 +159,8 @@ create table if not exists campaigns (
 alter table campaigns enable row level security;
 grant all on campaigns to service_role;
 grant usage, select on sequence campaigns_id_seq to service_role;
+
+-- Migration: apparel shop (cart checkout), Ennerdale local delivery, stock
+-- tracking and verified-payment timestamp — see 007_shop_cart_delivery.sql
+-- (order_items table, orders.order_type/subtotal/paid_at, inventory gender 'U',
+-- apply_paid_order_stock()).

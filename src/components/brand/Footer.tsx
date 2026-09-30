@@ -10,8 +10,8 @@ const FOOTER_COLS = [
   {
     title: 'SHOP',
     items: [
-      { label: 'New Arrivals',   href: '/shop' },
-      { label: 'Footwear',       href: '/shop' },
+      { label: 'New Arrivals',   href: '/shop/apparel' },
+      { label: 'Footwear',       href: '/shop/footwear' },
       { label: 'Apparel',        href: '/shop/apparel' },
       { label: 'Accessories',    href: '/shop/accessories' },
       { label: 'Sale',           href: '/sale' },
@@ -87,7 +87,7 @@ export default function Footer() {
       <div className="rr-footer-grid">
         {/* Brand column — spans full width on mobile */}
         <div className="rr-footer-brand">
-          <RougeLogo size={48} withWordmark />
+          <RougeLogo size={44} />
           <p style={{ marginTop: 22, fontSize: 13, color: '#A6A6A8', lineHeight: 1.7, maxWidth: 320 }}>
             Built different. Worn by the ones who refuse to blend in. Independent streetwear out of every corner that
             doesn&apos;t ask for permission.

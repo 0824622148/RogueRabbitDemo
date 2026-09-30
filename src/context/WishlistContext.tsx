@@ -12,6 +12,7 @@ export interface WishlistItem {
   price: number
   imageUrl: string
   mediaBg: string
+  category: string | null
 }
 
 interface WishlistContextValue {
@@ -54,6 +55,7 @@ function parseItems(raw: any[]): WishlistItem[] {
       price: p.price ?? 0,
       imageUrl: frontImg,
       mediaBg: p.media_bg ?? '#1E1E20',
+      category: p.category ?? null,
     }
   })
 }
