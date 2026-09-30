@@ -122,9 +122,10 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* Right — hero shoe image, hidden on mobile */}
+        {/* Right — hero image; on mobile it moves above the headline as a square */}
         <div className="rr-hero-right" style={{ position: 'relative', height: '100%', minHeight: 500 }}>
           <div
+            className="rr-hero-frame"
             style={{
               position: 'absolute', inset: '20px 0 20px 40px',
               background: '#161618',
