@@ -3,14 +3,13 @@
 import SubscribeButton from '@/components/brand/SubscribeButton'
 
 // Street wall — 6 tiles. pos keeps faces in frame on the square crop.
-// Slots 5–6 are older IG shots until the client sends the last two street photos.
 const STREET_POSTS = [
   { src: '/assets/street/street-01.jpg', alt: 'Paint Shop Overspray tee on the street', pos: 'center 12%' },
   { src: '/assets/street/street-02.jpg', alt: 'Paint Shop tee back print — Colour outside the lines', pos: 'center 40%' },
   { src: '/assets/street/street-03.jpg', alt: 'Bagged League x Rouge Rabbit Paint Shop Splash tee', pos: 'center 5%' },
   { src: '/assets/street/street-04.jpg', alt: 'Rouge Rabbit 5-panel cap in Snow', pos: 'center 30%' },
-  { src: '/assets/ig-05.png', alt: 'Rouge Rabbit IG post 5', pos: 'center' },
-  { src: '/assets/ig-06.png', alt: 'Rouge Rabbit IG post 6', pos: 'center' },
+  { src: '/assets/street/street-05.jpg', alt: 'Air Down tee at the Bagged League x Rouge Rabbit garage', pos: 'center 15%' },
+  { src: '/assets/street/street-06.jpg', alt: 'Rouge Rabbit 5-panel cap in Cardinal', pos: 'center' },
 ]
 
 export default function SplitCTA() {
