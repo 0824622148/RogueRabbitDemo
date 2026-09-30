@@ -53,7 +53,8 @@ export default function ShippingReturnsPage() {
       <h3 style={S.h3}>Shipping Costs</h3>
       <ul style={S.ul}>
         <li>
-          <strong style={{ color: '#E6E6E6' }}>Free local delivery in Ennerdale</strong> (postal code 1830).
+          <strong style={{ color: '#E6E6E6' }}>Free local delivery in Ennerdale</strong> (postal code 1830) —
+          Ennerdale is where Rouge Rabbit was born, so our home town gets first preference.
           These orders are delivered by the Rouge Rabbit team — we will WhatsApp you to arrange a time.
         </li>
         <li>

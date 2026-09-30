@@ -15,7 +15,7 @@ export default function AccessoriesPage() {
     <CategoryPage
       category="ACCESSORIES"
       title="Accessories"
-      blurb="Rouge Rabbit caps — in stock and shipping now. Free delivery in Ennerdale, nationwide with The Courier Guy."
+      blurb="Rouge Rabbit caps — in stock now. Born in Ennerdale, so home gets first delivery — free. Nationwide coming soon."
     />
   )
 }

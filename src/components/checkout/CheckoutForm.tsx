@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { useCart } from '@/context/CartContext'
 import { formatRand } from '@/lib/money'
-import { SHOP_ORDERS_ON_HOLD, COMING_SOON_LABEL } from '@/lib/store-status'
+import { SHOP_ORDERS_ON_HOLD, COMING_SOON_LABEL, NATIONWIDE_DELIVERY_LIVE } from '@/lib/store-status'
 import DeliveryAddressFields, {
   EMPTY_ADDRESS, cleanAddress, checkoutInputStyle, type DeliveryAddress,
 } from './DeliveryAddressFields'
@@ -217,7 +217,7 @@ export default function CheckoutForm() {
         <p className="rr-mono" style={{ fontSize: 9, color: '#A6A6A8', marginTop: 14, lineHeight: 1.8, letterSpacing: '.1em' }}>
           YOU WILL BE REDIRECTED TO PAYFAST TO COMPLETE PAYMENT SECURELY.
           FREE DELIVERY IN ENNERDALE — THE ROUGE RABBIT TEAM WILL WHATSAPP YOU TO ARRANGE A TIME.
-          NATIONWIDE ORDERS SHIP WITH THE COURIER GUY.
+          {NATIONWIDE_DELIVERY_LIVE ? 'NATIONWIDE ORDERS SHIP WITH THE COURIER GUY.' : 'NATIONWIDE DELIVERY IS COMING SOON.'}
         </p>
       </aside>
     </div>

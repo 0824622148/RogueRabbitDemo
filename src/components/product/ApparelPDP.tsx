@@ -5,7 +5,7 @@ import type { ColourwayDB, InventoryItem } from '@/types'
 import type { ProductDetail } from '@/lib/queries/products'
 import { useCart, MAX_QTY_PER_LINE } from '@/context/CartContext'
 import { formatRand } from '@/lib/money'
-import { isOnHold, COMING_SOON_LABEL } from '@/lib/store-status'
+import { isOnHold, COMING_SOON_LABEL, DELIVERY_SUMMARY } from '@/lib/store-status'
 
 interface Props {
   product: ProductDetail
@@ -249,7 +249,7 @@ export default function ApparelPDP({ product, initialColourwayId }: Props) {
 
         <div style={{ borderTop: '1px solid #3A3A3C', marginTop: 32, paddingTop: 20 }}>
           {[
-            ['DELIVERY', 'Free in Ennerdale — delivered by the Rouge Rabbit team. Nationwide with The Courier Guy, calculated at checkout.'],
+            ['DELIVERY', DELIVERY_SUMMARY],
             ['PAYMENT', 'Secure checkout with PayFast.'],
             ['RETURNS', 'See our shipping & returns policy.'],
           ].map(([k, v]) => (

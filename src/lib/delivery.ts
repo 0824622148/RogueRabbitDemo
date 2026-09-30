@@ -10,6 +10,7 @@
 // call verifyDelivery() and never trust a fee sent by the browser.
 
 import { getRates, isConfigured, type Address, type Parcel, type ShippingRate } from '@/lib/shiplogic'
+import { NATIONWIDE_DELIVERY_LIVE, OUTSIDE_DELIVERY_AREA_MESSAGE } from '@/lib/store-status'
 
 /** Service code stored on orders.ship_service_code for hand-delivered Ennerdale orders. */
 export const LOCAL_DELIVERY_CODE = 'RR_LOCAL_ENNERDALE'
@@ -79,6 +80,12 @@ export class DeliveryError extends Error {
 export async function quoteDelivery(address: Address, input: DeliveryQuoteInput): Promise<ShippingRate[]> {
   if (isEnnerdale(address.postalCode)) {
     return [localDeliveryRate()]
+  }
+
+  // Ennerdale-only launch: no courier quotes (and so no way to check out)
+  // for other addresses until nationwide delivery is switched on.
+  if (!NATIONWIDE_DELIVERY_LIVE) {
+    throw new DeliveryError(OUTSIDE_DELIVERY_AREA_MESSAGE, 422)
   }
 
   if (!isConfigured()) {

@@ -15,7 +15,7 @@ export default function ApparelPage() {
     <CategoryPage
       category="APPAREL"
       title="Apparel"
-      blurb="Rouge Rabbit tees — in stock and shipping now. Free delivery in Ennerdale, nationwide with The Courier Guy."
+      blurb="Rouge Rabbit tees — in stock now. Born in Ennerdale, so home gets first delivery — free. Nationwide coming soon."
     />
   )
 }

@@ -5,6 +5,7 @@ import ProductCard from '@/components/brand/ProductCard'
 import DroppingSoon from '@/components/brand/DroppingSoon'
 import CatalogHeader from '@/components/shop/CatalogHeader'
 import { getProductsByCategory } from '@/lib/queries/products'
+import { NATIONWIDE_DELIVERY_LIVE } from '@/lib/store-status'
 
 interface Props {
   /** products.category value, e.g. APPAREL */
@@ -27,7 +28,9 @@ export default async function CategoryPage({
   title,
   blurb,
   status = { n: 'IN', l: 'STOCK · SHIPS NOW' },
-  footnote = 'FREE DELIVERY IN ENNERDALE · NATIONWIDE WITH THE COURIER GUY',
+  footnote = NATIONWIDE_DELIVERY_LIVE
+    ? 'FREE DELIVERY IN ENNERDALE · NATIONWIDE WITH THE COURIER GUY'
+    : 'BORN IN ENNERDALE · FREE HOME-TOWN DELIVERY · NATIONWIDE COMING SOON',
 }: Props) {
   const products = await getProductsByCategory(category)
 

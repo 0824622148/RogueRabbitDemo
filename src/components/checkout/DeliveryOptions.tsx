@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { formatRand } from '@/lib/money'
+import { NATIONWIDE_DELIVERY_LIVE } from '@/lib/store-status'
 import { isAddressComplete, cleanAddress, type DeliveryAddress } from './DeliveryAddressFields'
 
 export interface ShippingRate {
@@ -89,7 +90,9 @@ export default function DeliveryOptions({ rates, selectedRate, onSelect, loading
     <div style={{ marginBottom: 24 }}>
       <div className="rr-overline" style={{ marginBottom: 12, color: '#A6A6A8' }}>DELIVERY OPTION</div>
 
-      {!addressComplete && msg('ENTER YOUR ADDRESS TO SEE DELIVERY OPTIONS. FREE DELIVERY IN ENNERDALE.')}
+      {!addressComplete && msg(NATIONWIDE_DELIVERY_LIVE
+        ? 'ENTER YOUR ADDRESS TO SEE DELIVERY OPTIONS. FREE DELIVERY IN ENNERDALE.'
+        : 'HOME FIRST: ROUGE RABBIT WAS BORN IN ENNERDALE, SO WE CURRENTLY DELIVER THERE ONLY — FREE. NATIONWIDE DELIVERY COMING SOON.')}
       {addressComplete && loading && msg('FETCHING DELIVERY OPTIONS…')}
       {addressComplete && !loading && error && msg(error.toUpperCase(), '#D90017')}
 
