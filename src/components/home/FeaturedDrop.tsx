@@ -22,9 +22,10 @@ export default function FeaturedDrop({ products }: Props) {
 
       <div className="rr-sectionhead-pad" style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 36 }}>
         <SectionHead
-          index="01"
+          index="02"
           kicker="DROP · 003 · FEATURED"
           title="THE ROUGE 01."
+          tag="DROPPING SOON"
         />
         <div className="rr-featured-nav" style={{ display: 'flex', alignItems: 'center', gap: 16, paddingBottom: 8 }}>
           <span className="rr-mono" style={{ color: '#A6A6A8', fontSize: 11, letterSpacing: '.18em' }}>

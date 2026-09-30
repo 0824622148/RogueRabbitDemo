@@ -26,9 +26,9 @@ export default async function HomePage() {
       <NavBar />
       <Hero />
       <div><TrustStrip /></div>
-      <div><FeaturedDrop products={sideProducts} /></div>
-      <CampaignStrip />
       <NewArrivals products={[...apparel, ...accessories]} />
+      <CampaignStrip />
+      <div><FeaturedDrop products={sideProducts} /></div>
       <SplitCTA />
       <Footer />
     </div>

@@ -509,10 +509,10 @@
   /* Assign explicit order to every child so nothing drifts to end */
   .rr-home-wrap > *:nth-child(1) { order: 1; }  /* NavBar      */
   .rr-home-wrap > *:nth-child(2) { order: 2; }  /* Hero        */
-  .rr-home-wrap > *:nth-child(3) { order: 4; }  /* TrustStrip  → after Featured */
-  .rr-home-wrap > *:nth-child(4) { order: 3; }  /* FeaturedDrop → directly after Hero */
+  .rr-home-wrap > *:nth-child(3) { order: 4; }  /* TrustStrip  → after New Arrivals */
+  .rr-home-wrap > *:nth-child(4) { order: 3; }  /* NewArrivals → directly after Hero */
   .rr-home-wrap > *:nth-child(5) { order: 5; }  /* CampaignStrip */
-  .rr-home-wrap > *:nth-child(6) { order: 6; }  /* NewArrivals   */
+  .rr-home-wrap > *:nth-child(6) { order: 6; }  /* FeaturedDrop (Rouge 01) */
   .rr-home-wrap > *:nth-child(7) { order: 7; }  /* SplitCTA      */
   .rr-home-wrap > *:nth-child(8) { order: 8; }  /* Footer        */
 }

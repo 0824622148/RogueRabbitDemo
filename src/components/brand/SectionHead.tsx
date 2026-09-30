@@ -7,9 +7,11 @@ interface SectionHeadProps {
   action?: string
   actionHref?: string
   dark?: boolean
+  /** Small red chip beside the title, e.g. "DROPPING SOON". */
+  tag?: string
 }
 
-export default function SectionHead({ index, kicker, title, action, actionHref, dark = true }: SectionHeadProps) {
+export default function SectionHead({ index, kicker, title, action, actionHref, dark = true, tag }: SectionHeadProps) {
   const textColor = dark ? '#E6E6E6' : '#0F0F10'
   const actionStyle = {
     fontFamily: 'var(--font-mono)',
@@ -46,12 +48,15 @@ export default function SectionHead({ index, kicker, title, action, actionHref, 
           </span>
           <span className="rr-overline">{kicker}</span>
         </div>
-        <h2
-          className="rr-display rr-section-title"
-          style={{ margin: 0, color: textColor }}
-        >
-          {title}
-        </h2>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 18, flexWrap: 'wrap' }}>
+          <h2
+            className="rr-display rr-section-title"
+            style={{ margin: 0, color: textColor }}
+          >
+            {title}
+          </h2>
+          {tag && <span className="rr-chip rr-chip--solid">{tag}</span>}
+        </div>
       </div>
       {action && (
         actionHref
