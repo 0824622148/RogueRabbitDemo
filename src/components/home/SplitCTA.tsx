@@ -2,6 +2,8 @@
 
 import SubscribeButton from '@/components/brand/SubscribeButton'
 
+const INSTAGRAM_URL = 'https://www.instagram.com/rougerabbit.za'
+
 // Street wall — 6 tiles. pos keeps faces in frame on the square crop.
 const STREET_POSTS = [
   { src: '/assets/street/street-01.jpg', alt: 'Paint Shop Overspray tee on the street', pos: 'center 12%' },
@@ -63,7 +65,9 @@ export default function SplitCTA() {
         }}
       >
         <div>
-          <span className="rr-overline">[ FROM THE FEED · @ROUGE.RABBIT ]</span>
+          <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" className="rr-overline" style={{ textDecoration: 'none' }}>
+            [ FROM THE FEED · @ROUGERABBIT.ZA ]
+          </a>
           <h2
             className="rr-display"
             style={{ fontSize: 'clamp(44px, 5vw, 76px)', margin: '20px 0 12px', color: '#E6E6E6' }}
@@ -78,6 +82,10 @@ export default function SplitCTA() {
           {STREET_POSTS.map((post, idx) => (
             <a
               key={post.src}
+              href={INSTAGRAM_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`${post.alt} — view on Instagram`}
               style={{
                 aspectRatio: '1',
                 position: 'relative',
