@@ -14,6 +14,9 @@ interface Props {
 
 const VIEW_ORDER = ['FRONT', 'BACK', 'SIDE', 'TOP']
 
+/** Show "HURRY — N LEFT" once the selected size is at or below this. */
+const HURRY_AT = 10
+
 /** Units available for a size row — 0 if sold out or stock not set. */
 function available(i: InventoryItem): number {
   return i.in_stock ? Math.max(0, Number(i.stock_count ?? 0)) : 0
@@ -179,9 +182,9 @@ export default function ApparelPDP({ product, initialColourwayId }: Props) {
               )
             })}
           </div>
-          {selected && available(selected) <= 3 && (
+          {selected && available(selected) <= HURRY_AT && (
             <div className="rr-mono" style={{ fontSize: 10, color: '#D90017', marginTop: 10, letterSpacing: '.12em' }}>
-              ONLY {available(selected)} LEFT
+              HURRY — {available(selected)} LEFT
             </div>
           )}
         </div>
