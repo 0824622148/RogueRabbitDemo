@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { requireAdmin } from '@/lib/admin/session'
 import { getServiceClient } from '@/lib/admin/service'
 import { sendCampaign } from '@/lib/admin/email'
 
@@ -11,9 +12,8 @@ export const dynamic = 'force-dynamic'
  * Cookie-gated like the other admin routes; proxy also guards /admin pages.
  */
 export async function POST(request: NextRequest) {
-  if (!request.cookies.get('rr_admin')?.value) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
+  const denied = await requireAdmin(request)
+  if (denied) return denied
 
   let body: { subject?: string; message?: string; test?: boolean; testEmail?: string }
   try {

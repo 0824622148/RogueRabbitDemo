@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { requireAdmin } from '@/lib/admin/session'
 import { getServiceClient } from '@/lib/admin/service'
 import { createShipment, isConfigured } from '@/lib/shiplogic'
 import { apparelParcel } from '@/lib/delivery'
@@ -35,10 +36,8 @@ export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
-  const cookie = request.cookies.get('rr_admin')
-  if (!cookie?.value) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
+  const denied = await requireAdmin(request)
+  if (denied) return denied
 
   if (!isConfigured()) {
     return NextResponse.json(

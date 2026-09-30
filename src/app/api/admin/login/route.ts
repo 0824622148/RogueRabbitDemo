@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { ADMIN_COOKIE, SESSION_MAX_AGE_S, signSession } from '@/lib/admin/session'
 
 export async function POST(request: NextRequest) {
   const { password } = await request.json()
@@ -8,11 +9,11 @@ export async function POST(request: NextRequest) {
   }
 
   const res = NextResponse.json({ success: true })
-  res.cookies.set('rr_admin', 'authenticated', {
+  res.cookies.set(ADMIN_COOKIE, await signSession(), {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',
-    maxAge: 60 * 60 * 24 * 7, // 7 days
+    maxAge: SESSION_MAX_AGE_S,
     path: '/',
   })
   return res

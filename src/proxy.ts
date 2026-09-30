@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { ADMIN_COOKIE, verifySession } from '@/lib/admin/session'
 
-export function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   // Allow login page and API routes through
@@ -8,8 +9,8 @@ export function middleware(request: NextRequest) {
     return NextResponse.next()
   }
 
-  const session = request.cookies.get('rr_admin')
-  if (!session?.value) {
+  // Signed cookie — a hand-made rr_admin value no longer gets in.
+  if (!(await verifySession(request.cookies.get(ADMIN_COOKIE)?.value))) {
     return NextResponse.redirect(new URL('/admin/login', request.url))
   }
 

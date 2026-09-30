@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { requireAdmin } from '@/lib/admin/session'
 import { getServiceClient } from '@/lib/admin/service'
 import { ADMIN_TRANSITIONS } from '@/lib/admin/format'
 import { sendEmail, esc } from '@/lib/email'
@@ -28,10 +29,8 @@ export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
-  const cookie = request.cookies.get('rr_admin')
-  if (!cookie?.value) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
+  const denied = await requireAdmin(request)
+  if (denied) return denied
 
   const { id } = await params
 

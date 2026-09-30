@@ -89,3 +89,7 @@ export function itemsLabel(o: AdminOrder): string {
     .filter(Boolean)
     .join(' · ')
 }
+
+/** Reasons offered when the team changes a stock count (logged per change). */
+export const STOCK_REASONS = ['Restock', 'Damaged / lost', 'Count correction', 'Test order', 'Other'] as const
+export const LOW_STOCK_AT = 3
