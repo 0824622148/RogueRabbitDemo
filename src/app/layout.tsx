@@ -1,7 +1,9 @@
 import type { Metadata } from 'next'
 import { Bebas_Neue, Montserrat, JetBrains_Mono } from 'next/font/google'
 import './globals.css'
-import WhatsAppWidget from '@/components/brand/WhatsAppWidget'
+// WhatsApp chat button temporarily hidden while the team sets up their official
+// WhatsApp Business number. To restore: re-add this import and <WhatsAppWidget /> below.
+// import WhatsAppWidget from '@/components/brand/WhatsAppWidget'
 import { WishlistProvider } from '@/context/WishlistContext'
 import WishlistDrawer from '@/components/wishlist/WishlistDrawer'
 import WishlistEmailModal from '@/components/wishlist/WishlistEmailModal'
@@ -67,7 +69,6 @@ export default function RootLayout({
               <CartDrawer />
               <WishlistEmailModal />
               <SubscribeModal />
-              <WhatsAppWidget />
             </CartProvider>
           </WishlistProvider>
         </SubscribeProvider>

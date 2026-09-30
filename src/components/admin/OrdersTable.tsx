@@ -108,9 +108,9 @@ export default function OrdersTable({
                 </td>
                 <td style={cell}>{o.name}</td>
                 <td style={cell}>
-                  {o.phone
-                    ? <a href={`https://wa.me/${String(o.phone).replace(/\D/g, '').replace(/^0/, '27')}`} target="_blank" rel="noopener noreferrer" style={{ color: '#E6E6E6' }}>{o.phone}</a>
-                    : '—'}
+                  {/* WhatsApp link temporarily removed until the official WhatsApp Business number is set up.
+                      To restore: <a href={`https://wa.me/${String(o.phone).replace(/\D/g, '').replace(/^0/, '27')}`} target="_blank" rel="noopener noreferrer" style={{ color: '#E6E6E6' }}>{o.phone}</a> */}
+                  {o.phone || '—'}
                 </td>
                 <td style={{ ...cell, color: '#A6A6A8' }}>{o.email}</td>
                 <td style={cell}>
