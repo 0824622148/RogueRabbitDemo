@@ -2,6 +2,17 @@
 
 import SubscribeButton from '@/components/brand/SubscribeButton'
 
+// Street wall — 6 tiles. pos keeps faces in frame on the square crop.
+// Slots 5–6 are older IG shots until the client sends the last two street photos.
+const STREET_POSTS = [
+  { src: '/assets/street/street-01.jpg', alt: 'Paint Shop Overspray tee on the street', pos: 'center 12%' },
+  { src: '/assets/street/street-02.jpg', alt: 'Paint Shop tee back print — Colour outside the lines', pos: 'center 40%' },
+  { src: '/assets/street/street-03.jpg', alt: 'Bagged League x Rouge Rabbit Paint Shop Splash tee', pos: 'center 5%' },
+  { src: '/assets/street/street-04.jpg', alt: 'Rouge Rabbit 5-panel cap in Snow', pos: 'center 30%' },
+  { src: '/assets/ig-05.png', alt: 'Rouge Rabbit IG post 5', pos: 'center' },
+  { src: '/assets/ig-06.png', alt: 'Rouge Rabbit IG post 6', pos: 'center' },
+]
+
 export default function SplitCTA() {
   return (
     <section
@@ -61,13 +72,13 @@ export default function SplitCTA() {
             SEEN IN<br />THE STREETS.
           </h2>
           <p style={{ color: '#A6A6A8', fontSize: 13, maxWidth: 400, lineHeight: 1.7 }}>
-            Tag your fit with #ROUGEONFOOT for a chance to land on the wall.
+            Tag your fit with #ROUGEINMOTION &amp; #WEARINGROUGE for a chance to land on the wall.
           </p>
         </div>
         <div className="rr-ig-grid">
-          {[1, 2, 3, 4, 5, 6].map((i) => (
+          {STREET_POSTS.map((post, idx) => (
             <a
-              key={i}
+              key={post.src}
               style={{
                 aspectRatio: '1',
                 position: 'relative',
@@ -87,11 +98,11 @@ export default function SplitCTA() {
               }}
             >
               <img
-                src={`/assets/ig-0${i}.png`}
-                alt={`Rouge Rabbit IG post ${i}`}
+                src={post.src}
+                alt={post.alt}
                 style={{
                   width: '100%', height: '100%',
-                  objectFit: 'cover',
+                  objectFit: 'cover', objectPosition: post.pos,
                   transition: 'transform .6s cubic-bezier(.2,.7,.2,1), filter .4s ease',
                   filter: 'grayscale(15%)',
                 }}
@@ -102,9 +113,10 @@ export default function SplitCTA() {
                   color: '#E6E6E6',
                   fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '.2em',
                   textShadow: '0 1px 4px rgba(0,0,0,.6)',
+                  background: 'rgba(15,15,16,.45)', padding: '2px 4px',
                 }}
               >
-                IG/{String(i).padStart(2, '0')}
+                IG/{String(idx + 1).padStart(2, '0')}
               </div>
             </a>
           ))}
