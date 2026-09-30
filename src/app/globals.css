@@ -374,6 +374,18 @@
 .rr-nav-links          { display: flex; }
 .rr-nav-hamburger      { display: none; }
 .rr-nav-right          { gap: 24px; }
+
+/* Desktop nav: 7 links + centred logo need ~1300px. Drop the right-hand
+   labels first, then fall back to the hamburger menu. */
+@media (max-width: 1280px) {
+  .rr-nav-search-label  { display: none; }
+  .rr-nav-account-label { display: none; }
+  .rr-nav-right         { gap: 18px; }
+}
+@media (max-width: 1100px) {
+  .rr-nav-links     { display: none; }
+  .rr-nav-hamburger { display: flex; }
+}
 .rr-section-pad        { padding: 100px 0; }
 .rr-section-inner-pad  { padding: 0 40px; }
 .rr-campaign-copy-pad  { padding: 80px 80px; }

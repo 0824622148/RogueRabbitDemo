@@ -41,14 +41,17 @@ export default function NavBar() {
           backdropFilter: 'blur(12px)',
           padding: '18px 40px',
           display: 'grid',
-          gridTemplateColumns: '1fr auto 1fr',
+          // Side columns never shrink below their content, so the links can't
+          // run under the logo — it shifts off-centre slightly instead.
+          gridTemplateColumns: 'minmax(max-content, 1fr) auto minmax(max-content, 1fr)',
+          columnGap: 32,
           alignItems: 'center',
           zIndex: 50,
         }}
       >
         {/* Left — desktop nav links / mobile hamburger */}
         <div>
-          <nav className="rr-nav-links" style={{ gap: 28 }}>
+          <nav className="rr-nav-links" style={{ gap: 22 }}>
             {NAV_LINKS.map(({ label, href }) => (
               <Link
                 key={label}
@@ -56,7 +59,7 @@ export default function NavBar() {
                 style={{
                   fontFamily: 'var(--font-mono)',
                   fontSize: 11,
-                  letterSpacing: '.22em',
+                  letterSpacing: '.18em',
                   color: '#E6E6E6',
                   textTransform: 'uppercase',
                   cursor: 'pointer',
