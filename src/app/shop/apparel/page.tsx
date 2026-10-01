@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import CategoryPage from '@/components/shop/CategoryPage'
+import { NATIONWIDE_DELIVERY_LIVE } from '@/lib/store-status'
 
 export const metadata: Metadata = {
   title: 'Apparel — Rouge Rabbit',
@@ -15,7 +16,9 @@ export default function ApparelPage() {
     <CategoryPage
       category="APPAREL"
       title="Apparel"
-      blurb="Rouge Rabbit tees — in stock now. Born in Ennerdale, so home gets first delivery — free. Nationwide coming soon."
+      blurb={NATIONWIDE_DELIVERY_LIVE
+        ? 'Rouge Rabbit tees — in stock and shipping now. Born in Ennerdale, so home delivery is free. Nationwide with The Courier Guy.'
+        : 'Rouge Rabbit tees — in stock now. Born in Ennerdale, so home gets first delivery — free. Nationwide coming soon.'}
     />
   )
 }
