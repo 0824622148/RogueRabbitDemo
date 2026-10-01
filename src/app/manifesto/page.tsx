@@ -199,7 +199,7 @@ export default function ManifestoPage() {
             className="rr-display"
             style={{ fontSize: 'clamp(22px, 3.5vw, 36px)', color: '#E6E6E6', margin: 0, lineHeight: 1.15 }}
           >
-            &ldquo;Raw by Nature. Engineered for Those Who Refuse to Blend In.&rdquo;
+            &ldquo;No Fear. Just Motion. Engineered for Those Who Refuse to Blend In.&rdquo;
           </p>
         </div>
 

@@ -90,8 +90,8 @@ export default function Hero() {
             className="rr-display rr-hero-title"
             style={{ margin: 0, color: '#E6E6E6', letterSpacing: '-.01em' }}
           >
-            RAW<br />BY<br />
-            <span style={{ color: '#D90017' }}>NATURE.</span>
+            NO FEAR<br />
+            <span style={{ color: '#D90017' }}>JUST MOTION</span>
           </h1>
           <p style={{ marginTop: 22, color: '#A6A6A8', maxWidth: 460, fontSize: 14, lineHeight: 1.7 }}>
             Inspired by Bagged League — the crew keeping stance culture low, clean and loud.
