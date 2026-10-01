@@ -4,6 +4,7 @@ import type { Product } from '@/types'
 import { useWishlist } from '@/context/WishlistContext'
 import { formatRand } from '@/lib/money'
 import { isOnHold, COMING_SOON_LABEL } from '@/lib/store-status'
+import { isTee, TEE_WEIGHT_LABEL } from '@/lib/fabric'
 
 interface ProductCardProps {
   product: Product
@@ -107,6 +108,11 @@ export default function ProductCard({ product, mediaHeight = 360, indexLabel }: 
           <h3 className="rr-display" style={{ fontSize: 26, margin: 0, color: '#E6E6E6' }}>
             {product.name}
           </h3>
+          {isTee(product.name) && (
+            <div className="rr-mono" style={{ fontSize: 10, color: '#A6A6A8', letterSpacing: '.14em', marginTop: 6 }}>
+              {TEE_WEIGHT_LABEL}
+            </div>
+          )}
         </div>
         <div style={{ textAlign: 'right' }}>
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: 13, color: '#E6E6E6', whiteSpace: 'nowrap' }}>

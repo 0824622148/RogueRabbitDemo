@@ -6,6 +6,7 @@ import type { ProductDetail } from '@/lib/queries/products'
 import { useCart, MAX_QTY_PER_LINE } from '@/context/CartContext'
 import { formatRand } from '@/lib/money'
 import { isOnHold, COMING_SOON_LABEL, DELIVERY_SUMMARY } from '@/lib/store-status'
+import { isTee, TEE_WEIGHT_LABEL } from '@/lib/fabric'
 
 interface Props {
   product: ProductDetail
@@ -133,6 +134,11 @@ export default function ApparelPDP({ product, initialColourwayId }: Props) {
           {!onHold && product.compareAt != null && (
             <span className="rr-mono" style={{ fontSize: 13, color: '#A6A6A8', textDecoration: 'line-through' }}>
               {formatRand(product.compareAt)}
+            </span>
+          )}
+          {isTee(product.name) && (
+            <span className="rr-mono" style={{ fontSize: 11, color: '#A6A6A8', letterSpacing: '.14em' }}>
+              · {TEE_WEIGHT_LABEL}
             </span>
           )}
         </div>
