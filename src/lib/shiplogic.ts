@@ -12,7 +12,10 @@
 // (POST /rates, POST /shipments). Verify exact fields against the live portal docs
 // (https://api-docs.shiplogic.com) before going to production.
 
-const BASE_URL = 'https://api.shiplogic.com'
+// The Courier Guy runs its own Shiplogic instance: accounts and keys made at
+// portal.thecourierguy.co.za only exist on this host and get a 401 from the
+// generic api.shiplogic.com.
+const BASE_URL = 'https://api.portal.thecourierguy.co.za'
 
 function apiKey(): string {
   return (process.env.SHIPLOGIC_API_KEY ?? '').trim()
