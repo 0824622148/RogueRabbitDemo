@@ -170,10 +170,18 @@ export async function validateITN(
     return { valid: false, reason: `amount mismatch: got ${amountGross}, expected ${expectedAmount}` }
   }
 
-  // Verify signature
+  // Verify signature. Unlike the checkout form, PayFast signs the ITN over
+  // EVERY field it posts — blanks included (item_description=, custom_str1=
+  // …) — in received order. Dropping the empty ones (as buildSignature does)
+  // makes every genuine ITN fail.
   const { signature, ...sigParams } = params
   const passphrase = (process.env.PAYFAST_PASSPHRASE ?? '').trim()
-  const expectedSig = buildSignature(sigParams, passphrase || undefined)
+  const itnParamString = Object.entries(sigParams)
+    .map(([k, v]) => `${k}=${pfEncode(v.trim())}`)
+    .join('&')
+  const expectedSig = createHash('md5')
+    .update(passphrase ? `${itnParamString}&passphrase=${pfEncode(passphrase)}` : itnParamString)
+    .digest('hex')
   if (expectedSig !== signature) {
     return { valid: false, reason: 'signature mismatch' }
   }
@@ -184,14 +192,11 @@ export async function validateITN(
     const timeout = setTimeout(() => controller.abort(), 8000)
     const validateUrl = `${PF_HOST}/eng/query/validate`
 
-    const rawBody = Object.entries(params)
-      .map(([k, v]) => `${k}=${pfEncode(v)}`)
-      .join('&')
-
+    // Same param string PayFast's examples post back: all fields, no signature.
     const res = await fetch(validateUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: rawBody,
+      body: itnParamString,
       signal: controller.signal,
     })
     clearTimeout(timeout)
