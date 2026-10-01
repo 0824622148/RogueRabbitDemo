@@ -35,7 +35,7 @@ export function isOnHold(category: string | null | undefined): boolean {
  * OUTSIDE_DELIVERY_AREA_MESSAGE. Enforced on the server in src/lib/delivery.ts.
  * Flip to true once the ShipLogic account is fully set up.
  */
-export const NATIONWIDE_DELIVERY_LIVE = true
+export const NATIONWIDE_DELIVERY_LIVE = false
 
 /** Shown at checkout to addresses outside Ennerdale while nationwide is off. */
 export const OUTSIDE_DELIVERY_AREA_MESSAGE =
