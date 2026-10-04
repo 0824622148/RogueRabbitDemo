@@ -21,6 +21,13 @@ export interface Product {
   objectPos?: string
 }
 
+export interface HeroPanel {
+  src: string
+  alt: string
+  /** CSS object-position keeping the subject in frame, e.g. "55% 60%". */
+  pos?: string
+}
+
 /** collections row — drives the FEATURED / DROPS menus and /drops/[slug]. */
 export interface Collection {
   id: number
@@ -32,6 +39,10 @@ export interface Collection {
   story: string | null
   hero_image: string | null
   logo_image: string | null
+  /** Headline for the drop page hero — falls back to name. */
+  hero_title?: string | null
+  /** Side-by-side campaign photos; when set, replaces the single hero_image on the drop page. */
+  hero_panels?: HeroPanel[] | null
   release_date: string | null
   status: 'live' | 'coming_soon' | 'hidden'
   is_featured: boolean

@@ -671,3 +671,32 @@
 @media (max-width: 480px) {
   .rr-checkout-row2 { grid-template-columns: 1fr; }
 }
+
+/* ── Collection hero (drop pages) ─────────────────────────────────────────
+   Campaign photos side by side, copy over the bottom-left. --rr-panels is
+   set inline from the number of photos. Phones: panels stack, copy and shade
+   cover the first panel only (4:5 → 125vw tall). */
+.rr-collection-hero        { position: relative; overflow: hidden; background: #0F0F10;
+                             border-bottom: 1px solid #3A3A3C; }
+.rr-collection-hero-panels { display: grid; grid-template-columns: repeat(var(--rr-panels, 3), 1fr);
+                             gap: 1px; height: clamp(560px, 82vh, 820px); }
+.rr-collection-hero-panels img { width: 100%; height: 100%; object-fit: cover; display: block; min-width: 0; }
+.rr-collection-hero-shade  { position: absolute; inset: 0; pointer-events: none;
+                             background: linear-gradient(180deg, transparent 45%, rgba(15,15,16,.78) 100%),
+                                         linear-gradient(90deg, rgba(15,15,16,.45) 0%, transparent 55%); }
+.rr-collection-hero-copy   { position: absolute; inset: 0; display: flex; flex-direction: column;
+                             justify-content: flex-end; align-items: flex-start;
+                             padding: clamp(24px, 4vw, 56px); pointer-events: none; }
+.rr-collection-hero-copy a { pointer-events: auto; }
+.rr-collection-hero-title  { font-size: clamp(56px, 7vw, 120px); line-height: .86; margin: 14px 0 0;
+                             color: #E6E6E6; max-width: 11ch; text-shadow: 0 2px 24px rgba(0,0,0,.35); }
+.rr-collection-hero-sub    { margin: 14px 0 0; font-size: 18px; color: #E6E6E6; letter-spacing: .02em; }
+
+@media (max-width: 768px) {
+  .rr-collection-hero-panels { grid-template-columns: 1fr; height: auto; }
+  .rr-collection-hero-panels img { height: auto; aspect-ratio: 4 / 5; }
+  .rr-collection-hero-shade,
+  .rr-collection-hero-copy   { bottom: auto; height: 125vw; }
+  .rr-collection-hero-title  { font-size: clamp(48px, 14vw, 72px); }
+  .rr-collection-hero-sub    { font-size: 15px; }
+}

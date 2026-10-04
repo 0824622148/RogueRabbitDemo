@@ -5,6 +5,7 @@ import NavBar from '@/components/brand/NavBar'
 import Footer from '@/components/brand/Footer'
 import ProductCard from '@/components/brand/ProductCard'
 import DroppingSoon from '@/components/brand/DroppingSoon'
+import CollectionHero from '@/components/drops/CollectionHero'
 import { getCollection, dropHref } from '@/lib/queries/collections'
 import type { Product } from '@/types'
 
@@ -77,41 +78,52 @@ export default async function DropPage({ params }: { params: Params }) {
         <span className="rr-mono" style={{ color: '#E6E6E6' }}>{collection.name}</span>
       </div>
 
-      {/* Hero — logo over the campaign image once supplied, otherwise the name */}
-      <section
-        style={{
-          position: 'relative', minHeight: 'clamp(420px, 70vh, 760px)', overflow: 'hidden',
-          display: 'flex', alignItems: 'flex-end', padding: 'clamp(24px, 4vw, 56px)',
-          borderBottom: '1px solid #3A3A3C', background: '#141416',
-        }}
-      >
-        {collection.hero_image && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={collection.hero_image}
-            alt={collection.name}
-            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.75 }}
-          />
-        )}
-        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, transparent 45%, rgba(15,15,16,.92))' }} />
-        <div style={{ position: 'relative' }}>
-          <span className="rr-overline" style={{ color: '#D90017' }}>
-            [ {collection.tagline ?? (collection.kind === 'collab' ? 'COLLAB' : 'DROP')} ]
-          </span>
-          {collection.logo_image ? (
+      {/* Hero — panelled campaign photos when set; otherwise one image with the
+          logo (once supplied) or the name over it */}
+      {collection.hero_panels?.length ? (
+        <CollectionHero
+          panels={collection.hero_panels}
+          eyebrow={collection.kind === 'collab' ? 'THE COLLAB' : 'THE DROP'}
+          title={collection.hero_title ?? collection.name}
+          subline={collection.tagline}
+          ctaHref="#shop"
+        />
+      ) : (
+        <section
+          style={{
+            position: 'relative', minHeight: 'clamp(420px, 70vh, 760px)', overflow: 'hidden',
+            display: 'flex', alignItems: 'flex-end', padding: 'clamp(24px, 4vw, 56px)',
+            borderBottom: '1px solid #3A3A3C', background: '#141416',
+          }}
+        >
+          {collection.hero_image && (
             // eslint-disable-next-line @next/next/no-img-element
             <img
-              src={collection.logo_image}
+              src={collection.hero_image}
               alt={collection.name}
-              style={{ display: 'block', maxWidth: 'min(560px, 80vw)', maxHeight: 220, marginTop: 18 }}
+              style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.75 }}
             />
-          ) : (
-            <h1 className="rr-display" style={{ fontSize: 'clamp(72px, 13vw, 200px)', lineHeight: 0.85, margin: '16px 0 0' }}>
-              {collection.name}
-            </h1>
           )}
-        </div>
-      </section>
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, transparent 45%, rgba(15,15,16,.92))' }} />
+          <div style={{ position: 'relative' }}>
+            <span className="rr-overline" style={{ color: '#D90017' }}>
+              [ {collection.tagline ?? (collection.kind === 'collab' ? 'COLLAB' : 'DROP')} ]
+            </span>
+            {collection.logo_image ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={collection.logo_image}
+                alt={collection.name}
+                style={{ display: 'block', maxWidth: 'min(560px, 80vw)', maxHeight: 220, marginTop: 18 }}
+              />
+            ) : (
+              <h1 className="rr-display" style={{ fontSize: 'clamp(72px, 13vw, 200px)', lineHeight: 0.85, margin: '16px 0 0' }}>
+                {collection.name}
+              </h1>
+            )}
+          </div>
+        </section>
+      )}
 
       {story.length > 0 && (
         <section className="rr-catalog-pad" style={{ borderBottom: '1px solid #3A3A3C' }}>
@@ -125,8 +137,8 @@ export default async function DropPage({ params }: { params: Params }) {
       )}
 
       {/* Sub-collections, each with its pieces */}
-      {sections.map(({ collection: sub, products: subProducts }) => (
-        <section key={sub.id} style={{ borderBottom: '1px solid #3A3A3C' }}>
+      {sections.map(({ collection: sub, products: subProducts }, i) => (
+        <section key={sub.id} id={i === 0 ? 'shop' : undefined} style={{ borderBottom: '1px solid #3A3A3C', scrollMarginTop: 70 }}>
           <div style={{ padding: '40px 40px 0', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: 20, flexWrap: 'wrap' }}>
             <h2 className="rr-display" style={{ fontSize: 'clamp(44px, 6vw, 80px)', lineHeight: 0.9, margin: 0 }}>{sub.name}</h2>
             <Link href={dropHref(sub)} className="rr-mono" style={{ color: '#D90017', textDecoration: 'none' }}>
@@ -140,7 +152,7 @@ export default async function DropPage({ params }: { params: Params }) {
       ))}
 
       {products.length > 0 && (
-        <section style={{ borderBottom: '1px solid #3A3A3C' }}>
+        <section id={sections.length === 0 ? 'shop' : undefined} style={{ borderBottom: '1px solid #3A3A3C', scrollMarginTop: 70 }}>
           {sections.length > 0 && (
             <div style={{ padding: '40px 40px 0' }}>
               <h2 className="rr-display" style={{ fontSize: 'clamp(44px, 6vw, 80px)', lineHeight: 0.9, margin: 0 }}>

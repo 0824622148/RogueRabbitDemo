@@ -6,14 +6,21 @@ import type { Collection, NavItem, Product } from '@/types'
 // Every visible collection, memoised per request. Returns [] if the table isn't
 // there yet (code deployed before supabase/010_collections.sql) so the menu and
 // /drops degrade to their plain links instead of erroring.
+const COLLECTION_COLUMNS =
+  'id, slug, name, parent_id, kind, tagline, story, hero_image, logo_image, release_date, status, is_featured, sort_order'
+
 const fetchCollections = cache(async (): Promise<Collection[]> => {
-  const { data, error } = await supabase
-    .from('collections')
-    .select('id, slug, name, parent_id, kind, tagline, story, hero_image, logo_image, release_date, status, is_featured, sort_order')
-    .neq('status', 'hidden')
-    .order('sort_order')
-  if (error) return []
-  return (data ?? []) as Collection[]
+  const query = (columns: string) =>
+    supabase.from('collections').select(columns).neq('status', 'hidden').order('sort_order')
+
+  const { data, error } = await query(`${COLLECTION_COLUMNS}, hero_title, hero_panels`)
+  if (!error) return (data ?? []) as unknown as Collection[]
+
+  // hero_title / hero_panels arrive with supabase/011_collection_hero.sql —
+  // fall back to the single-image hero until it has run.
+  const { data: legacy, error: legacyError } = await query(COLLECTION_COLUMNS)
+  if (legacyError) return []
+  return (legacy ?? []) as unknown as Collection[]
 })
 
 const childrenOf = (all: Collection[], id: number) => all.filter((c) => c.parent_id === id)
