@@ -1,5 +1,17 @@
 import Link from 'next/link'
 import Arrow from '@/components/brand/Arrow'
+import HeroCarousel, { type HeroSlide } from './HeroCarousel'
+
+// Campaign photos for the hero frame — people and cars alternating.
+const BL = '/assets/drops/bagged-league'
+const HERO_SLIDES: HeroSlide[] = [
+  { src: `${BL}/paint-shop-model.jpg`, alt: 'Paint Shop tee worn arms-out on a hilltop', caption: 'PAINT SHOP TEE', href: '/drops/paint-shop', pos: 'center 38%' },
+  { src: `${BL}/golf-pair.jpg`, alt: 'Bagged white and red VW Citi Golfs at sunset', caption: 'BAGGED LEAGUE · CITI GOLFS', href: '/drops/bagged-league', pos: 'center 62%' },
+  { src: `${BL}/duo.jpg`, alt: 'Paint Shop and Air Down tees worn on the railway tracks', caption: 'PAINT SHOP × AIR DOWN', href: '/drops/bagged-league', pos: 'center 45%' },
+  { src: `${BL}/red-car.jpg`, alt: 'Bagged red VW Golf front wheel at a night meet', caption: 'BAGGED LEAGUE · NIGHT MEET', href: '/drops/bagged-league', pos: '55% 60%' },
+  { src: `${BL}/air-down.jpg`, alt: 'Air Down tee back print — Standard, Low, Lower, Bagged', caption: 'AIR DOWN TEE', href: '/drops/air-down', pos: 'center 55%' },
+  { src: `${BL}/white-car.jpg`, alt: 'Bagged white VW Golf rear wheel', caption: 'BAGGED LEAGUE · STANCE', href: '/drops/bagged-league', pos: '50% 70%' },
+]
 
 function Stat({ n, l }: { n: string; l: string }) {
   return (
@@ -50,7 +62,7 @@ export default function Hero() {
         }}
       >
         <span className="rr-mono" style={{ writingMode: 'vertical-rl' }}>SCROLL ↓</span>
-        <span className="rr-mono" style={{ writingMode: 'vertical-rl' }}>00 / 04</span>
+        <span className="rr-mono" style={{ writingMode: 'vertical-rl' }}>BL × RR</span>
       </div>
 
       {/* Background gradient */}
@@ -122,7 +134,7 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* Right — hero image; on mobile it moves above the headline, cropped to head-to-hem */}
+        {/* Right — campaign carousel; on mobile it moves above the headline (4:5) */}
         <div className="rr-hero-right" style={{ position: 'relative', height: '100%', minHeight: 500 }}>
           <div
             className="rr-hero-frame"
@@ -133,16 +145,7 @@ export default function Hero() {
               overflow: 'hidden',
             }}
           >
-            <img
-              src="/assets/hero-air-down.jpg"
-              alt="Bagged League x Rouge Rabbit Air Down tee"
-              className="rr-hero-img"
-              fetchPriority="high"
-              style={{
-                width: '100%', height: '100%',
-                objectFit: 'cover', objectPosition: 'center 30%',
-              }}
-            />
+            <HeroCarousel slides={HERO_SLIDES} />
             <div className="rr-plus" style={{ top: 12, left: 12 }} />
             <div className="rr-plus" style={{ top: 12, right: 12 }} />
             <div className="rr-plus" style={{ bottom: 12, left: 12 }} />
