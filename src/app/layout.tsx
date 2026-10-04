@@ -11,6 +11,13 @@ import { SubscribeProvider } from '@/context/SubscribeContext'
 import SubscribeModal from '@/components/brand/SubscribeModal'
 import { CartProvider } from '@/context/CartContext'
 import CartDrawer from '@/components/shop/CartDrawer'
+import { NavMenuProvider } from '@/context/NavMenuContext'
+import { getNavMenu } from '@/lib/queries/collections'
+import { buildMenu } from '@/lib/nav'
+
+// The menu (FEATURED / DROPS) is read from the collections table. Pages without
+// their own shorter revalidate pick up collection changes within 5 minutes.
+export const revalidate = 300
 
 const bebasNeue = Bebas_Neue({
   weight: '400',
@@ -43,9 +50,11 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const menu = buildMenu(await getNavMenu())
+
   return (
     <html
       lang="en"
@@ -61,17 +70,19 @@ export default function RootLayout({
           textRendering: 'optimizeLegibility',
         }}
       >
-        <SubscribeProvider>
-          <WishlistProvider>
-            <CartProvider>
-              {children}
-              <WishlistDrawer />
-              <CartDrawer />
-              <WishlistEmailModal />
-              <SubscribeModal />
-            </CartProvider>
-          </WishlistProvider>
-        </SubscribeProvider>
+        <NavMenuProvider menu={menu}>
+          <SubscribeProvider>
+            <WishlistProvider>
+              <CartProvider>
+                {children}
+                <WishlistDrawer />
+                <CartDrawer />
+                <WishlistEmailModal />
+                <SubscribeModal />
+              </CartProvider>
+            </WishlistProvider>
+          </SubscribeProvider>
+        </NavMenuProvider>
       </body>
     </html>
   )

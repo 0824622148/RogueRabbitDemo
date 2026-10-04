@@ -4,6 +4,7 @@ import Footer from '@/components/brand/Footer'
 import ProductCard from '@/components/brand/ProductCard'
 import DroppingSoon from '@/components/brand/DroppingSoon'
 import CatalogHeader from '@/components/shop/CatalogHeader'
+import ShopCategoryNav from '@/components/shop/ShopCategoryNav'
 import { getProductsByCategory } from '@/lib/queries/products'
 import { NATIONWIDE_DELIVERY_LIVE } from '@/lib/store-status'
 
@@ -54,6 +55,7 @@ export default async function CategoryPage({
           status,
         ]}
       />
+      <ShopCategoryNav active={`/shop/${title.toLowerCase()}`} />
 
       <section style={{ borderBottom: '1px solid #3A3A3C', padding: '40px' }} className="rr-catalog-grid-pad">
         <div className="rr-3col-grid">

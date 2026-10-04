@@ -3,6 +3,7 @@ import NavBar from '@/components/brand/NavBar'
 import Footer from '@/components/brand/Footer'
 import ProductCard from '@/components/brand/ProductCard'
 import CatalogHeader from '@/components/shop/CatalogHeader'
+import ShopCategoryNav from '@/components/shop/ShopCategoryNav'
 import { getProducts } from '@/lib/queries/products'
 
 // Card prices come from Supabase products.price. Without this the page is
@@ -26,6 +27,7 @@ export default async function ShopPage() {
           { n: pad(products.length), l: 'COLOURWAYS' },
         ]}
       />
+      <ShopCategoryNav active="/shop" />
 
       <section style={{ borderBottom: '1px solid #3A3A3C', padding: '40px' }}>
         <div className="rr-3col-grid">

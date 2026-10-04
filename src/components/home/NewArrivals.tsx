@@ -15,7 +15,7 @@ export default function NewArrivals({ products }: Props) {
         kicker="BAGGED LEAGUE × ROUGE RABBIT · AIR DOWN + PAINT SHOP · IN STOCK NOW"
         title="NEW ARRIVALS."
         action="Shop the collab"
-        actionHref="/shop/apparel"
+        actionHref="/shop/tops"
       />
       <div className="rr-4col-grid-gap rr-section-inner-pad">
         {products.map((p, i) => (

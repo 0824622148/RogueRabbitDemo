@@ -21,6 +21,34 @@ export interface Product {
   objectPos?: string
 }
 
+/** collections row — drives the FEATURED / DROPS menus and /drops/[slug]. */
+export interface Collection {
+  id: number
+  slug: string
+  name: string
+  parent_id: number | null
+  kind: 'collab' | 'drop' | 'sub'
+  tagline: string | null
+  story: string | null
+  hero_image: string | null
+  logo_image: string | null
+  release_date: string | null
+  status: 'live' | 'coming_soon' | 'hidden'
+  is_featured: boolean
+  sort_order: number
+}
+
+/** One entry in the site menu. Top-level items with children open a dropdown. */
+export interface NavItem {
+  label: string
+  href: string
+  /** Small tag after the label, e.g. "DROPPING SOON". */
+  tag?: string
+  /** Campaign image shown in the dropdown panel. */
+  image?: string
+  children?: NavItem[]
+}
+
 export interface ProductImage {
   view: 'FRONT' | 'SIDE' | 'BACK' | 'TOP'
   url: string

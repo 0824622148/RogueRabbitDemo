@@ -32,7 +32,9 @@ export default async function ShopProductPage({ params, searchParams }: { params
   }
 
   const initialColourwayId = typeof query.colour === 'string' ? query.colour : undefined
-  const categoryHref = String(product.category).toUpperCase() === 'ACCESSORIES' ? '/shop/accessories' : '/shop/apparel'
+  const isAccessory = String(product.category).toUpperCase() === 'ACCESSORIES'
+  const categoryHref = isAccessory ? '/shop/accessories' : '/shop/tops'
+  const categoryLabel = isAccessory ? 'ACCESSORIES' : 'TOPS'
 
   return (
     <div style={{ background: '#0F0F10', color: '#E6E6E6', fontFamily: 'var(--font-body)' }}>
@@ -49,7 +51,7 @@ export default async function ShopProductPage({ params, searchParams }: { params
         <Link href="/shop" className="rr-mono" style={{ textDecoration: 'none', color: 'inherit' }}>SHOP</Link>
         <span style={{ color: '#3A3A3C' }}>/</span>
         <Link href={categoryHref} className="rr-mono rr-breadcrumb-hide" style={{ textDecoration: 'none', color: 'inherit' }}>
-          {product.category}
+          {categoryLabel}
         </Link>
         <span className="rr-breadcrumb-hide" style={{ color: '#3A3A3C' }}>/</span>
         <span className="rr-mono" style={{ color: '#E6E6E6' }}>{product.name}</span>

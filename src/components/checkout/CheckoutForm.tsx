@@ -101,8 +101,8 @@ export default function CheckoutForm() {
     return (
       <div style={{ minHeight: '60vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '80px 16px', textAlign: 'center' }}>
         <p className="rr-overline" style={{ color: '#A6A6A8', marginBottom: 24 }}>YOUR BAG IS EMPTY</p>
-        <Link href="/shop/apparel" className="rr-btn" style={{ textDecoration: 'none' }}>
-          SHOP APPAREL →
+        <Link href="/shop/tops" className="rr-btn" style={{ textDecoration: 'none' }}>
+          SHOP TOPS →
         </Link>
       </div>
     )

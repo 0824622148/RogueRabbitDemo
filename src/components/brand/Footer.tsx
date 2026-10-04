@@ -10,9 +10,9 @@ const FOOTER_COLS = [
   {
     title: 'SHOP',
     items: [
-      { label: 'New Arrivals',   href: '/shop/apparel' },
+      { label: 'New Arrivals',   href: '/shop' },
       { label: 'Footwear',       href: '/shop/footwear' },
-      { label: 'Apparel',        href: '/shop/apparel' },
+      { label: 'Tops',           href: '/shop/tops' },
       { label: 'Accessories',    href: '/shop/accessories' },
       { label: 'Sale',           href: '/sale' },
     ],
@@ -20,7 +20,7 @@ const FOOTER_COLS = [
   {
     title: 'WORLD',
     items: [
-      { label: 'Drops Calendar', href: '/drops' },
+      { label: 'Drops',          href: '/drops' },
       { label: 'Influencers',    href: '/influencers' },
       { label: 'Journal',        href: '/journal' },
       { label: 'Stockists',      href: '/stockists' },

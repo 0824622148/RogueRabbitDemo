@@ -164,3 +164,6 @@ grant usage, select on sequence campaigns_id_seq to service_role;
 -- tracking and verified-payment timestamp — see 007_shop_cart_delivery.sql
 -- (order_items table, orders.order_type/subtotal/paid_at, inventory gender 'U',
 -- apply_paid_order_stock()).
+
+-- Migration: collections (Bagged League → Air Down / Paint Shop, Caesar, Signal)
+-- and products.collection_id / release_date — see 010_collections.sql.

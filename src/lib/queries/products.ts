@@ -2,21 +2,35 @@ import { cache } from 'react'
 import { supabase } from '@/lib/supabase'
 import type { Product, ColourwayDB, InventoryItem } from '@/types'
 
-// Memoised per request — two callers on the same page share one DB round-trip
+const LISTING_COLUMNS = `
+  id, name, category, drop_label, price, compare_at_price,
+  badge, slug, media_bg, image_contain, image_fit, image_object_pos,
+  colourways (
+    id, name, hex, sort_order,
+    product_images (view, url)
+  )
+`
+
+// Memoised per request — two callers on the same page share one DB round-trip.
+// Newest release first ("All Items — latest release"); id breaks ties so pieces
+// from the same drop keep their seeded order.
 const fetchAllProducts = cache(async () => {
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from('products')
-    .select(`
-      id, name, category, drop_label, price, compare_at_price,
-      badge, slug, media_bg, image_contain, image_fit, image_object_pos,
-      colourways (
-        id, name, hex, sort_order,
-        product_images (view, url)
-      )
-    `)
+    .select(`${LISTING_COLUMNS}, collection_id, release_date`)
+    .eq('is_active', true)
+    .order('release_date', { ascending: false, nullsFirst: false })
+    .order('id', { ascending: false })
+  if (!error) return (data ?? []) as any[]
+
+  // release_date / collection_id arrive with supabase/010_collections.sql —
+  // keep the shop up if the code deploys before the migration has run.
+  const { data: legacy } = await supabase
+    .from('products')
+    .select(LISTING_COLUMNS)
     .eq('is_active', true)
     .order('id')
-  return (data ?? []) as any[]
+  return (legacy ?? []) as any[]
 })
 
 function colourwayToProduct(p: any, cw: any, view: 'FRONT' | 'SIDE'): Product {
@@ -69,6 +83,16 @@ export async function getProductsByCategory(
   const rows = (await fetchAllProducts()).filter(
     (p) => String(p.category ?? '').toUpperCase() === category.toUpperCase(),
   )
+  return toProducts(rows, view)
+}
+
+/** One card per colourway for the given collections (a collection plus its sub-collections). */
+export async function getProductsByCollection(
+  collectionIds: number[],
+  view: 'FRONT' | 'SIDE' = 'FRONT',
+): Promise<Product[]> {
+  const ids = new Set(collectionIds)
+  const rows = (await fetchAllProducts()).filter((p) => ids.has(p.collection_id))
   return toProducts(rows, view)
 }
 

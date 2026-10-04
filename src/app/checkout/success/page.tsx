@@ -48,7 +48,7 @@ export default async function CheckoutSuccessPage({
           )}
 
           <Link
-            href="/shop/apparel"
+            href="/shop/tops"
             style={{
               display: 'flex', justifyContent: 'space-between', alignItems: 'center',
               padding: '16px 24px', background: '#D90017',

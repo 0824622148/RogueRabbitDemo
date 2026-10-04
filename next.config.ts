@@ -8,6 +8,12 @@ const nextConfig: NextConfig = {
         destination: '/influencers',
         permanent: true,
       },
+      // Apparel is shown as "Tops" in the shop menu.
+      {
+        source: '/shop/apparel',
+        destination: '/shop/tops',
+        permanent: true,
+      },
     ]
   },
 };

@@ -56,7 +56,7 @@ export async function PATCH(
   }
 
   // Category grids and the homepage are cached (revalidate 60–300s) — refresh now.
-  for (const path of ['/', '/shop', '/shop/apparel', '/shop/accessories']) revalidatePath(path)
+  for (const path of ['/', '/shop', '/shop/tops', '/shop/accessories']) revalidatePath(path)
 
   return NextResponse.json({ ok: true, stock: result.current_count })
 }

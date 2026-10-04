@@ -99,7 +99,7 @@ export default function Hero() {
             and refuse to blend in. Marked with the rabbit. Worn loud.
           </p>
           <div style={{ display: 'flex', gap: 14, marginTop: 28, flexWrap: 'wrap' }}>
-            <Link href="/shop/apparel">
+            <Link href="/shop/tops">
               <button className="rr-btn">
                 SHOP THE COLLAB <span className="arr"><Arrow size={14} /></span>
               </button>

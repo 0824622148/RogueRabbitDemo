@@ -70,14 +70,14 @@ export default function CartDrawer() {
                     YOUR BAG IS EMPTY
                   </p>
                   <Link
-                    href="/shop/apparel"
+                    href="/shop/tops"
                     onClick={closeCart}
                     style={{
                       fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.18em',
                       color: '#E6E6E6', textDecoration: 'underline',
                     }}
                   >
-                    SHOP APPAREL →
+                    SHOP TOPS →
                   </Link>
                 </div>
               ) : (

@@ -7,27 +7,142 @@ import RougeLogo from './RougeLogo'
 import { useWishlist } from '@/context/WishlistContext'
 import { useSubscribeModal } from '@/context/SubscribeContext'
 import { useCart } from '@/context/CartContext'
+import { useNavMenu } from '@/context/NavMenuContext'
+import { hrefsOf } from '@/lib/nav'
+import type { NavItem } from '@/types'
 
-const NAV_LINKS = [
-  { label: 'SHOP',     href: '/shop' },
-  { label: 'FOOTWEAR', href: '/shop/footwear' },
-  { label: 'APPAREL',  href: '/shop/apparel' },
-  { label: 'ACCESSORIES', href: '/shop/accessories' },
-  { label: 'DROPS',    href: '/drops' },
-  { label: 'INFLUENCERS', href: '/influencers' },
-  { label: 'JOURNAL',  href: '/journal' },
-]
+/**
+ * Which top-level item to underline: the one with the most specific href
+ * matching the current path. Product links (with ?colour=) are ignored so a
+ * product page lights up SHOP, not FEATURED. Ties go to the later item, so
+ * /drops/bagged-league is DROPS rather than FEATURED.
+ */
+function activeLabel(menu: NavItem[], pathname: string): string | null {
+  let best: { label: string; score: number } | null = null
+  for (const item of menu) {
+    for (const href of hrefsOf(item)) {
+      if (href.includes('?')) continue
+      if (pathname !== href && !pathname.startsWith(href + '/')) continue
+      if (!best || href.length >= best.score) best = { label: item.label, score: href.length }
+    }
+  }
+  return best?.label ?? null
+}
+
+const tagStyle: React.CSSProperties = {
+  marginLeft: 10,
+  fontFamily: 'var(--font-mono)',
+  fontSize: 9,
+  letterSpacing: '.18em',
+  color: '#D90017',
+  border: '1px solid #D90017',
+  padding: '2px 6px',
+  verticalAlign: 'middle',
+  whiteSpace: 'nowrap',
+}
+
+/** Desktop dropdown body. Children with their own children become headed columns. */
+function DropdownPanel({ item }: { item: NavItem }) {
+  const children = item.children ?? []
+  return (
+    <div className="rr-nav-dd-inner">
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 28 }}>
+        {children.map((c) =>
+          c.children?.length ? (
+            <div key={c.href}>
+              <Link href={c.href} className="rr-display rr-nav-dd-link" style={{ fontSize: 40, lineHeight: 1 }}>
+                {c.label}
+                {c.tag && <span style={tagStyle}>{c.tag}</span>}
+              </Link>
+              <div style={{ display: 'flex', gap: 56, marginTop: 18, flexWrap: 'wrap' }}>
+                {c.children.map((g) => (
+                  <div key={g.href} style={{ minWidth: 160 }}>
+                    <Link href={g.href} className="rr-mono rr-nav-dd-link" style={{ color: '#D90017', letterSpacing: '.22em' }}>
+                      {g.label} →
+                    </Link>
+                    <ul style={{ listStyle: 'none', margin: '12px 0 0', padding: 0, display: 'flex', flexDirection: 'column', gap: 10 }}>
+                      {(g.children ?? []).map((l) => (
+                        <li key={l.href}>
+                          <Link href={l.href} className="rr-nav-dd-link" style={{ fontSize: 13, letterSpacing: '.06em' }}>
+                            {l.label}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <Link key={c.href + c.label} href={c.href} className="rr-display rr-nav-dd-link" style={{ fontSize: 34, lineHeight: 1 }}>
+              {c.label}
+              {c.tag && <span style={tagStyle}>{c.tag}</span>}
+            </Link>
+          ),
+        )}
+      </div>
+      {item.image && (
+        <Link href={item.href} className="rr-nav-dd-image" aria-hidden="true" tabIndex={-1}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={item.image} alt="" />
+        </Link>
+      )}
+    </div>
+  )
+}
+
+/** Mobile accordion rows for one section, indented by depth. */
+function MobileLinks({ items, depth, onNavigate }: { items: NavItem[]; depth: number; onNavigate: () => void }) {
+  return (
+    <>
+      {items.map((c) => (
+        <div key={c.href + c.label}>
+          <Link
+            href={c.href}
+            onClick={onNavigate}
+            style={{
+              display: 'block',
+              padding: `${depth === 1 ? 12 : 8}px 0 ${depth === 1 ? 12 : 8}px ${depth * 16}px`,
+              fontFamily: 'var(--font-mono)',
+              fontSize: depth === 1 ? 12 : 11,
+              letterSpacing: '.18em',
+              color: depth === 2 ? '#D90017' : depth > 2 ? '#A6A6A8' : '#E6E6E6',
+              textTransform: 'uppercase',
+              textDecoration: 'none',
+            }}
+          >
+            {c.label}
+            {c.tag && <span style={tagStyle}>{c.tag}</span>}
+          </Link>
+          {c.children?.length ? <MobileLinks items={c.children} depth={depth + 1} onNavigate={onNavigate} /> : null}
+        </div>
+      ))}
+    </>
+  )
+}
 
 export default function NavBar() {
   const pathname = usePathname()
-  const isActive = (href: string) =>
-    href === '/shop'
-      ? pathname === '/shop' || (pathname.startsWith('/shop/') && !pathname.startsWith('/shop/apparel') && !pathname.startsWith('/shop/accessories'))
-      : pathname === href || pathname.startsWith(href + '/')
+  const menu = useNavMenu()
+  const active = activeLabel(menu, pathname)
   const [menuOpen, setMenuOpen] = useState(false)
+  // Desktop dropdown: label of the open top-level item.
+  const [openLabel, setOpenLabel] = useState<string | null>(null)
+  // Mobile accordion: label of the expanded section.
+  const [expanded, setExpanded] = useState<string | null>(null)
   const { count: wishlistCount, openDrawer } = useWishlist()
   const { openSubscribe } = useSubscribeModal()
   const { count: cartCount, openCart } = useCart()
+
+  // Close everything on navigation (adjust-state-during-render, no effect).
+  const [lastPath, setLastPath] = useState(pathname)
+  if (lastPath !== pathname) {
+    setLastPath(pathname)
+    setOpenLabel(null)
+    setMenuOpen(false)
+  }
+
+  const openItem = menu.find((m) => m.label === openLabel && m.children?.length)
 
   return (
     <>
@@ -48,29 +163,41 @@ export default function NavBar() {
           alignItems: 'center',
           zIndex: 50,
         }}
+        onMouseLeave={() => setOpenLabel(null)}
+        onKeyDown={(e) => { if (e.key === 'Escape') setOpenLabel(null) }}
       >
         {/* Left — desktop nav links / mobile hamburger */}
         <div>
-          <nav className="rr-nav-links" style={{ gap: 22 }}>
-            {NAV_LINKS.map(({ label, href }) => (
-              <Link
-                key={label}
-                href={href}
-                style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: 11,
-                  letterSpacing: '.18em',
-                  color: '#E6E6E6',
-                  textTransform: 'uppercase',
-                  cursor: 'pointer',
-                  paddingBottom: 4,
-                  textDecoration: 'none',
-                  borderBottom: isActive(href) ? '1px solid #D90017' : '1px solid transparent',
-                }}
-              >
-                {label}
-              </Link>
-            ))}
+          <nav className="rr-nav-links" style={{ gap: 28 }}>
+            {menu.map((item) => {
+              const hasPanel = !!item.children?.length
+              return (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  aria-haspopup={hasPanel || undefined}
+                  aria-expanded={hasPanel ? openLabel === item.label : undefined}
+                  onMouseEnter={() => setOpenLabel(item.label)}
+                  onFocus={() => setOpenLabel(item.label)}
+                  style={{
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: 11,
+                    letterSpacing: '.18em',
+                    color: '#E6E6E6',
+                    textTransform: 'uppercase',
+                    cursor: 'pointer',
+                    paddingBottom: 4,
+                    textDecoration: 'none',
+                    borderBottom:
+                      active === item.label || openLabel === item.label
+                        ? '1px solid #D90017'
+                        : '1px solid transparent',
+                  }}
+                >
+                  {item.label}
+                </Link>
+              )
+            })}
           </nav>
           <button
             className="rr-nav-hamburger"
@@ -191,39 +318,73 @@ export default function NavBar() {
             )}
           </button>
         </div>
+
+        {/* Desktop dropdown panel */}
+        {openItem && (
+          // Clicks inside close it too — covers links to the page you're already on.
+          <div className="rr-nav-dd" onClick={() => setOpenLabel(null)}>
+            <DropdownPanel item={openItem} />
+          </div>
+        )}
       </header>
 
-      {/* Mobile slide-down menu */}
+      {/* Mobile slide-down menu — accordion per section */}
       {menuOpen && (
         <div
           style={{
             position: 'fixed', top: 64, left: 0, right: 0,
+            maxHeight: 'calc(100vh - 64px)', overflowY: 'auto',
             background: '#0F0F10',
             borderBottom: '1px solid #3A3A3C',
             zIndex: 49,
             padding: '0 20px 20px',
           }}
         >
-          {NAV_LINKS.map(({ label, href }) => (
-            <Link
-              key={label}
-              href={href}
-              onClick={() => setMenuOpen(false)}
-              style={{
-                display: 'block',
-                padding: '18px 0',
-                borderBottom: '1px solid #3A3A3C',
-                fontFamily: 'var(--font-mono)',
-                fontSize: 13,
-                letterSpacing: '.22em',
-                color: '#E6E6E6',
-                textTransform: 'uppercase',
-                textDecoration: 'none',
-              }}
-            >
-              {label}
-            </Link>
-          ))}
+          {menu.map((item) => {
+            const hasKids = !!item.children?.length
+            const isOpen = expanded === item.label
+            return (
+              <div key={item.label} style={{ borderBottom: '1px solid #3A3A3C' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <Link
+                    href={item.href}
+                    onClick={() => setMenuOpen(false)}
+                    style={{
+                      flex: 1,
+                      display: 'block',
+                      padding: '18px 0',
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: 13,
+                      letterSpacing: '.22em',
+                      color: active === item.label ? '#D90017' : '#E6E6E6',
+                      textTransform: 'uppercase',
+                      textDecoration: 'none',
+                    }}
+                  >
+                    {item.label}
+                  </Link>
+                  {hasKids && (
+                    <button
+                      onClick={() => setExpanded(isOpen ? null : item.label)}
+                      aria-expanded={isOpen}
+                      aria-label={`${isOpen ? 'Collapse' : 'Expand'} ${item.label}`}
+                      style={{ background: 'none', border: 'none', color: '#E6E6E6', cursor: 'pointer', padding: '18px 0 18px 24px' }}
+                    >
+                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                        <path d="M1 6H11" stroke="currentColor" strokeWidth="1.4" />
+                        {!isOpen && <path d="M6 1V11" stroke="currentColor" strokeWidth="1.4" />}
+                      </svg>
+                    </button>
+                  )}
+                </div>
+                {hasKids && isOpen && (
+                  <div style={{ paddingBottom: 14 }}>
+                    <MobileLinks items={item.children!} depth={1} onNavigate={() => setMenuOpen(false)} />
+                  </div>
+                )}
+              </div>
+            )
+          })}
           <button
             onClick={() => { setMenuOpen(false); openSubscribe() }}
             style={{
