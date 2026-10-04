@@ -26,19 +26,20 @@ export default function CampaignStrip() {
           }}
         >
           <img
-            src="/assets/paint-shop-campaign.jpg"
-            alt="Bagged League x Rouge Rabbit Paint Shop tee, front and back"
+            src="/assets/drops/bagged-league/air-down.jpg"
+            alt="Air Down tee back print — Standard, Low, Lower, Bagged"
             style={{
               position: 'absolute', inset: 0,
               width: '100%', height: '100%',
-              objectFit: 'cover', objectPosition: 'center 25%',
+              // Wide crop of a portrait shot — keeps the whole back print, Standard down to Bagged.
+              objectFit: 'cover', objectPosition: 'center 66%',
             }}
           />
           <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.15)' }} />
           <div className="rr-plus" style={{ top: 20, left: 20 }} />
           <div className="rr-plus" style={{ bottom: 20, right: 20 }} />
           <div style={{ position: 'absolute', bottom: 24, left: 30 }}>
-            <div className="rr-mono" style={{ color: '#A6A6A8' }}>BL × RR · PAINT SHOP</div>
+            <div className="rr-mono" style={{ color: '#A6A6A8' }}>BL × RR · AIR DOWN</div>
           </div>
         </div>
 
