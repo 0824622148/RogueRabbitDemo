@@ -23,8 +23,8 @@ update collections set
   hero_panels = '[
     {"src": "/assets/drops/bagged-league/red-car.jpg",   "alt": "Bagged red VW Golf front wheel at a night meet", "pos": "55% 60%"},
     {"src": "/assets/drops/bagged-league/duo.jpg",       "alt": "Paint Shop and Air Down tees worn on the railway tracks", "pos": "center 45%"},
-    {"src": "/assets/drops/bagged-league/air-down.jpg",  "alt": "Air Down tee back print — Standard, Low, Lower, Bagged", "pos": "center 55%"},
-    {"src": "/assets/drops/bagged-league/white-car.jpg", "alt": "Bagged white VW Golf rear wheel", "pos": "50% 70%"}
+    {"src": "/assets/drops/bagged-league/white-car.jpg", "alt": "Bagged white VW Golf rear wheel", "pos": "50% 70%"},
+    {"src": "/assets/drops/bagged-league/air-down.jpg",  "alt": "Air Down tee back print — Standard, Low, Lower, Bagged", "pos": "center 55%"}
   ]'::jsonb
 where slug = 'bagged-league';
 
