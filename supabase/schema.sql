@@ -87,7 +87,7 @@ create table members (
   name       text,
   email      text unique not null,
   phone      text,
-  source     text default 'homepage' check (source in ('homepage', 'preorder', 'navbar', 'footer', 'wishlist')),
+  source     text default 'homepage' check (source in ('homepage', 'preorder', 'navbar', 'footer', 'wishlist', 'shop', 'popup')),
   created_at timestamptz default now()
 );
 

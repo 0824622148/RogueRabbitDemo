@@ -5,9 +5,9 @@ import { sendWelcomeEmail } from '@/lib/admin/email'
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 // Must stay in sync with the members.source CHECK constraint (schema.sql /
-// 003_member_sources.sql). Unknown values fall back to null so a bad `source`
-// can never fail the insert.
-const ALLOWED_SOURCES = new Set(['homepage', 'preorder', 'navbar', 'footer', 'wishlist'])
+// 003_member_sources.sql / 014_member_source_popup.sql). Unknown values fall
+// back to null so a bad `source` can never fail the insert.
+const ALLOWED_SOURCES = new Set(['homepage', 'preorder', 'navbar', 'footer', 'wishlist', 'popup'])
 
 function getServiceClient() {
   return createClient(

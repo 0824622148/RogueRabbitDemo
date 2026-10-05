@@ -12,7 +12,7 @@ import SubscribeModal from '@/components/brand/SubscribeModal'
 import { CartProvider } from '@/context/CartContext'
 import CartDrawer from '@/components/shop/CartDrawer'
 import { NavMenuProvider } from '@/context/NavMenuContext'
-import { getNavMenu } from '@/lib/queries/collections'
+import { getNavMenu, getPopupDrop } from '@/lib/queries/collections'
 import { buildMenu } from '@/lib/nav'
 
 // The menu (FEATURED / DROPS) is read from the collections table. Pages without
@@ -53,7 +53,8 @@ export const metadata: Metadata = {
 export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  const menu = buildMenu(await getNavMenu())
+  const [navMenu, popupDrop] = await Promise.all([getNavMenu(), getPopupDrop()])
+  const menu = buildMenu(navMenu)
 
   return (
     <html
@@ -78,7 +79,7 @@ export default async function RootLayout({
                 <WishlistDrawer />
                 <CartDrawer />
                 <WishlistEmailModal />
-                <SubscribeModal />
+                <SubscribeModal drop={popupDrop} />
               </CartProvider>
             </WishlistProvider>
           </SubscribeProvider>

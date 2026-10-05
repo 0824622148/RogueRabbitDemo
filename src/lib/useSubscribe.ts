@@ -1,6 +1,7 @@
 'use client'
 
 import { useCallback, useState } from 'react'
+import { markMember } from '@/lib/memberFlags'
 
 export type SubscribeStatus = 'idle' | 'loading' | 'success' | 'error'
 
@@ -64,6 +65,8 @@ export function useSubscribe(source: string): UseSubscribeResult {
       }
       const data = await res.json().catch(() => ({}))
       setIsNew(Boolean(data?.isNew))
+      // Joined from anywhere: the welcome popup never shows again.
+      markMember()
       setStatus('success')
     } catch {
       setStatus('error')

@@ -1,7 +1,7 @@
 import { cache } from 'react'
 import { supabase } from '@/lib/supabase'
 import { getProductsByCollection } from '@/lib/queries/products'
-import type { Collection, NavItem, Product } from '@/types'
+import type { Collection, NavItem, PopupDrop, Product } from '@/types'
 
 // Every visible collection, memoised per request. Returns [] if the table isn't
 // there yet (code deployed before supabase/010_collections.sql) so the menu and
@@ -61,6 +61,27 @@ export async function getDrops(): Promise<Collection[]> {
 }
 
 export const dropHref = (c: Pick<Collection, 'slug'>) => `/drops/${c.slug}`
+
+/**
+ * The drop that themes the members popup: the featured live drop, else any
+ * live drop, else the next one coming soon. Null leaves the plain popup.
+ */
+export async function getPopupDrop(): Promise<PopupDrop | null> {
+  const top = (await fetchCollections()).filter((c) => c.parent_id === null)
+  const c =
+    top.find((x) => x.is_featured && x.status === 'live') ??
+    top.find((x) => x.status === 'live') ??
+    top.find((x) => x.status === 'coming_soon')
+  if (!c || c.status === 'hidden') return null
+
+  // hero_image is the drop's single "card" shot (worn pieces); reuse its panel's
+  // alt / framing when it's also one of the hero panels.
+  const panels = c.hero_panels ?? []
+  const image = c.hero_image
+    ? panels.find((p) => p.src === c.hero_image) ?? { src: c.hero_image, alt: c.name }
+    : panels[0] ?? null
+  return { name: c.name, slug: c.slug, tagline: c.tagline, status: c.status, logo: c.logo_image, image }
+}
 
 /**
  * Product links for a menu column: one per colourway when a piece comes in

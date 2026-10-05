@@ -49,6 +49,16 @@ export interface Collection {
   sort_order: number
 }
 
+/** The drop whose campaign art themes the members popup. */
+export interface PopupDrop {
+  name: string
+  slug: string
+  tagline: string | null
+  status: 'live' | 'coming_soon'
+  logo: string | null
+  image: HeroPanel | null
+}
+
 /** One entry in the site menu. Top-level items with children open a dropdown. */
 export interface NavItem {
   label: string
