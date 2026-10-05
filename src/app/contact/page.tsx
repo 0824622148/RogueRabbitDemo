@@ -40,7 +40,7 @@ const FAQS = [
   },
   {
     q: 'How do I return or exchange an item?',
-    a: 'Email support@rougerabbit.co.za with your order number, reason for return, and photos if applicable. Returns must be requested within 14 days of delivery. Our team will guide you through the rest. See our Returns Policy for full eligibility criteria.',
+    a: 'Email support@rougerabbit.co.za with your order number, reason for return, and photos if applicable. Returns must be requested within 30 days of delivery. Our team will guide you through the rest. See our Returns Policy for full eligibility criteria.',
   },
   {
     q: 'How do I track my order?',

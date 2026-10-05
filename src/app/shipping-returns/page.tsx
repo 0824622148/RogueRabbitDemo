@@ -17,7 +17,7 @@ const S = {
 
 export default function ShippingReturnsPage() {
   return (
-    <PolicyLayout title="Shipping & Returns" lastUpdated="June 2026">
+    <PolicyLayout title="Shipping & Returns" lastUpdated="October 2026">
 
       <p style={S.p}>
         At Rouge Rabbit, we are committed to delivering premium products and an exceptional
@@ -91,7 +91,7 @@ export default function ShippingReturnsPage() {
 
       <h3 style={S.h3}>Returns Window</h3>
       <p style={S.p}>
-        Customers may request a return within <strong style={{ color: '#E6E6E6' }}>14 days</strong> of
+        Customers may request a return within <strong style={{ color: '#E6E6E6' }}>30 days</strong> of
         receiving their order.
       </p>
 
