@@ -7,6 +7,8 @@ import { useCart, MAX_QTY_PER_LINE } from '@/context/CartContext'
 import { formatRand } from '@/lib/money'
 import { isOnHold, COMING_SOON_LABEL, DELIVERY_SUMMARY } from '@/lib/store-status'
 import { isTee, TEE_WEIGHT_LABEL } from '@/lib/fabric'
+import { apparelKind, productDetails } from '@/lib/apparel-sizing'
+import ApparelSizeGuide from '@/components/shop/ApparelSizeGuide'
 
 interface Props {
   product: ProductDetail
@@ -26,6 +28,8 @@ function available(i: InventoryItem): number {
 export default function ApparelPDP({ product, initialColourwayId }: Props) {
   const { addItem } = useCart()
   const onHold = isOnHold(product.category)
+  const kind = apparelKind(product)
+  const details = productDetails(kind)
 
   const [cw, setCw] = useState<ColourwayDB>(
     product.colourways.find((c) => c.id === initialColourwayId) ?? product.colourways[0],
@@ -127,7 +131,7 @@ export default function ApparelPDP({ product, initialColourwayId }: Props) {
         <h1 className="rr-display" style={{ fontSize: 'clamp(40px, 6vw, 64px)', margin: '0 0 12px', lineHeight: 0.9 }}>
           {product.name}
         </h1>
-        <div style={{ display: 'flex', gap: 12, alignItems: 'baseline', marginBottom: 32 }}>
+        <div style={{ display: 'flex', gap: 12, alignItems: 'baseline', marginBottom: details ? 16 : 32 }}>
           <span className="rr-mono" style={{ fontSize: 20, color: '#E6E6E6' }}>
             {onHold ? COMING_SOON_LABEL : formatRand(product.price)}
           </span>
@@ -142,6 +146,12 @@ export default function ApparelPDP({ product, initialColourwayId }: Props) {
             </span>
           )}
         </div>
+
+        {details && (
+          <p style={{ color: '#A6A6A8', fontSize: 13, lineHeight: 1.7, margin: '0 0 32px', maxWidth: 480 }}>
+            {details.description}
+          </p>
+        )}
 
         {/* Colourways */}
         {product.colourways.length > 1 && (
@@ -169,8 +179,11 @@ export default function ApparelPDP({ product, initialColourwayId }: Props) {
 
         {/* Sizes */}
         <div style={{ marginBottom: 28 }}>
-          <div className="rr-overline" style={{ marginBottom: 12, color: '#A6A6A8' }}>
-            SIZE{selected ? ` · ${selected.size_value}` : ''}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 12 }}>
+            <div className="rr-overline" style={{ color: '#A6A6A8' }}>
+              SIZE{selected ? ` · ${selected.size_value}` : ''}
+            </div>
+            {kind && <ApparelSizeGuide kind={kind} />}
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: `repeat(${Math.min(Math.max(sizes.length, 1), 5)}, 1fr)`, gap: 6 }}>
             {sizes.map((s) => {
@@ -250,6 +263,20 @@ export default function ApparelPDP({ product, initialColourwayId }: Props) {
         {added && (
           <div className="rr-mono" style={{ fontSize: 10, color: '#2A9D2A', marginTop: 12, letterSpacing: '.12em' }}>
             ✓ ADDED TO YOUR BAG
+          </div>
+        )}
+
+        {details && (
+          <div style={{ borderTop: '1px solid #3A3A3C', marginTop: 32, paddingTop: 20 }}>
+            <div className="rr-overline" style={{ marginBottom: 12, color: '#A6A6A8' }}>DETAILS</div>
+            <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 8 }}>
+              {details.specs.map((s) => (
+                <li key={s} style={{ display: 'flex', gap: 12, fontSize: 13, color: '#E6E6E6', lineHeight: 1.6 }}>
+                  <span style={{ color: '#D90017', fontFamily: 'var(--font-mono)' }}>+</span>
+                  {s}
+                </li>
+              ))}
+            </ul>
           </div>
         )}
 

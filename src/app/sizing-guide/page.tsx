@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import PolicyLayout from '@/components/brand/PolicyLayout'
+import { ApparelSizeContent } from '@/components/shop/ApparelSizeGuide'
 
 const SIZE_GUIDE = {
   MALE: [
@@ -45,14 +46,24 @@ export default function SizingGuidePage() {
   const rows = SIZE_GUIDE[gender]
 
   return (
-    <PolicyLayout title="Sizing Guide" lastUpdated="June 2026">
+    <PolicyLayout title="Sizing Guide" lastUpdated="October 2026">
 
       <p style={S.p}>
-        All Rouge Rabbit footwear is sized in UK sizing. Use the guide below to find your
-        perfect fit. If you are between sizes, we recommend sizing up.
+        Find your fit for every Rouge Rabbit piece: tees, caps and footwear. Still unsure?
+        Our team is happy to help (details at the bottom of this page).
       </p>
 
-      <h2 style={S.h2}>How to Measure</h2>
+      <h2 id="tees" style={S.h2}>Tees</h2>
+      <ApparelSizeContent kind="tee" />
+
+      <h2 id="caps" style={S.h2}>Caps</h2>
+      <ApparelSizeContent kind="cap" />
+
+      <h2 id="footwear" style={S.h2}>Footwear · How to Measure</h2>
+      <p style={S.p}>
+        All Rouge Rabbit footwear is sized in UK sizing. If you are between sizes, we
+        recommend sizing up.
+      </p>
       <p style={S.p}>
         Stand on a flat surface and measure the distance from the back of your heel to the
         tip of your longest toe. Do this in the afternoon when your feet are at their largest.
@@ -111,7 +122,7 @@ export default function SizingGuidePage() {
         ))}
       </div>
 
-      <h2 style={S.h2}>Fit Tips</h2>
+      <h2 style={S.h2}>Footwear Fit Tips</h2>
       <ul style={{ margin: '0 0 14px', paddingLeft: 24, display: 'flex', flexDirection: 'column', gap: 8 }}>
         <li>Measure both feet — use the larger measurement.</li>
         <li>Wear the socks you intend to pair with the shoe when measuring.</li>
