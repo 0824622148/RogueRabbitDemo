@@ -2,13 +2,18 @@ import NavBar from './NavBar'
 import Footer from './Footer'
 import Marquee from './Marquee'
 import Asterisk from './Asterisk'
+import type { HeroPanel } from '@/types'
 
 interface DroppingSoonProps {
   title: string
   eyebrow?: string
+  /** Teaser line under "Dropping Soon" — replaces the generic copy. */
+  tagline?: string | null
+  /** Sneak-peek shots (e.g. a drop's front / back) shown under the title. */
+  images?: HeroPanel[] | null
 }
 
-export default function DroppingSoon({ title, eyebrow }: DroppingSoonProps) {
+export default function DroppingSoon({ title, eyebrow, tagline, images }: DroppingSoonProps) {
   return (
     <div style={{ background: '#0F0F10', color: '#E6E6E6', fontFamily: 'var(--font-body)', display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <NavBar />
@@ -62,7 +67,7 @@ export default function DroppingSoon({ title, eyebrow }: DroppingSoonProps) {
 
         {/* Body copy */}
         <p style={{ fontSize: 14, color: '#A6A6A8', lineHeight: 1.8, maxWidth: 400, margin: '0 0 40px' }}>
-          Something wild is on its way. Stay locked in — we&apos;ll let you know when it&apos;s ready to drop.
+          {tagline ?? <>Something wild is on its way. Stay locked in — we&apos;ll let you know when it&apos;s ready to drop.</>}
         </p>
 
         {/* CTA */}
@@ -79,6 +84,22 @@ export default function DroppingSoon({ title, eyebrow }: DroppingSoonProps) {
         {/* Bottom rule */}
         <div style={{ position: 'absolute', bottom: 0, left: 40, right: 40, height: '1px', background: '#3A3A3C' }} />
       </main>
+
+      {images && images.length > 0 && (
+        <section style={{ borderBottom: '1px solid #3A3A3C', padding: 40 }} className="rr-catalog-grid-pad">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 1, background: '#3A3A3C' }}>
+            {images.map((img) => (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                key={img.src}
+                src={img.src}
+                alt={img.alt}
+                style={{ display: 'block', width: '100%', aspectRatio: '1 / 1', objectFit: 'cover', objectPosition: img.pos ?? 'center' }}
+              />
+            ))}
+          </div>
+        </section>
+      )}
 
       <Marquee items={['NO FEAR', 'JUST MOTION', 'DROPPING SOON', 'ROUGE RABBIT']} speed={28} accent="rouge" />
 

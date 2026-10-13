@@ -9,7 +9,7 @@ import CollectionHero from '@/components/drops/CollectionHero'
 import { getCollection, dropHref } from '@/lib/queries/collections'
 import type { Product } from '@/types'
 
-// One page per collection — top-level drops (Bagged League, Caesar, Signal) and
+// One page per collection — top-level drops (Bagged League, Beauty in Contrast, Signal) and
 // sub-collections (Air Down, Paint Shop). Content lives in the collections table.
 
 type Params = Promise<{ slug: string }>
@@ -51,7 +51,14 @@ export default async function DropPage({ params }: { params: Params }) {
   const { collection, parent, children, products } = detail
 
   if (collection.status === 'coming_soon') {
-    return <DroppingSoon title={collection.name} eyebrow={`Rouge Rabbit · ${parent ? parent.name : 'Drops'}`} />
+    return (
+      <DroppingSoon
+        title={collection.name}
+        eyebrow={`Rouge Rabbit · ${parent ? parent.name : 'Drops'}`}
+        tagline={collection.tagline}
+        images={collection.hero_panels}
+      />
+    )
   }
 
   const story = (collection.story ?? '').split(/\n\s*\n/).map((s) => s.trim()).filter(Boolean)
