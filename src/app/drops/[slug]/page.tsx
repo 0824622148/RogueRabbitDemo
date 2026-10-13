@@ -57,6 +57,7 @@ export default async function DropPage({ params }: { params: Params }) {
         eyebrow={`Rouge Rabbit · ${parent ? parent.name : 'Drops'}`}
         tagline={collection.tagline}
         images={collection.hero_panels}
+        background={collection.hero_image}
       />
     )
   }
