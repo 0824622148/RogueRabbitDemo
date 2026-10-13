@@ -30,7 +30,7 @@ export default function DroppingSoon({ title, eyebrow, tagline, images, backgrou
               alt=""
               style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 30%', opacity: 0.55, zIndex: -1 }}
             />
-            <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at center, rgba(15,15,16,.72) 0%, rgba(15,15,16,.45) 70%, rgba(15,15,16,.85) 100%)', zIndex: -1 }} />
+            <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at center, rgba(15,15,16,.85) 0%, rgba(15,15,16,.7) 70%, rgba(15,15,16,.92) 100%)', zIndex: -1 }} />
           </>
         )}
 
