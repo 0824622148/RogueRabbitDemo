@@ -154,6 +154,13 @@
   .rr-drop-banner-short { display: inline; }
 }
 
+/* ── Home "next drop" cards: back print, front on hover ── */
+.rr-upcoming-card-front { opacity: 0; transition: opacity .45s ease; }
+.rr-upcoming-card:hover .rr-upcoming-card-front,
+.rr-upcoming-card:focus-visible .rr-upcoming-card-front { opacity: 1; }
+@media (hover: none) { .rr-upcoming-card-hint { display: none; } }
+@media (prefers-reduced-motion: reduce) { .rr-upcoming-card-front { transition: none; } }
+
 /* ── Slash divider ────────────────────────────── */
 .rr-slash {
   display: inline-block;
