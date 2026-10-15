@@ -561,16 +561,12 @@
 /* ── Mobile section reordering ───────────────── */
 .rr-home-wrap { display: flex; flex-direction: column; }
 
+/* Order by class, not position, so adding a section can't shuffle the rest.
+   Unclassed sections (NavBar, Hero, UpcomingDrops, NewArrivals) keep order 0
+   in DOM order; the trust strip drops below New Arrivals on phones. */
 @media (max-width: 768px) {
-  /* Assign explicit order to every child so nothing drifts to end */
-  .rr-home-wrap > *:nth-child(1) { order: 1; }  /* NavBar      */
-  .rr-home-wrap > *:nth-child(2) { order: 2; }  /* Hero        */
-  .rr-home-wrap > *:nth-child(3) { order: 4; }  /* TrustStrip  → after New Arrivals */
-  .rr-home-wrap > *:nth-child(4) { order: 3; }  /* NewArrivals → directly after Hero */
-  .rr-home-wrap > *:nth-child(5) { order: 5; }  /* CampaignStrip */
-  .rr-home-wrap > *:nth-child(6) { order: 6; }  /* FeaturedDrop (Rouge 01) */
-  .rr-home-wrap > *:nth-child(7) { order: 7; }  /* SplitCTA      */
-  .rr-home-wrap > *:nth-child(8) { order: 8; }  /* Footer        */
+  .rr-home-wrap > .rr-home-trust { order: 1; }
+  .rr-home-wrap > .rr-home-rest  { order: 2; }
 }
 
 /* ── FeaturedDrop: native swipe carousel on mobile ── */

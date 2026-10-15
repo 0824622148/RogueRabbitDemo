@@ -28,13 +28,16 @@ export default async function HomePage() {
     <div className="rr-home-wrap" style={{ background: '#0F0F10', color: '#E6E6E6', fontFamily: 'var(--font-body)' }}>
       <NavBar />
       <Hero />
-      <div><TrustStrip /></div>
+      <div className="rr-home-trust"><TrustStrip /></div>
       <UpcomingDrops drops={upcoming} />
       <NewArrivals products={[...apparel, ...accessories]} />
-      <CampaignStrip />
-      <div><FeaturedDrop products={sideProducts} /></div>
-      <SplitCTA />
-      <Footer />
+      {/* Everything below New Arrivals — one block so mobile ordering stays put */}
+      <div className="rr-home-rest">
+        <CampaignStrip />
+        <FeaturedDrop products={sideProducts} />
+        <SplitCTA />
+        <Footer />
+      </div>
     </div>
   )
 }
