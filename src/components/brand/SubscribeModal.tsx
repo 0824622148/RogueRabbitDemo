@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useSubscribeModal } from '@/context/SubscribeContext'
+import { formatDropDate, joinNames } from '@/lib/drop-dates'
 import type { PopupDrop } from '@/types'
 import SubscribeForm from './SubscribeForm'
 
@@ -19,6 +20,11 @@ function blurb(drop: PopupDrop | null) {
     return '48-hour early access to every drop. Numbered pairs reserved. No spam, no noise — just tell us where to send it.'
   }
   const name = drop.name.toUpperCase()
+  if (drop.releaseDate) {
+    const names = [name, ...drop.alsoDropping.map((n) => n.toUpperCase())]
+    const verb = names.length > 1 ? 'drop' : 'drops'
+    return `${joinNames(names)} ${verb} ${formatDropDate(drop.releaseDate)}. Members get 48-hour early access, before it goes public. No spam, no noise.`
+  }
   return drop.status === 'coming_soon'
     ? `Be first when ${name} lands. 48-hour early access, before it goes public. No spam, no noise.`
     : `${name} is live. Members get 48-hour early access to every drop after it. No spam, no noise.`
@@ -94,7 +100,9 @@ export default function SubscribeModal({ drop }: Props) {
                     <img className="rr-sub-modal-logo" src={drop.logo} alt={drop.name} />
                   )}
                   <span className="rr-mono" style={{ color: '#E6E6E6', fontSize: 10, letterSpacing: '.22em' }}>
-                    {drop.status === 'coming_soon' ? 'DROPPING SOON' : 'DROP'} · {drop.name.toUpperCase()}
+                    {drop.releaseDate
+                      ? `DROPPING ${formatDropDate(drop.releaseDate)}`
+                      : drop.status === 'coming_soon' ? 'DROPPING SOON' : 'DROP'} · {drop.name.toUpperCase()}
                   </span>
                 </div>
               </div>

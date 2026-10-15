@@ -9,10 +9,12 @@ import WishlistDrawer from '@/components/wishlist/WishlistDrawer'
 import WishlistEmailModal from '@/components/wishlist/WishlistEmailModal'
 import { SubscribeProvider } from '@/context/SubscribeContext'
 import SubscribeModal from '@/components/brand/SubscribeModal'
+import DropBanner from '@/components/brand/DropBanner'
 import { CartProvider } from '@/context/CartContext'
 import CartDrawer from '@/components/shop/CartDrawer'
 import { NavMenuProvider } from '@/context/NavMenuContext'
-import { getNavMenu, getPopupDrop } from '@/lib/queries/collections'
+import { dropHref, getNavMenu, getPopupDrop, getUpcomingDrops } from '@/lib/queries/collections'
+import { formatDropDate } from '@/lib/drop-dates'
 import { buildMenu } from '@/lib/nav'
 
 // The menu (FEATURED / DROPS) is read from the collections table. Pages without
@@ -53,8 +55,10 @@ export const metadata: Metadata = {
 export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  const [navMenu, popupDrop] = await Promise.all([getNavMenu(), getPopupDrop()])
+  const [navMenu, popupDrop, upcoming] = await Promise.all([getNavMenu(), getPopupDrop(), getUpcomingDrops()])
   const menu = buildMenu(navMenu)
+  // The announcement bar names every drop landing on the next release date.
+  const nextDrops = upcoming.filter((c) => c.release_date === upcoming[0]?.release_date)
 
   return (
     <html
@@ -72,7 +76,14 @@ export default async function RootLayout({
         }}
       >
         <NavMenuProvider menu={menu}>
-          <SubscribeProvider>
+          <SubscribeProvider campaign={popupDrop ? `${popupDrop.slug}:${popupDrop.status}` : ''}>
+            {nextDrops.length > 0 && (
+              <DropBanner
+                names={nextDrops.map((c) => c.name).join(' + ')}
+                date={formatDropDate(nextDrops[0].release_date!)}
+                href={nextDrops.length === 1 ? dropHref(nextDrops[0]) : '/drops'}
+              />
+            )}
             <WishlistProvider>
               <CartProvider>
                 {children}

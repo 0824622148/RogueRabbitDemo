@@ -5,9 +5,9 @@ import { sendWelcomeEmail } from '@/lib/admin/email'
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 // Must stay in sync with the members.source CHECK constraint (schema.sql /
-// 003_member_sources.sql / 014_member_source_popup.sql). Unknown values fall
-// back to null so a bad `source` can never fail the insert.
-const ALLOWED_SOURCES = new Set(['homepage', 'preorder', 'navbar', 'footer', 'wishlist', 'popup'])
+// 003_member_sources.sql / 014_member_source_popup.sql / 016_member_source_drops.sql).
+// Unknown values fall back to null so a bad `source` can never fail the insert.
+const ALLOWED_SOURCES = new Set(['homepage', 'preorder', 'navbar', 'footer', 'wishlist', 'popup', 'banner', 'drop'])
 
 function getServiceClient() {
   return createClient(
@@ -47,15 +47,21 @@ export async function POST(request: NextRequest) {
     .maybeSingle()
   const isNew = !existing
 
-  const { error } = await db.from('members').upsert(
-    {
-      name: name?.trim() || null,
-      email: cleanEmail,
-      phone: phone?.trim() || null,
-      source: cleanSource,
-    },
-    { onConflict: 'email', ignoreDuplicates: true },
-  )
+  const save = (source: string | null) =>
+    db.from('members').upsert(
+      {
+        name: name?.trim() || null,
+        email: cleanEmail,
+        phone: phone?.trim() || null,
+        source,
+      },
+      { onConflict: 'email', ignoreDuplicates: true },
+    )
+
+  let { error } = await save(cleanSource)
+  // 23514 = CHECK violation: the source isn't in members_source_check yet (its
+  // migration hasn't run). Keep the signup, just without the source tag.
+  if (error?.code === '23514' && cleanSource) ({ error } = await save(null))
 
   if (error) {
     console.error('[MEMBERS] Insert failed:', JSON.stringify(error))

@@ -5,6 +5,7 @@ import Footer from '@/components/brand/Footer'
 import DroppingSoon from '@/components/brand/DroppingSoon'
 import CatalogHeader from '@/components/shop/CatalogHeader'
 import { getDrops, dropHref } from '@/lib/queries/collections'
+import { formatDropDate, todaySA } from '@/lib/drop-dates'
 import type { Collection } from '@/types'
 
 export const metadata: Metadata = {
@@ -17,6 +18,7 @@ export const revalidate = 300
 
 function DropTile({ drop, hero = false }: { drop: Collection; hero?: boolean }) {
   const soon = drop.status === 'coming_soon'
+  const dated = soon && drop.release_date && drop.release_date >= todaySA() ? drop.release_date : null
   return (
     <Link
       href={dropHref(drop)}
@@ -38,7 +40,7 @@ function DropTile({ drop, hero = false }: { drop: Collection; hero?: boolean }) 
       <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, transparent 40%, rgba(15,15,16,.9))' }} />
       <div style={{ position: 'relative' }}>
         <span className="rr-overline" style={{ color: '#D90017' }}>
-          [ {soon ? 'COMING SOON' : drop.kind === 'collab' ? 'COLLAB · LIVE' : 'DROP · LIVE'} ]
+          [ {dated ? `DROPPING ${formatDropDate(dated)}` : soon ? 'COMING SOON' : drop.kind === 'collab' ? 'COLLAB · LIVE' : 'DROP · LIVE'} ]
         </span>
         <h2 className="rr-display" style={{ fontSize: hero ? 'clamp(64px, 11vw, 160px)' : 72, lineHeight: 0.88, margin: '14px 0 0' }}>
           {drop.name}

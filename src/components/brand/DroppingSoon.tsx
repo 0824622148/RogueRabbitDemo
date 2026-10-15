@@ -2,6 +2,8 @@ import NavBar from './NavBar'
 import Footer from './Footer'
 import Marquee from './Marquee'
 import Asterisk from './Asterisk'
+import SubscribeForm from './SubscribeForm'
+import { formatDropDate } from '@/lib/drop-dates'
 import type { HeroPanel } from '@/types'
 
 interface DroppingSoonProps {
@@ -13,9 +15,11 @@ interface DroppingSoonProps {
   images?: HeroPanel[] | null
   /** Artwork shown darkened behind the title (e.g. the drop's back print). */
   background?: string | null
+  /** YYYY-MM-DD — swaps "Dropping Soon" for the date and adds the members sign-up. */
+  releaseDate?: string | null
 }
 
-export default function DroppingSoon({ title, eyebrow, tagline, images, background }: DroppingSoonProps) {
+export default function DroppingSoon({ title, eyebrow, tagline, images, background, releaseDate }: DroppingSoonProps) {
   return (
     <div style={{ background: '#0F0F10', color: '#E6E6E6', fontFamily: 'var(--font-body)', display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <NavBar />
@@ -69,7 +73,7 @@ export default function DroppingSoon({ title, eyebrow, tagline, images, backgrou
             marginBottom: 40,
           }}
         >
-          Dropping Soon
+          {releaseDate ? `Dropping ${formatDropDate(releaseDate)}` : 'Dropping Soon'}
         </div>
 
         {/* Divider */}
@@ -83,6 +87,16 @@ export default function DroppingSoon({ title, eyebrow, tagline, images, backgrou
         <p style={{ fontSize: 14, color: '#A6A6A8', lineHeight: 1.8, maxWidth: 400, margin: '0 0 40px' }}>
           {tagline ?? <>Something wild is on its way. Stay locked in — we&apos;ll let you know when it&apos;s ready to drop.</>}
         </p>
+
+        {/* Members sign-up — only for a dated drop, where early access means something */}
+        {releaseDate && (
+          <div style={{ width: '100%', maxWidth: 420, margin: '0 0 28px', textAlign: 'left' }}>
+            <span className="rr-overline" style={{ color: '#D90017', display: 'block', marginBottom: 14, textAlign: 'center' }}>
+              MEMBERS GET 48H EARLY ACCESS
+            </span>
+            <SubscribeForm source="drop" buttonLabel="GET EARLY ACCESS" />
+          </div>
+        )}
 
         {/* CTA */}
         <a
@@ -115,7 +129,7 @@ export default function DroppingSoon({ title, eyebrow, tagline, images, backgrou
         </section>
       )}
 
-      <Marquee items={['NO FEAR', 'JUST MOTION', 'DROPPING SOON', 'ROUGE RABBIT']} speed={28} accent="rouge" />
+      <Marquee items={['NO FEAR', 'JUST MOTION', releaseDate ? `DROPPING ${formatDropDate(releaseDate)}` : 'DROPPING SOON', 'ROUGE RABBIT']} speed={28} accent="rouge" />
 
       <Footer />
     </div>

@@ -7,6 +7,7 @@ import ProductCard from '@/components/brand/ProductCard'
 import DroppingSoon from '@/components/brand/DroppingSoon'
 import CollectionHero from '@/components/drops/CollectionHero'
 import { getCollection, dropHref } from '@/lib/queries/collections'
+import { formatDropDate, todaySA } from '@/lib/drop-dates'
 import type { Product } from '@/types'
 
 // One page per collection — top-level drops (Bagged League, Beauty in Contrast, Signal) and
@@ -23,7 +24,12 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   const { collection } = detail
   return {
     title: `${collection.name} — Rouge Rabbit`,
-    description: collection.tagline ?? `${collection.name} — a Rouge Rabbit drop.`,
+    description:
+      collection.status === 'coming_soon' && collection.release_date && collection.release_date >= todaySA()
+        ? [`${collection.name} drops ${formatDropDate(collection.release_date)}.`, collection.tagline, 'Members get 48-hour early access.']
+            .filter(Boolean).join(' ')
+        : collection.tagline ?? `${collection.name} — a Rouge Rabbit drop.`,
+    openGraph: collection.hero_image ? { images: [collection.hero_image] } : undefined,
   }
 }
 
@@ -58,6 +64,7 @@ export default async function DropPage({ params }: { params: Params }) {
         tagline={collection.tagline}
         images={collection.hero_panels}
         background={collection.hero_image}
+        releaseDate={collection.release_date && collection.release_date >= todaySA() ? collection.release_date : null}
       />
     )
   }

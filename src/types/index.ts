@@ -57,6 +57,10 @@ export interface PopupDrop {
   status: 'live' | 'coming_soon'
   logo: string | null
   image: HeroPanel | null
+  /** Set while it's an upcoming drop with a date (YYYY-MM-DD). */
+  releaseDate: string | null
+  /** Other drops releasing the same day, named alongside it. */
+  alsoDropping: string[]
 }
 
 /** One entry in the site menu. Top-level items with children open a dropdown. */

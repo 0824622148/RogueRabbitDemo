@@ -1,6 +1,7 @@
 import { cache } from 'react'
 import { supabase } from '@/lib/supabase'
 import { getProductsByCollection } from '@/lib/queries/products'
+import { formatDropDay, todaySA } from '@/lib/drop-dates'
 import type { Collection, NavItem, PopupDrop, Product } from '@/types'
 
 // Every visible collection, memoised per request. Returns [] if the table isn't
@@ -63,12 +64,26 @@ export async function getDrops(): Promise<Collection[]> {
 export const dropHref = (c: Pick<Collection, 'slug'>) => `/drops/${c.slug}`
 
 /**
- * The drop that themes the members popup: the featured live drop, else any
- * live drop, else the next one coming soon. Null leaves the plain popup.
+ * Teasers with a release date that hasn't passed yet (SA time), soonest first.
+ * These drive the announcement bar, the home "next drop" section and the popup.
+ */
+export async function getUpcomingDrops(): Promise<Collection[]> {
+  const today = todaySA()
+  return (await fetchCollections())
+    .filter((c) => c.parent_id === null && c.status === 'coming_soon' && c.release_date && c.release_date >= today)
+    .sort((a, b) => a.release_date!.localeCompare(b.release_date!) || a.sort_order - b.sort_order)
+}
+
+/**
+ * The drop that themes the members popup: the next dated drop (so the popup
+ * promotes what's coming), else the featured live drop, else any live drop,
+ * else any teaser. Null leaves the plain popup.
  */
 export async function getPopupDrop(): Promise<PopupDrop | null> {
+  const upcoming = await getUpcomingDrops()
   const top = (await fetchCollections()).filter((c) => c.parent_id === null)
   const c =
+    upcoming[0] ??
     top.find((x) => x.is_featured && x.status === 'live') ??
     top.find((x) => x.status === 'live') ??
     top.find((x) => x.status === 'coming_soon')
@@ -80,7 +95,15 @@ export async function getPopupDrop(): Promise<PopupDrop | null> {
   const image = c.hero_image
     ? panels.find((p) => p.src === c.hero_image) ?? { src: c.hero_image, alt: c.name }
     : panels[0] ?? null
-  return { name: c.name, slug: c.slug, tagline: c.tagline, status: c.status, logo: c.logo_image, image }
+  // Other drops landing the same day are named alongside it in the copy.
+  const alsoDropping = c.release_date
+    ? upcoming.filter((u) => u.id !== c.id && u.release_date === c.release_date).map((u) => u.name)
+    : []
+  return {
+    name: c.name, slug: c.slug, tagline: c.tagline, status: c.status, logo: c.logo_image, image,
+    releaseDate: c.status === 'coming_soon' ? c.release_date : null,
+    alsoDropping,
+  }
 }
 
 /**
@@ -134,7 +157,9 @@ export const getNavMenu = cache(async (): Promise<{ featured: NavItem[]; drops: 
   const drops = (await getDrops()).map((c): NavItem => ({
     label: c.name,
     href: dropHref(c),
-    tag: c.status === 'coming_soon' ? 'SOON' : undefined,
+    tag: c.status === 'coming_soon'
+      ? c.release_date && c.release_date >= todaySA() ? formatDropDay(c.release_date) : 'SOON'
+      : undefined,
   }))
 
   return { featured, drops }

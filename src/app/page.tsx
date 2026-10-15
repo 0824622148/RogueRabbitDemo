@@ -6,7 +6,9 @@ import FeaturedDrop from '@/components/home/FeaturedDrop'
 import CampaignStrip from '@/components/home/CampaignStrip'
 import NewArrivals from '@/components/home/NewArrivals'
 import SplitCTA from '@/components/home/SplitCTA'
+import UpcomingDrops from '@/components/home/UpcomingDrops'
 import { getProductsByCategory } from '@/lib/queries/products'
+import { getUpcomingDrops } from '@/lib/queries/collections'
 
 // Card prices come from Supabase products.price. Without this the page is
 // prerendered once at build time and a price change in the DB stays invisible
@@ -15,10 +17,11 @@ export const revalidate = 300
 
 export default async function HomePage() {
   // Sneaker carousel stays footwear-only; New Arrivals shows the in-stock range.
-  const [sideProducts, apparel, accessories] = await Promise.all([
+  const [sideProducts, apparel, accessories, upcoming] = await Promise.all([
     getProductsByCategory('FOOTWEAR', 'SIDE'),
     getProductsByCategory('APPAREL'),
     getProductsByCategory('ACCESSORIES'),
+    getUpcomingDrops(),
   ])
 
   return (
@@ -26,6 +29,7 @@ export default async function HomePage() {
       <NavBar />
       <Hero />
       <div><TrustStrip /></div>
+      <UpcomingDrops drops={upcoming} />
       <NewArrivals products={[...apparel, ...accessories]} />
       <CampaignStrip />
       <div><FeaturedDrop products={sideProducts} /></div>
