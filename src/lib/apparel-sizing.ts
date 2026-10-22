@@ -18,6 +18,9 @@ export const TEE_SIZES: TeeSizeRow[] = [
   { size: 'M',  chest: 59, length: 72 },
   { size: 'L',  chest: 62, length: 74 },
   { size: 'XL', chest: 65, length: 76 },
+  // Signal and Beauty in Contrast go up to 3XL; Bagged League stops at XL.
+  { size: '2XL', chest: 68, length: 78 },
+  { size: '3XL', chest: 71, length: 80 },
 ]
 
 export const TEE_FIT_NOTE =
@@ -45,8 +48,14 @@ export function apparelKind(product: { name: string; category?: string | null })
   return null
 }
 
-/** Description paragraph and spec lines for the product page. */
-export function productDetails(kind: ApparelKind): { description: string; specs: string[] } | null {
+/**
+ * Description paragraph and spec lines for the product page. `sizes` is the
+ * product's own size run (e.g. ['S', …, '3XL']) — ranges differ between drops.
+ */
+export function productDetails(
+  kind: ApparelKind,
+  sizes: string[] = [],
+): { description: string; specs: string[] } | null {
   if (kind === 'tee') {
     return {
       description:
@@ -60,7 +69,7 @@ export function productDetails(kind: ApparelKind): { description: string; specs:
         'Ribbed crew neckline',
         'Soft-touch finish',
         'Front ROUGE RABBIT branding · statement back artwork',
-        'Unisex · sizes S – XL',
+        sizes.length > 1 ? `Unisex · sizes ${sizes[0]} – ${sizes[sizes.length - 1]}` : 'Unisex',
         'Wash cold, inside out · do not tumble dry · do not iron the print',
       ],
     }

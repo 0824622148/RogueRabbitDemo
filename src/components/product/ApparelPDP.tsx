@@ -33,7 +33,6 @@ export default function ApparelPDP({ product, initialColourwayId }: Props) {
   const preRelease = product.releaseDate !== null
   const locked = onHold || preRelease
   const kind = apparelKind(product)
-  const details = productDetails(kind)
 
   const [cw, setCw] = useState<ColourwayDB>(
     product.colourways.find((c) => c.id === initialColourwayId) ?? product.colourways[0],
@@ -46,6 +45,7 @@ export default function ApparelPDP({ product, initialColourwayId }: Props) {
 
   // One-size products (caps) are pre-selected.
   const sizes = cw.inventory
+  const details = productDetails(kind, sizes.map((s) => s.size_value))
   const [sizeId, setSizeId] = useState<number | null>(
     sizes.length === 1 && available(sizes[0]) > 0 ? sizes[0].id : null,
   )
@@ -189,7 +189,7 @@ export default function ApparelPDP({ product, initialColourwayId }: Props) {
             </div>
             {kind && <ApparelSizeGuide kind={kind} />}
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: `repeat(${Math.min(Math.max(sizes.length, 1), 5)}, 1fr)`, gap: 6 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: `repeat(${Math.min(Math.max(sizes.length, 1), 6)}, 1fr)`, gap: 6 }}>
             {sizes.map((s) => {
               const oos = available(s) === 0
               return (
