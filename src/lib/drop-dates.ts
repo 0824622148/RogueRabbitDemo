@@ -6,6 +6,11 @@ export function todaySA(): string {
   return new Intl.DateTimeFormat('en-CA', { timeZone: 'Africa/Johannesburg' }).format(new Date())
 }
 
+/** A product with a future release_date stays hidden (and unbuyable) until that day, SA time. */
+export function isReleased(releaseDate: string | null | undefined): boolean {
+  return !releaseDate || releaseDate <= todaySA()
+}
+
 /** '2026-10-23' → 'FRI 23 OCT'. */
 export function formatDropDate(date: string): string {
   const d = new Date(`${date}T00:00:00Z`)

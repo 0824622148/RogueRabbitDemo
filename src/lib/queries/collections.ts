@@ -15,14 +15,23 @@ const fetchCollections = cache(async (): Promise<Collection[]> => {
     supabase.from('collections').select(columns).neq('status', 'hidden').order('sort_order')
 
   const { data, error } = await query(`${COLLECTION_COLUMNS}, hero_title, hero_panels`)
-  if (!error) return (data ?? []) as unknown as Collection[]
+  if (!error) return releaseDue((data ?? []) as unknown as Collection[])
 
   // hero_title / hero_panels arrive with supabase/011_collection_hero.sql —
   // fall back to the single-image hero until it has run.
   const { data: legacy, error: legacyError } = await query(COLLECTION_COLUMNS)
   if (legacyError) return []
-  return (legacy ?? []) as unknown as Collection[]
+  return releaseDue((legacy ?? []) as unknown as Collection[])
 })
+
+// A coming_soon drop goes live by itself on its release day (SA time), in step
+// with its products (see isReleased) — no one has to flip the row at midnight.
+function releaseDue(all: Collection[]): Collection[] {
+  const today = todaySA()
+  return all.map((c) =>
+    c.status === 'coming_soon' && c.release_date && c.release_date <= today ? { ...c, status: 'live' } : c,
+  )
+}
 
 const childrenOf = (all: Collection[], id: number) => all.filter((c) => c.parent_id === id)
 

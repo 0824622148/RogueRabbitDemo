@@ -5,6 +5,7 @@
 // what is charged.
 
 import { getServiceClient } from '@/lib/admin/service'
+import { isReleased } from '@/lib/drop-dates'
 
 export interface CartInput {
   inventoryId: number
@@ -71,7 +72,7 @@ export async function priceCart(items: CartInput[]): Promise<PricedLine[]> {
       id, size_value, in_stock, stock_count,
       colourways (
         id, name,
-        products ( id, name, price, category, is_active )
+        products ( id, name, price, category, is_active, release_date )
       )
     `)
     .in('id', items.map((i) => i.inventoryId))
@@ -87,7 +88,7 @@ export async function priceCart(items: CartInput[]): Promise<PricedLine[]> {
     const row = byId.get(inventoryId)
     const cw = row?.colourways
     const product = cw?.products
-    if (!row || !cw || !product || !product.is_active) {
+    if (!row || !cw || !product || !product.is_active || !isReleased(product.release_date)) {
       throw new CartError('An item in your bag is no longer available. Please remove it and try again.')
     }
     const category = String(product.category ?? '').toUpperCase()

@@ -1,5 +1,6 @@
 import { cache } from 'react'
 import { supabase } from '@/lib/supabase'
+import { isReleased } from '@/lib/drop-dates'
 import type { Product, ColourwayDB, InventoryItem } from '@/types'
 
 const LISTING_COLUMNS = `
@@ -13,7 +14,8 @@ const LISTING_COLUMNS = `
 
 // Memoised per request — two callers on the same page share one DB round-trip.
 // Newest release first ("All Items — latest release"); id breaks ties so pieces
-// from the same drop keep their seeded order.
+// from the same drop keep their seeded order. Unreleased pieces are left out, so
+// a drop can be loaded ahead of time and appears on its release day.
 const fetchAllProducts = cache(async () => {
   const { data, error } = await supabase
     .from('products')
@@ -21,7 +23,7 @@ const fetchAllProducts = cache(async () => {
     .eq('is_active', true)
     .order('release_date', { ascending: false, nullsFirst: false })
     .order('id', { ascending: false })
-  if (!error) return (data ?? []) as any[]
+  if (!error) return ((data ?? []) as any[]).filter((p) => isReleased(p.release_date))
 
   // release_date / collection_id arrive with supabase/010_collections.sql —
   // keep the shop up if the code deploys before the migration has run.
@@ -113,7 +115,7 @@ export async function getProduct(slug: string): Promise<ProductDetail | null> {
   const { data, error } = await supabase
     .from('products')
     .select(`
-      id, name, slug, category, drop_label, price, compare_at_price, badge, media_bg,
+      id, name, slug, category, drop_label, price, compare_at_price, badge, media_bg, release_date,
       colourways (
         id, name, hex, sort_order,
         product_images (view, url),
@@ -126,6 +128,7 @@ export async function getProduct(slug: string): Promise<ProductDetail | null> {
 
   if (error || !data) return null
   const d = data as any
+  if (!isReleased(d.release_date)) return null
 
   const colourways: ColourwayDB[] = (d.colourways as any[])
     .sort((a: any, b: any) => a.sort_order - b.sort_order)
