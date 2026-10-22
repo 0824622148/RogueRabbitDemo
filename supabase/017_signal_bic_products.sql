@@ -5,10 +5,10 @@
 -- own. The two collections go live at the same moment (releaseDue in
 -- src/lib/queries/collections.ts), so nothing needs flipping at midnight.
 --
--- R350 each, unisex S–XL, 10 units per size until the team confirms counts.
+-- R350 each, unisex S–XL, 25 units per size (confirmed by the client 22 Oct).
 -- Images live in public/assets/apparel/ (from the client's 22 Oct packshots).
 --
--- Re-runnable, but NOTE re-running RESETS stock to 10 — after launch, edit
+-- Re-runnable, but NOTE re-running RESETS stock to 25 — after launch, edit
 -- stock from /admin/inventory instead.
 
 begin;
@@ -41,7 +41,7 @@ insert into product_images (colourway_id, view, url) values
   ('bic-wht',    'BACK',  '/assets/apparel/beauty-in-contrast-back.jpg');
 
 insert into inventory (colourway_id, gender, size_value, in_stock, stock_count, sort_order)
-select cw, 'U', sz, true, 10, ord
+select cw, 'U', sz, true, 25, ord
   from (values ('signal-blk'), ('bic-wht')) as c(cw)
  cross join (values ('S', 1), ('M', 2), ('L', 3), ('XL', 4)) as s(sz, ord)
 on conflict (colourway_id, gender, size_value) do update
