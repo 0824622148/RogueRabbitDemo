@@ -1,5 +1,5 @@
 const TRUST_ITEMS = [
-  ['HEAVYWEIGHT · 300 GSM', 'Best-in-class cotton. Built to hold its shape, wash after wash.'],
+  ['HEAVYWEIGHT · 300 GSM', '95% cotton, 5% elastane. Built to hold its shape, wash after wash.'],
   ['NATIONWIDE DELIVERY', 'Door-to-door by The Courier Guy.'],
   ['RETURNS · 30 DAYS',   "Don't love it? Send it back."],
   ['MEMBERS DROP FIRST',  'Sign up · 48h early access.'],

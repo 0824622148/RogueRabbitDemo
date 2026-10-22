@@ -54,7 +54,7 @@ export default function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
       className={`rr-hero-carousel${paused ? ' is-paused' : ''}`}
       role="region"
       aria-roledescription="carousel"
-      aria-label="Bagged League × Rouge Rabbit campaign"
+      aria-label="Rouge Rabbit campaign"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       onFocus={() => setFocused(true)}

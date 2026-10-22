@@ -50,12 +50,17 @@ export function productDetails(kind: ApparelKind): { description: string; specs:
   if (kind === 'tee') {
     return {
       description:
-        'Heavyweight cotton, cut oversized and boxy with dropped shoulders and a wide body. ' +
-        'Built to hold its shape, wash after wash.',
+        'Heavyweight cotton with a touch of stretch, cut oversized with dropped shoulders ' +
+        'for a relaxed, structured silhouette. Built to hold its shape, wash after wash.',
       specs: [
-        `${TEE_WEIGHT_LABEL} heavyweight cotton`,
-        'Oversized, boxy fit · dropped shoulders',
-        'Sizes S – XL',
+        `${TEE_WEIGHT_LABEL} heavyweight fabric`,
+        '95% cotton / 5% elastane',
+        'Oversized fit · dropped shoulders',
+        'Relaxed, structured silhouette',
+        'Ribbed crew neckline',
+        'Soft-touch finish',
+        'Front ROUGE RABBIT branding · statement back artwork',
+        'Unisex · sizes S – XL',
         'Wash cold, inside out · do not tumble dry · do not iron the print',
       ],
     }

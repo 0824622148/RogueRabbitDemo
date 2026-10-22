@@ -2,11 +2,18 @@ import Link from 'next/link'
 import Arrow from '@/components/brand/Arrow'
 import HeroCarousel, { type HeroSlide } from './HeroCarousel'
 
-// Campaign photos for the hero frame — people and cars alternating.
+// Campaign photos for the hero frame — the newest drops lead, then the
+// Bagged League people and cars alternating.
 const BL = '/assets/drops/bagged-league'
+const BIC = '/assets/drops/beauty-in-contrast'
+const SIG = '/assets/drops/signal'
 const HERO_SLIDES: HeroSlide[] = [
+  { src: `${BIC}/back.jpg`, alt: 'Beauty in Contrast tee back print — statue with a red-painted blindfold', caption: 'BEAUTY IN CONTRAST TEE', href: '/drops/beauty-in-contrast', pos: 'center 45%' },
+  { src: `${SIG}/back.jpg`, alt: 'Signal tee back print — diver helmet with a goldfish', caption: 'SIGNAL TEE', href: '/drops/signal', pos: 'center 45%' },
   { src: `${BL}/paint-shop-model.jpg`, alt: 'Paint Shop tee worn arms-out on a hilltop', caption: 'PAINT SHOP TEE', href: '/drops/paint-shop', pos: 'center 38%' },
+  { src: `${BIC}/front.jpg`, alt: 'Beauty in Contrast white tee and cap — front', caption: 'BEAUTY IN CONTRAST · FRONT', href: '/drops/beauty-in-contrast', pos: 'center 40%' },
   { src: `${BL}/golf-pair.jpg`, alt: 'Bagged white and red VW Citi Golfs at sunset', caption: 'BAGGED LEAGUE · CITI GOLFS', href: '/drops/bagged-league', pos: 'center 62%' },
+  { src: `${SIG}/front.jpg`, alt: 'Signal black tee and cap — front', caption: 'SIGNAL · FRONT', href: '/drops/signal', pos: 'center 40%' },
   { src: `${BL}/duo.jpg`, alt: 'Paint Shop and Air Down tees worn on the railway tracks', caption: 'PAINT SHOP × AIR DOWN', href: '/drops/bagged-league', pos: 'center 45%' },
   { src: `${BL}/red-car.jpg`, alt: 'Bagged red VW Golf front wheel at a night meet', caption: 'BAGGED LEAGUE · NIGHT MEET', href: '/drops/bagged-league', pos: '55% 60%' },
   { src: `${BL}/air-down.jpg`, alt: 'Air Down tee back print — Standard, Low, Lower, Bagged', caption: 'AIR DOWN TEE', href: '/drops/air-down', pos: 'center 55%' },
