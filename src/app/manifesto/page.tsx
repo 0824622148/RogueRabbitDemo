@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { SNEAKERS_HIDDEN } from '@/lib/store-status'
 import NavBar from '@/components/brand/NavBar'
 import Footer from '@/components/brand/Footer'
 import Arrow from '@/components/brand/Arrow'
@@ -262,7 +263,7 @@ export default function ManifestoPage() {
             We Become It.
           </p>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-            <Link href="/shop/rouge-01" style={{ textDecoration: 'none' }}>
+            <Link href={SNEAKERS_HIDDEN ? '/shop' : '/shop/rouge-01'} style={{ textDecoration: 'none' }}>
               <button
                 style={{
                   display: 'inline-flex', alignItems: 'center', gap: 10,

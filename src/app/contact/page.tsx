@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { SNEAKERS_HIDDEN } from '@/lib/store-status'
 import NavBar from '@/components/brand/NavBar'
 import Footer from '@/components/brand/Footer'
 import FAQAccordion from '@/components/brand/FAQAccordion'
@@ -28,7 +29,9 @@ const FAQS = [
   },
   {
     q: 'How do I find my size?',
-    a: "The Rouge 01 runs true to size. Use the Sizing Guide on any product page or in the shop sidebar to compare UK, EU, and foot-length measurements. If you're between sizes, size up. Still unsure? Drop us an email.",
+    a: SNEAKERS_HIDDEN
+      ? "Our tees are an oversized, boxy fit — take your usual size for the intended look, or size down for a closer fit. Caps are one size with an adjustable strap. See the Sizing Guide for measurements. Still unsure? Drop us an email."
+      : "The Rouge 01 runs true to size. Use the Sizing Guide on any product page or in the shop sidebar to compare UK, EU, and foot-length measurements. If you're between sizes, size up. Still unsure? Drop us an email.",
   },
   {
     q: 'Do you ship internationally?',

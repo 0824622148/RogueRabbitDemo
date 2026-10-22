@@ -1,12 +1,12 @@
 import Link from 'next/link'
-import { SNEAKER_ORDERS_ON_HOLD } from '@/lib/store-status'
+import { SNEAKER_ORDERS_ON_HOLD, SNEAKERS_HIDDEN } from '@/lib/store-status'
 
 const CATEGORIES = [
   { label: 'ALL ITEMS', href: '/shop' },
   { label: 'TOPS', href: '/shop/tops' },
   { label: 'ACCESSORIES', href: '/shop/accessories' },
   { label: 'FOOTWEAR', href: '/shop/footwear', soon: SNEAKER_ORDERS_ON_HOLD },
-]
+].filter((c) => !(SNEAKERS_HIDDEN && c.href === '/shop/footwear'))
 
 /** Category pills under the catalog header — mirrors the SHOP dropdown. */
 export default function ShopCategoryNav({ active }: { active: string }) {

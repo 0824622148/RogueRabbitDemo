@@ -1,4 +1,4 @@
-import { SNEAKER_ORDERS_ON_HOLD } from '@/lib/store-status'
+import { SNEAKER_ORDERS_ON_HOLD, SNEAKERS_HIDDEN } from '@/lib/store-status'
 import type { NavItem } from '@/types'
 
 /**
@@ -16,7 +16,9 @@ export function buildMenu({ featured, drops }: { featured: NavItem[]; drops: Nav
         { label: 'ALL ITEMS', href: '/shop' },
         { label: 'TOPS', href: '/shop/tops' },
         { label: 'ACCESSORIES', href: '/shop/accessories' },
-        { label: 'FOOTWEAR', href: '/shop/footwear', tag: SNEAKER_ORDERS_ON_HOLD ? 'DROPPING SOON' : undefined },
+        ...(SNEAKERS_HIDDEN
+          ? []
+          : [{ label: 'FOOTWEAR', href: '/shop/footwear', tag: SNEAKER_ORDERS_ON_HOLD ? 'DROPPING SOON' : undefined }]),
       ],
     },
     { label: 'DROPS', href: '/drops', children: drops },

@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import RougeLogo from './RougeLogo'
 import SubscribeButton from './SubscribeButton'
+import { SNEAKERS_HIDDEN } from '@/lib/store-status'
 import { FaInstagram, FaYoutube } from 'react-icons/fa'
 import { FaTiktok, FaXTwitter } from 'react-icons/fa6'
 
@@ -11,7 +12,7 @@ const FOOTER_COLS = [
     title: 'SHOP',
     items: [
       { label: 'New Arrivals',   href: '/shop' },
-      { label: 'Footwear',       href: '/shop/footwear' },
+      ...(SNEAKERS_HIDDEN ? [] : [{ label: 'Footwear', href: '/shop/footwear' }]),
       { label: 'Tops',           href: '/shop/tops' },
       { label: 'Accessories',    href: '/shop/accessories' },
       { label: 'Sale',           href: '/sale' },

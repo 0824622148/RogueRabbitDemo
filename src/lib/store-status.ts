@@ -16,6 +16,13 @@
  * components (PDPHero, ProductCard, PreOrderModal, CartDrawer) can import them.
  */
 
+/**
+ * Hides the ROUGE 01 from the storefront until it launches (client, 22 Oct 2026):
+ * no footwear in listings, menus or the home page, and /shop/footwear and
+ * /shop/rouge-01 redirect to /shop. Flip to false to bring it all back.
+ */
+export const SNEAKERS_HIDDEN = true
+
 /** ROUGE 01 pre-order. False restores footwear pricing and pre-ordering. */
 export const SNEAKER_ORDERS_ON_HOLD = true
 

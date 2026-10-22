@@ -9,6 +9,7 @@ import SplitCTA from '@/components/home/SplitCTA'
 import UpcomingDrops from '@/components/home/UpcomingDrops'
 import { getProductsByCategory } from '@/lib/queries/products'
 import { getUpcomingDrops } from '@/lib/queries/collections'
+import { SNEAKERS_HIDDEN } from '@/lib/store-status'
 
 // Card prices come from Supabase products.price. Without this the page is
 // prerendered once at build time and a price change in the DB stays invisible
@@ -34,7 +35,7 @@ export default async function HomePage() {
       {/* Everything below New Arrivals — one block so mobile ordering stays put */}
       <div className="rr-home-rest">
         <CampaignStrip />
-        <FeaturedDrop products={sideProducts} />
+        {!SNEAKERS_HIDDEN && <FeaturedDrop products={sideProducts} />}
         <SplitCTA />
         <Footer />
       </div>

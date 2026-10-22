@@ -1,6 +1,7 @@
 import { cache } from 'react'
 import { supabase } from '@/lib/supabase'
 import { formatDropDay, isReleased } from '@/lib/drop-dates'
+import { SNEAKERS_HIDDEN } from '@/lib/store-status'
 import type { Product, ColourwayDB, InventoryItem } from '@/types'
 
 const LISTING_COLUMNS = `
@@ -23,7 +24,7 @@ const fetchAllProducts = cache(async () => {
     .eq('is_active', true)
     .order('release_date', { ascending: false, nullsFirst: false })
     .order('id', { ascending: false })
-  if (!error) return (data ?? []) as any[]
+  if (!error) return withoutHidden((data ?? []) as any[])
 
   // release_date / collection_id arrive with supabase/010_collections.sql —
   // keep the shop up if the code deploys before the migration has run.
@@ -32,8 +33,12 @@ const fetchAllProducts = cache(async () => {
     .select(LISTING_COLUMNS)
     .eq('is_active', true)
     .order('id')
-  return (legacy ?? []) as any[]
+  return withoutHidden((legacy ?? []) as any[])
 })
+
+function withoutHidden(rows: any[]): any[] {
+  return SNEAKERS_HIDDEN ? rows.filter((p) => String(p.category ?? '').toUpperCase() !== 'FOOTWEAR') : rows
+}
 
 function colourwayToProduct(p: any, cw: any, view: 'FRONT' | 'SIDE'): Product {
   const images = cw.product_images as any[]

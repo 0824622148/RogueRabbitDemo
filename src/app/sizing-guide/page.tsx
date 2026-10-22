@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import PolicyLayout from '@/components/brand/PolicyLayout'
 import { ApparelSizeContent } from '@/components/shop/ApparelSizeGuide'
+import { SNEAKERS_HIDDEN } from '@/lib/store-status'
 
 const SIZE_GUIDE = {
   MALE: [
@@ -49,7 +50,7 @@ export default function SizingGuidePage() {
     <PolicyLayout title="Sizing Guide" lastUpdated="October 2026">
 
       <p style={S.p}>
-        Find your fit for every Rouge Rabbit piece: tees, caps and footwear. Still unsure?
+        Find your fit for every Rouge Rabbit piece: {SNEAKERS_HIDDEN ? 'tees and caps' : 'tees, caps and footwear'}. Still unsure?
         Our team is happy to help (details at the bottom of this page).
       </p>
 
@@ -59,76 +60,80 @@ export default function SizingGuidePage() {
       <h2 id="caps" style={S.h2}>Caps</h2>
       <ApparelSizeContent kind="cap" />
 
-      <h2 id="footwear" style={S.h2}>Footwear · How to Measure</h2>
-      <p style={S.p}>
-        All Rouge Rabbit footwear is sized in UK sizing. If you are between sizes, we
-        recommend sizing up.
-      </p>
-      <p style={S.p}>
-        Stand on a flat surface and measure the distance from the back of your heel to the
-        tip of your longest toe. Do this in the afternoon when your feet are at their largest.
-        The Rouge 01 runs true to size.
-      </p>
+      {!SNEAKERS_HIDDEN && (
+        <>
+          <h2 id="footwear" style={S.h2}>Footwear · How to Measure</h2>
+          <p style={S.p}>
+            All Rouge Rabbit footwear is sized in UK sizing. If you are between sizes, we
+            recommend sizing up.
+          </p>
+          <p style={S.p}>
+            Stand on a flat surface and measure the distance from the back of your heel to the
+            tip of your longest toe. Do this in the afternoon when your feet are at their largest.
+            The Rouge 01 runs true to size.
+          </p>
 
-      <h2 style={S.h2}>Footwear Size Chart</h2>
+          <h2 style={S.h2}>Footwear Size Chart</h2>
 
-      {/* Gender toggle */}
-      <div style={{ display: 'flex', maxWidth: 320, marginBottom: 24 }}>
-        {(['MALE', 'FEMALE'] as const).map((g, i) => (
-          <button
-            key={g}
-            onClick={() => setGender(g)}
-            style={{
-              flex: 1, padding: '10px 0',
-              fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.14em',
-              border: '1px solid #3A3A3C',
-              borderRight: i === 0 ? 'none' : '1px solid #3A3A3C',
-              background: gender === g ? '#D90017' : 'transparent',
-              color: gender === g ? '#fff' : '#A6A6A8',
-              cursor: 'pointer',
-            }}
-          >
-            {g}
-          </button>
-        ))}
-      </div>
+          {/* Gender toggle */}
+          <div style={{ display: 'flex', maxWidth: 320, marginBottom: 24 }}>
+            {(['MALE', 'FEMALE'] as const).map((g, i) => (
+              <button
+                key={g}
+                onClick={() => setGender(g)}
+                style={{
+                  flex: 1, padding: '10px 0',
+                  fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.14em',
+                  border: '1px solid #3A3A3C',
+                  borderRight: i === 0 ? 'none' : '1px solid #3A3A3C',
+                  background: gender === g ? '#D90017' : 'transparent',
+                  color: gender === g ? '#fff' : '#A6A6A8',
+                  cursor: 'pointer',
+                }}
+              >
+                {g}
+              </button>
+            ))}
+          </div>
 
-      {/* Size table */}
-      <div style={{ border: '1px solid #3A3A3C', maxWidth: 480 }}>
-        <div style={{
-          display: 'grid', gridTemplateColumns: '1fr 1fr 1fr',
-          padding: '12px 20px',
-          borderBottom: '1px solid #3A3A3C',
-          background: '#1E1E20',
-        }}>
-          {['UK', 'EU', 'FOOT LENGTH'].map(h => (
-            <span key={h} className="rr-mono" style={{ fontSize: 9, color: '#A6A6A8', letterSpacing: '.16em' }}>{h}</span>
-          ))}
-        </div>
-        {rows.map((r, idx) => (
-          <div
-            key={r.uk}
-            style={{
+          {/* Size table */}
+          <div style={{ border: '1px solid #3A3A3C', maxWidth: 480 }}>
+            <div style={{
               display: 'grid', gridTemplateColumns: '1fr 1fr 1fr',
               padding: '12px 20px',
-              borderBottom: idx < rows.length - 1 ? '1px solid #3A3A3C' : 'none',
-              background: idx % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.02)',
-            }}
-          >
-            <span className="rr-mono" style={{ color: '#E6E6E6', fontSize: 12 }}>{r.uk}</span>
-            <span className="rr-mono" style={{ color: '#E6E6E6', fontSize: 12 }}>{r.eu}</span>
-            <span className="rr-mono" style={{ color: '#A6A6A8', fontSize: 12 }}>{r.cm}</span>
+              borderBottom: '1px solid #3A3A3C',
+              background: '#1E1E20',
+            }}>
+              {['UK', 'EU', 'FOOT LENGTH'].map(h => (
+                <span key={h} className="rr-mono" style={{ fontSize: 9, color: '#A6A6A8', letterSpacing: '.16em' }}>{h}</span>
+              ))}
+            </div>
+            {rows.map((r, idx) => (
+              <div
+                key={r.uk}
+                style={{
+                  display: 'grid', gridTemplateColumns: '1fr 1fr 1fr',
+                  padding: '12px 20px',
+                  borderBottom: idx < rows.length - 1 ? '1px solid #3A3A3C' : 'none',
+                  background: idx % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.02)',
+                }}
+              >
+                <span className="rr-mono" style={{ color: '#E6E6E6', fontSize: 12 }}>{r.uk}</span>
+                <span className="rr-mono" style={{ color: '#E6E6E6', fontSize: 12 }}>{r.eu}</span>
+                <span className="rr-mono" style={{ color: '#A6A6A8', fontSize: 12 }}>{r.cm}</span>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
 
-      <h2 style={S.h2}>Footwear Fit Tips</h2>
-      <ul style={{ margin: '0 0 14px', paddingLeft: 24, display: 'flex', flexDirection: 'column', gap: 8 }}>
-        <li>Measure both feet — use the larger measurement.</li>
-        <li>Wear the socks you intend to pair with the shoe when measuring.</li>
-        <li>If between sizes, size up for a more comfortable fit.</li>
-        <li>The Rouge 01 features a standard-width last. Wide-foot wearers may prefer to size up half a size.</li>
-      </ul>
+          <h2 style={S.h2}>Footwear Fit Tips</h2>
+          <ul style={{ margin: '0 0 14px', paddingLeft: 24, display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <li>Measure both feet — use the larger measurement.</li>
+            <li>Wear the socks you intend to pair with the shoe when measuring.</li>
+            <li>If between sizes, size up for a more comfortable fit.</li>
+            <li>The Rouge 01 features a standard-width last. Wide-foot wearers may prefer to size up half a size.</li>
+          </ul>
+        </>
+      )}
 
       <div style={{ marginTop: 56, padding: 32, background: '#1E1E20', border: '1px solid #3A3A3C' }}>
         <p style={{ ...S.p, fontWeight: 600, color: '#E6E6E6', marginBottom: 8 }}>Still unsure of your size?</p>

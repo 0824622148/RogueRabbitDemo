@@ -1,3 +1,5 @@
+import { SNEAKERS_HIDDEN } from '@/lib/store-status'
+
 interface CatalogHeaderProps {
   /** Breadcrumb label after HOME /, e.g. "SHOP — ALL". */
   crumb?: string
@@ -12,8 +14,10 @@ export default function CatalogHeader({
   crumb = 'SHOP — ALL',
   title = 'CATALOG/',
   accent = '26',
-  blurb = 'Footwear, apparel and accessories. The Bagged League × Rouge Rabbit tees and caps are ' +
-    'in stock now — free delivery in Ennerdale, where Rouge Rabbit was born. Rouge 01 sneakers coming soon.',
+  blurb = SNEAKERS_HIDDEN
+    ? 'Tees and caps, in stock now — free delivery in Ennerdale, where Rouge Rabbit was born.'
+    : 'Footwear, apparel and accessories. The Bagged League × Rouge Rabbit tees and caps are ' +
+      'in stock now — free delivery in Ennerdale, where Rouge Rabbit was born. Rouge 01 sneakers coming soon.',
   stats = [
     { n: '05', l: 'COLOURWAYS' },
     { n: '01', l: 'DROP · ACTIVE' },

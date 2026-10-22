@@ -45,7 +45,7 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL('https://rougerabbit.co.za'),
   title: 'Rouge Rabbit — Built Different.',
-  description: 'Modern streetwear for the youth who refuse to blend in. Shop the Rouge 01 silhouette and latest drops.',
+  description: 'Modern streetwear for the youth who refuse to blend in. Shop the latest Rouge Rabbit drops.',
   icons: {
     icon: '/icon.png',
     apple: '/icon.png',

@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
+import { redirect } from 'next/navigation'
 import CategoryPage from '@/components/shop/CategoryPage'
+import { SNEAKERS_HIDDEN } from '@/lib/store-status'
 
 export const metadata: Metadata = {
   title: 'Footwear — Rouge Rabbit',
@@ -9,6 +11,7 @@ export const metadata: Metadata = {
 export const revalidate = 60
 
 export default function FootwearPage() {
+  if (SNEAKERS_HIDDEN) redirect('/shop')
   return (
     <CategoryPage
       category="FOOTWEAR"

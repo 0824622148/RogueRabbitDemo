@@ -1,4 +1,4 @@
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import NavBar from '@/components/brand/NavBar'
 import Footer from '@/components/brand/Footer'
 import PDPHero from '@/components/product/PDPHero'
@@ -6,12 +6,13 @@ import StorySpecs from '@/components/product/StorySpecs'
 import OnFootStrip from '@/components/product/OnFootStrip'
 import Recommended from '@/components/product/Recommended'
 import { getProduct } from '@/lib/queries/products'
-import { SNEAKER_ORDERS_ON_HOLD } from '@/lib/store-status'
+import { SNEAKER_ORDERS_ON_HOLD, SNEAKERS_HIDDEN } from '@/lib/store-status'
 import type { Product } from '@/types'
 
 import type { SearchParams } from 'next/dist/server/request/search-params'
 
 export default async function ProductPage({ searchParams }: { searchParams: Promise<SearchParams> }) {
+  if (SNEAKERS_HIDDEN) redirect('/shop')
   const [data, params] = await Promise.all([getProduct('rouge-01'), searchParams])
   if (!data) notFound()
 
