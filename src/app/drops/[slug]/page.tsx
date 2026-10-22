@@ -65,7 +65,13 @@ export default async function DropPage({ params }: { params: Params }) {
         images={collection.hero_panels}
         background={collection.hero_image}
         releaseDate={collection.release_date && collection.release_date >= todaySA() ? collection.release_date : null}
-      />
+      >
+        {products.length > 0 && (
+          <section style={{ borderBottom: '1px solid #3A3A3C', padding: 40 }} className="rr-catalog-grid-pad">
+            <ProductGrid products={products} />
+          </section>
+        )}
+      </DroppingSoon>
     )
   }
 

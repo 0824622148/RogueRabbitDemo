@@ -5,7 +5,7 @@
 // what is charged.
 
 import { getServiceClient } from '@/lib/admin/service'
-import { isReleased } from '@/lib/drop-dates'
+import { formatDropDate, isReleased } from '@/lib/drop-dates'
 
 export interface CartInput {
   inventoryId: number
@@ -88,8 +88,14 @@ export async function priceCart(items: CartInput[]): Promise<PricedLine[]> {
     const row = byId.get(inventoryId)
     const cw = row?.colourways
     const product = cw?.products
-    if (!row || !cw || !product || !product.is_active || !isReleased(product.release_date)) {
+    if (!row || !cw || !product || !product.is_active) {
       throw new CartError('An item in your bag is no longer available. Please remove it and try again.')
+    }
+    if (!isReleased(product.release_date)) {
+      throw new CartError(
+        `${product.name} drops ${formatDropDate(product.release_date)} at midnight — checkout opens then.`,
+        422,
+      )
     }
     const category = String(product.category ?? '').toUpperCase()
     if (category === 'FOOTWEAR') {

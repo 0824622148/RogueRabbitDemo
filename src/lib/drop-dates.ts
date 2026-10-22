@@ -6,7 +6,7 @@ export function todaySA(): string {
   return new Intl.DateTimeFormat('en-CA', { timeZone: 'Africa/Johannesburg' }).format(new Date())
 }
 
-/** A product with a future release_date stays hidden (and unbuyable) until that day, SA time. */
+/** A product with a future release_date can be viewed but not bought until that day, SA time. */
 export function isReleased(releaseDate: string | null | undefined): boolean {
   return !releaseDate || releaseDate <= todaySA()
 }

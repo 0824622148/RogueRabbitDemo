@@ -8,6 +8,7 @@ import { formatRand } from '@/lib/money'
 import { isOnHold, COMING_SOON_LABEL, DELIVERY_SUMMARY } from '@/lib/store-status'
 import { isTee, TEE_WEIGHT_LABEL } from '@/lib/fabric'
 import { apparelKind, productDetails } from '@/lib/apparel-sizing'
+import { formatDropDate } from '@/lib/drop-dates'
 import ApparelSizeGuide from '@/components/shop/ApparelSizeGuide'
 
 interface Props {
@@ -28,6 +29,9 @@ function available(i: InventoryItem): number {
 export default function ApparelPDP({ product, initialColourwayId }: Props) {
   const { addItem } = useCart()
   const onHold = isOnHold(product.category)
+  // Viewable ahead of its drop day, but no bag until midnight (the server enforces it too).
+  const preRelease = product.releaseDate !== null
+  const locked = onHold || preRelease
   const kind = apparelKind(product)
   const details = productDetails(kind)
 
@@ -65,7 +69,7 @@ export default function ApparelPDP({ product, initialColourwayId }: Props) {
   }
 
   const add = () => {
-    if (!selected || onHold) return
+    if (!selected || locked) return
     addItem({
       inventoryId: selected.id,
       productId: product.id,
@@ -209,7 +213,7 @@ export default function ApparelPDP({ product, initialColourwayId }: Props) {
         </div>
 
         {/* Quantity */}
-        {!soldOut && !onHold && (
+        {!soldOut && !locked && (
           <div style={{ marginBottom: 28 }}>
             <div className="rr-overline" style={{ marginBottom: 12, color: '#A6A6A8' }}>QUANTITY</div>
             <div style={{ display: 'inline-flex', border: '1px solid #3A3A3C' }}>
@@ -240,24 +244,26 @@ export default function ApparelPDP({ product, initialColourwayId }: Props) {
 
         <button
           onClick={add}
-          disabled={onHold || soldOut || !selected}
+          disabled={locked || soldOut || !selected}
           className="rr-btn"
           style={{
             width: '100%', justifyContent: 'space-between', padding: '18px 24px',
-            opacity: onHold || soldOut || !selected ? 0.45 : 1,
-            cursor: onHold || soldOut || !selected ? 'default' : 'pointer',
+            opacity: locked || soldOut || !selected ? 0.45 : 1,
+            cursor: locked || soldOut || !selected ? 'default' : 'pointer',
           }}
         >
           <span>
             {onHold
               ? COMING_SOON_LABEL
+              : preRelease
+                ? `DROPS ${formatDropDate(product.releaseDate!)} · 00:00`
               : soldOut
                 ? 'SOLD OUT'
                 : !selected
                   ? 'SELECT A SIZE'
                   : `ADD TO BAG · ${formatRand(product.price * qty)}`}
           </span>
-          {!onHold && !soldOut && selected && <span>→</span>}
+          {!locked && !soldOut && selected && <span>→</span>}
         </button>
 
         {added && (

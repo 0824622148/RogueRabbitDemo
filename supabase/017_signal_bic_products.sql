@@ -1,9 +1,10 @@
 -- Rouge Rabbit — Signal + Beauty in Contrast tees (22 Oct 2026, drop day 23 Oct).
 -- Run AFTER 015_upcoming_drops.sql, and only once the release-date gate is
 -- deployed (isReleased in src/lib/drop-dates.ts): products dated 2026-10-23
--- stay hidden and unbuyable until 00:00 SA time that day, then appear on their
--- own. The two collections go live at the same moment (releaseDue in
--- src/lib/queries/collections.ts), so nothing needs flipping at midnight.
+-- are listed straight away (client's call, 22 Oct) but can't be added to the
+-- bag or checked out until 00:00 SA time that day. The two collections go live
+-- at the same moment (releaseDue in src/lib/queries/collections.ts), so
+-- nothing needs flipping at midnight.
 --
 -- R350 each, unisex S–XL, 25 units per size (confirmed by the client 22 Oct).
 -- Images live in public/assets/apparel/ (from the client's 22 Oct packshots).

@@ -1,6 +1,6 @@
 import { cache } from 'react'
 import { supabase } from '@/lib/supabase'
-import { isReleased } from '@/lib/drop-dates'
+import { formatDropDay, isReleased } from '@/lib/drop-dates'
 import type { Product, ColourwayDB, InventoryItem } from '@/types'
 
 const LISTING_COLUMNS = `
@@ -14,8 +14,8 @@ const LISTING_COLUMNS = `
 
 // Memoised per request — two callers on the same page share one DB round-trip.
 // Newest release first ("All Items — latest release"); id breaks ties so pieces
-// from the same drop keep their seeded order. Unreleased pieces are left out, so
-// a drop can be loaded ahead of time and appears on its release day.
+// from the same drop keep their seeded order. Pieces with a future release_date
+// are listed (badged with the drop day) but can't be bought until then.
 const fetchAllProducts = cache(async () => {
   const { data, error } = await supabase
     .from('products')
@@ -23,7 +23,7 @@ const fetchAllProducts = cache(async () => {
     .eq('is_active', true)
     .order('release_date', { ascending: false, nullsFirst: false })
     .order('id', { ascending: false })
-  if (!error) return ((data ?? []) as any[]).filter((p) => isReleased(p.release_date))
+  if (!error) return (data ?? []) as any[]
 
   // release_date / collection_id arrive with supabase/010_collections.sql —
   // keep the shop up if the code deploys before the migration has run.
@@ -53,7 +53,7 @@ function colourwayToProduct(p: any, cw: any, view: 'FRONT' | 'SIDE'): Product {
     drop_label: p.drop_label,
     price: p.price as number,
     image: img,
-    badge: p.badge ?? undefined,
+    badge: isReleased(p.release_date) ? p.badge ?? undefined : `DROPS ${formatDropDay(p.release_date)}`,
     compareAt: p.compare_at_price ?? undefined,
     mediaBg: p.media_bg ?? undefined,
     contain: p.image_contain ?? undefined,
@@ -108,6 +108,8 @@ export interface ProductDetail {
   compareAt: number | null
   badge: string | null
   mediaBg: string | null
+  /** YYYY-MM-DD — set while the product is still to be released; null once it can be bought. */
+  releaseDate: string | null
   colourways: ColourwayDB[]
 }
 
@@ -128,7 +130,6 @@ export async function getProduct(slug: string): Promise<ProductDetail | null> {
 
   if (error || !data) return null
   const d = data as any
-  if (!isReleased(d.release_date)) return null
 
   const colourways: ColourwayDB[] = (d.colourways as any[])
     .sort((a: any, b: any) => a.sort_order - b.sort_order)
@@ -153,6 +154,7 @@ export async function getProduct(slug: string): Promise<ProductDetail | null> {
     compareAt: d.compare_at_price != null ? Number(d.compare_at_price) : null,
     badge: d.badge ?? null,
     mediaBg: d.media_bg ?? null,
+    releaseDate: isReleased(d.release_date) ? null : d.release_date,
     colourways,
   }
 }

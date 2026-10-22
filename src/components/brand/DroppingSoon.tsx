@@ -17,9 +17,11 @@ interface DroppingSoonProps {
   background?: string | null
   /** YYYY-MM-DD — swaps "Dropping Soon" for the date and adds the members sign-up. */
   releaseDate?: string | null
+  /** Extra content under the sneak peek — e.g. the drop's products ahead of release. */
+  children?: React.ReactNode
 }
 
-export default function DroppingSoon({ title, eyebrow, tagline, images, background, releaseDate }: DroppingSoonProps) {
+export default function DroppingSoon({ title, eyebrow, tagline, images, background, releaseDate, children }: DroppingSoonProps) {
   return (
     <div style={{ background: '#0F0F10', color: '#E6E6E6', fontFamily: 'var(--font-body)', display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <NavBar />
@@ -128,6 +130,8 @@ export default function DroppingSoon({ title, eyebrow, tagline, images, backgrou
           </div>
         </section>
       )}
+
+      {children}
 
       <Marquee items={['NO FEAR', 'JUST MOTION', releaseDate ? `DROPPING ${formatDropDate(releaseDate)}` : 'DROPPING SOON', 'ROUGE RABBIT']} speed={28} accent="rouge" />
 
