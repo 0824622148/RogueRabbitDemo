@@ -2,22 +2,15 @@ import Link from 'next/link'
 import Arrow from '@/components/brand/Arrow'
 import HeroCarousel, { type HeroSlide } from './HeroCarousel'
 
-// Campaign photos for the hero frame — the newest drops lead, then the
-// Bagged League people and cars alternating.
-const BL = '/assets/drops/bagged-league'
+// Campaign photos for the hero frame — the home page focuses on the latest
+// releases only, so it alternates Signal and Beauty in Contrast.
 const BIC = '/assets/drops/beauty-in-contrast'
 const SIG = '/assets/drops/signal'
 const HERO_SLIDES: HeroSlide[] = [
   { src: `${BIC}/back.jpg`, alt: 'Beauty in Contrast tee back print — statue with a red-painted blindfold', caption: 'BEAUTY IN CONTRAST TEE', href: '/drops/beauty-in-contrast', pos: 'center 45%' },
   { src: `${SIG}/back.jpg`, alt: 'Signal tee back print — diver helmet with a goldfish', caption: 'SIGNAL TEE', href: '/drops/signal', pos: 'center 45%' },
-  { src: `${BL}/paint-shop-model.jpg`, alt: 'Paint Shop tee worn arms-out on a hilltop', caption: 'PAINT SHOP TEE', href: '/drops/paint-shop', pos: 'center 38%' },
   { src: `${BIC}/front.jpg`, alt: 'Beauty in Contrast white tee and cap — front', caption: 'BEAUTY IN CONTRAST · FRONT', href: '/drops/beauty-in-contrast', pos: 'center 40%' },
-  { src: `${BL}/golf-pair.jpg`, alt: 'Bagged white and red VW Citi Golfs at sunset', caption: 'BAGGED LEAGUE · CITI GOLFS', href: '/drops/bagged-league', pos: 'center 62%' },
   { src: `${SIG}/front.jpg`, alt: 'Signal black tee and cap — front', caption: 'SIGNAL · FRONT', href: '/drops/signal', pos: 'center 40%' },
-  { src: `${BL}/duo.jpg`, alt: 'Paint Shop and Air Down tees worn on the railway tracks', caption: 'PAINT SHOP × AIR DOWN', href: '/drops/bagged-league', pos: 'center 45%' },
-  { src: `${BL}/red-car.jpg`, alt: 'Bagged red VW Golf front wheel at a night meet', caption: 'BAGGED LEAGUE · NIGHT MEET', href: '/drops/bagged-league', pos: '55% 60%' },
-  { src: `${BL}/air-down.jpg`, alt: 'Air Down tee back print — Standard, Low, Lower, Bagged', caption: 'AIR DOWN TEE', href: '/drops/air-down', pos: 'center 55%' },
-  { src: `${BL}/white-car.jpg`, alt: 'Bagged white VW Golf rear wheel', caption: 'BAGGED LEAGUE · STANCE', href: '/drops/bagged-league', pos: '50% 70%' },
 ]
 
 function Stat({ n, l }: { n: string; l: string }) {
@@ -51,7 +44,7 @@ export default function Hero() {
         }}
       >
         <span className="rr-mono" style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}>
-          BAGGED LEAGUE × ROUGE RABBIT
+          SIGNAL × BEAUTY IN CONTRAST
         </span>
         <span className="rr-mono" style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)', color: '#D90017' }}>
           OUT NOW
@@ -69,7 +62,7 @@ export default function Hero() {
         }}
       >
         <span className="rr-mono" style={{ writingMode: 'vertical-rl' }}>SCROLL ↓</span>
-        <span className="rr-mono" style={{ writingMode: 'vertical-rl' }}>BL × RR</span>
+        <span className="rr-mono" style={{ writingMode: 'vertical-rl' }}>SIG × BIC</span>
       </div>
 
       {/* Background gradient */}
@@ -103,28 +96,28 @@ export default function Hero() {
         {/* Left copy */}
         <div>
           <div style={{ marginBottom: 24 }}>
-            <span className="rr-mono">BAGGED LEAGUE × ROUGE RABBIT · THE COLLAB</span>
+            <span className="rr-mono">LATEST RELEASES · SIGNAL + BEAUTY IN CONTRAST</span>
           </div>
           <h1
             className="rr-display rr-hero-title"
             style={{ margin: 0, color: '#E6E6E6', letterSpacing: '-.01em' }}
           >
-            NO FEAR<br />
-            <span style={{ color: '#D90017' }}>JUST MOTION</span>
+            TWO DROPS.<br />
+            <span style={{ color: '#D90017' }}>OUT NOW.</span>
           </h1>
           <p style={{ marginTop: 22, color: '#A6A6A8', maxWidth: 460, fontSize: 14, lineHeight: 1.7 }}>
-            Inspired by Bagged League — the crew keeping stance culture low, clean and loud.
-            Two T-shirt drops, Air Dropped and Paint Shop, built for the ones who ride on air
-            and refuse to blend in. Marked with the rabbit. Worn loud.
+            Signal — not everything needs to be received. Beauty in Contrast — beauty lives
+            in the contrast. Two new back-print tees, limited runs, marked with the rabbit.
+            Worn loud.
           </p>
           <div style={{ display: 'flex', gap: 14, marginTop: 28, flexWrap: 'wrap' }}>
-            <Link href="/shop/tops">
+            <Link href="/drops/signal">
               <button className="rr-btn">
-                SHOP THE COLLAB <span className="arr"><Arrow size={14} /></span>
+                SHOP SIGNAL <span className="arr"><Arrow size={14} /></span>
               </button>
             </Link>
-            <Link href="/shop">
-              <button className="rr-btn rr-btn--ghost">VIEW ALL ▸</button>
+            <Link href="/drops/beauty-in-contrast">
+              <button className="rr-btn rr-btn--ghost">SHOP BEAUTY IN CONTRAST ▸</button>
             </Link>
           </div>
           <div
@@ -134,8 +127,8 @@ export default function Hero() {
               borderTop: '1px solid #3A3A3C', flexWrap: 'wrap',
             }}
           >
-            <Stat n="02" l="T-SHIRT DROPS" />
-            <Stat n="BL×RR" l="THE COLLAB" />
+            <Stat n="02" l="NEW DROPS" />
+            <Stat n="R350" l="PER TEE" />
             <Stat n="FREE" l="ENNERDALE DELIVERY" />
             <Stat n="SA" l="NATIONWIDE SHIPPING" />
           </div>

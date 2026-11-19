@@ -4,14 +4,15 @@ import SubscribeButton from '@/components/brand/SubscribeButton'
 
 const INSTAGRAM_URL = 'https://www.instagram.com/rougerabbit.za'
 
-// Street wall — 6 tiles. pos keeps faces in frame on the square crop.
+// Street wall — 6 tiles of the latest drops (Signal, Beauty in Contrast) until
+// customer fits of them come in. pos keeps the print in frame on the square crop.
 const STREET_POSTS = [
-  { src: '/assets/street/street-01.jpg', alt: 'Paint Shop Overspray tee on the street', pos: 'center 12%' },
-  { src: '/assets/street/street-02.jpg', alt: 'Paint Shop tee back print — Colour outside the lines', pos: 'center 40%' },
-  { src: '/assets/street/street-03.jpg', alt: 'Bagged League x Rouge Rabbit Paint Shop Splash tee', pos: 'center 5%' },
-  { src: '/assets/street/street-04.jpg', alt: 'Rouge Rabbit 5-panel cap in Snow', pos: 'center 30%' },
-  { src: '/assets/street/street-05.jpg', alt: 'Air Down tee at the Bagged League x Rouge Rabbit garage', pos: 'center 15%' },
-  { src: '/assets/street/street-06.jpg', alt: 'Rouge Rabbit 5-panel cap in Cardinal', pos: 'center' },
+  { src: '/assets/drops/signal/back.jpg', alt: 'Signal tee back print — diver helmet with a goldfish', pos: 'center 45%' },
+  { src: '/assets/drops/beauty-in-contrast/back.jpg', alt: 'Beauty in Contrast tee back print — statue with a red-painted blindfold', pos: 'center 45%' },
+  { src: '/assets/drops/signal/front.jpg', alt: 'Signal black tee and cap — front', pos: 'center 40%' },
+  { src: '/assets/drops/beauty-in-contrast/front.jpg', alt: 'Beauty in Contrast white tee and cap — front', pos: 'center 40%' },
+  { src: '/assets/drops/signal/art.jpg', alt: 'Signal back-print artwork', pos: 'center' },
+  { src: '/assets/drops/beauty-in-contrast/art.jpg', alt: 'Beauty in Contrast back-print artwork', pos: 'center' },
 ]
 
 export default function SplitCTA() {

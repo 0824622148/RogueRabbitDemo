@@ -26,20 +26,19 @@ export default function CampaignStrip() {
           }}
         >
           <img
-            src="/assets/drops/bagged-league/air-down.jpg"
-            alt="Air Down tee back print — Standard, Low, Lower, Bagged"
+            src="/assets/drops/signal/back.jpg"
+            alt="Signal tee back print — diver helmet with a goldfish"
             style={{
               position: 'absolute', inset: 0,
               width: '100%', height: '100%',
-              // Wide crop of a portrait shot — keeps the whole back print, Standard down to Bagged.
-              objectFit: 'cover', objectPosition: 'center 66%',
+              objectFit: 'cover', objectPosition: 'center 45%',
             }}
           />
           <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.15)' }} />
           <div className="rr-plus" style={{ top: 20, left: 20 }} />
           <div className="rr-plus" style={{ bottom: 20, right: 20 }} />
           <div style={{ position: 'absolute', bottom: 24, left: 30 }}>
-            <div className="rr-mono" style={{ color: '#A6A6A8' }}>BL × RR · AIR DOWN</div>
+            <div className="rr-mono" style={{ color: '#A6A6A8' }}>SIGNAL · BACK PRINT</div>
           </div>
         </div>
 
