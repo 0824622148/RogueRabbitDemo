@@ -20,7 +20,7 @@ export default async function CheckoutSuccessPage({
   return (
     <>
       <NavBar />
-      <ClearCart />
+      <ClearCart orderRef={ref} />
       <main style={{ minHeight: '70vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '80px 16px' }}>
         <div style={{ maxWidth: 520, width: '100%' }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, border: '1px solid #2A9D2A', padding: '8px 20px', marginBottom: 32 }}>

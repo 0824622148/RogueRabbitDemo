@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import PolicyLayout from '@/components/brand/PolicyLayout'
+import CookieSettingsButton from '@/components/brand/CookieSettingsButton'
 
 export const metadata: Metadata = {
   title: 'Privacy Policy — Rouge Rabbit',
@@ -16,7 +17,7 @@ const S = {
 
 export default function PrivacyPage() {
   return (
-    <PolicyLayout title="Privacy Policy" lastUpdated="June 2026">
+    <PolicyLayout title="Privacy Policy" lastUpdated="November 2026">
 
       <p style={S.p}>
         At Rouge Rabbit, we respect your privacy and are committed to protecting your personal
@@ -95,6 +96,28 @@ export default function PrivacyPage() {
       <p style={S.p}>
         You can disable cookies through your browser settings, although some website features
         may not function properly.
+      </p>
+
+      <h3 style={S.h3}>Advertising Cookies (Meta Pixel)</h3>
+      <p style={S.p}>
+        If you accept advertising cookies in our cookie banner, we use the Meta Pixel, a tool
+        provided by Meta Platforms, the company behind Facebook and Instagram. We use it to
+        measure how our adverts perform and to show relevant adverts to you and to people with
+        similar interests.
+      </p>
+      <p style={S.p}>
+        The Meta Pixel may send Meta information such as your IP address, browser and device
+        details, the pages you visit, products you view or add to your bag, the checkout pages
+        you reach, and the items, value and reference number of your order. We may also
+        have Meta match this activity to Facebook or Instagram accounts using scrambled (hashed)
+        contact details you enter on our website, such as your email address or phone number.
+        Meta may process this information outside South Africa and handles it under its own
+        privacy policy, available at{' '}
+        <a href="https://www.facebook.com/privacy/policy" target="_blank" rel="noopener noreferrer" style={S.a}>facebook.com/privacy/policy</a>.
+      </p>
+      <p style={S.p}>
+        If you decline, the Meta Pixel does not load. You can withdraw or change your choice at
+        any time: <CookieSettingsButton />.
       </p>
 
       <h2 style={S.h2}>7. Sharing Your Information</h2>

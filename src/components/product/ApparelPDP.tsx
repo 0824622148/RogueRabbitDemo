@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import type { ColourwayDB, InventoryItem } from '@/types'
 import type { ProductDetail } from '@/lib/queries/products'
 import { useCart, MAX_QTY_PER_LINE } from '@/context/CartContext'
@@ -9,6 +9,7 @@ import { isOnHold, COMING_SOON_LABEL, DELIVERY_SUMMARY } from '@/lib/store-statu
 import { isTee, TEE_WEIGHT_LABEL } from '@/lib/fabric'
 import { apparelKind, productDetails } from '@/lib/apparel-sizing'
 import { formatDropDate } from '@/lib/drop-dates'
+import { trackAddToCart, trackViewContent } from '@/lib/meta-pixel'
 import ApparelSizeGuide from '@/components/shop/ApparelSizeGuide'
 
 interface Props {
@@ -33,6 +34,10 @@ export default function ApparelPDP({ product, initialColourwayId }: Props) {
   const preRelease = product.releaseDate !== null
   const locked = onHold || preRelease
   const kind = apparelKind(product)
+
+  useEffect(() => {
+    trackViewContent(product.slug, product.price, product.name)
+  }, [product.slug, product.price, product.name])
 
   const [cw, setCw] = useState<ColourwayDB>(
     product.colourways.find((c) => c.id === initialColourwayId) ?? product.colourways[0],
@@ -83,6 +88,7 @@ export default function ApparelPDP({ product, initialColourwayId }: Props) {
       mediaBg: product.mediaBg ?? '#1E1E20',
       maxQty: Math.min(available(selected), MAX_QTY_PER_LINE),
     }, qty)
+    trackAddToCart(product.slug, product.price, qty, product.name)
     setAdded(true)
   }
 

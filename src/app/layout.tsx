@@ -16,6 +16,8 @@ import { NavMenuProvider } from '@/context/NavMenuContext'
 import { dropHref, getNavMenu, getPopupDrop, getUpcomingDrops } from '@/lib/queries/collections'
 import { formatDropDate } from '@/lib/drop-dates'
 import { buildMenu } from '@/lib/nav'
+import { META_PIXEL_BASE_CODE } from '@/lib/meta-pixel'
+import CookieBanner from '@/components/brand/CookieBanner'
 
 // The menu (FEATURED / DROPS) is read from the collections table. Pages without
 // their own shorter revalidate pick up collection changes within 5 minutes.
@@ -65,6 +67,10 @@ export default async function RootLayout({
       lang="en"
       className={`${bebasNeue.variable} ${montserrat.variable} ${jetbrainsMono.variable}`}
     >
+      <head>
+        {/* Inline so fbq exists before hydration, when the first events fire. */}
+        <script dangerouslySetInnerHTML={{ __html: META_PIXEL_BASE_CODE }} />
+      </head>
       <body
         className="antialiased"
         style={{
@@ -95,6 +101,7 @@ export default async function RootLayout({
             </WishlistProvider>
           </SubscribeProvider>
         </NavMenuProvider>
+        <CookieBanner />
       </body>
     </html>
   )
