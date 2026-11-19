@@ -4,13 +4,21 @@
 // Two ways an order reaches the customer:
 //   1. Ennerdale (postal code in ENNERDALE_POSTAL_CODES) — free, delivered by
 //      the Rouge Rabbit team themselves. Never booked with The Courier Guy.
-//   2. Everywhere else — The Courier Guy, live-quoted via Shiplogic.
+//   2. Everywhere else — The Courier Guy, live-quoted via Shiplogic. Orders
+//      of FREE_SHIPPING_THRESHOLD+ also get a free option (FREE_NATIONWIDE_CODE)
+//      that the team dispatches manually — not booked via "Book collection".
 //
 // The delivery fee is ALWAYS worked out here on the server. Checkout routes
 // call verifyDelivery() and never trust a fee sent by the browser.
 
 import { getRates, isConfigured, type Address, type Parcel, type ShippingRate } from '@/lib/shiplogic'
-import { NATIONWIDE_DELIVERY_LIVE, OUTSIDE_DELIVERY_AREA_MESSAGE } from '@/lib/store-status'
+import {
+  NATIONWIDE_DELIVERY_LIVE,
+  OUTSIDE_DELIVERY_AREA_MESSAGE,
+  FREE_SHIPPING_THRESHOLD,
+  FREE_SHIPPING_ESTIMATE,
+  FREE_NATIONWIDE_CODE,
+} from '@/lib/store-status'
 
 /** Service code stored on orders.ship_service_code for hand-delivered Ennerdale orders. */
 export const LOCAL_DELIVERY_CODE = 'RR_LOCAL_ENNERDALE'
@@ -74,7 +82,8 @@ export class DeliveryError extends Error {
 
 /**
  * Delivery options for an address. Ennerdale gets the free local option only;
- * everywhere else gets live The Courier Guy rates.
+ * everywhere else gets live The Courier Guy rates, plus a free manually
+ * dispatched option on orders of FREE_SHIPPING_THRESHOLD+.
  * Throws DeliveryError with an HTTP-friendly status on failure.
  */
 export async function quoteDelivery(address: Address, input: DeliveryQuoteInput): Promise<ShippingRate[]> {
@@ -88,22 +97,49 @@ export async function quoteDelivery(address: Address, input: DeliveryQuoteInput)
     throw new DeliveryError(OUTSIDE_DELIVERY_AREA_MESSAGE, 422)
   }
 
-  if (!isConfigured()) {
+  const freeEligible = qualifiesForFreeShipping(input.declaredValue)
+
+  // Free R900+ orders are dispatched by the team, so they don't depend on
+  // ShipLogic — if live quotes fail, the free option is still offered.
+  let rates: ShippingRate[] = []
+  if (isConfigured()) {
+    try {
+      rates = await getRates(address, input.declaredValue, input.parcel)
+    } catch (err) {
+      console.error('[DELIVERY] Shiplogic error:', err)
+      if (!freeEligible) {
+        throw new DeliveryError('Could not fetch delivery rates. Please check your address and try again.', 502)
+      }
+    }
+  } else if (!freeEligible) {
     throw new DeliveryError('Delivery rates are temporarily unavailable.', 503)
   }
 
-  let rates: ShippingRate[]
-  try {
-    rates = await getRates(address, input.declaredValue, input.parcel)
-  } catch (err) {
-    console.error('[DELIVERY] Shiplogic error:', err)
-    throw new DeliveryError('Could not fetch delivery rates. Please check your address and try again.', 502)
+  if (freeEligible) {
+    // The free option replaces the cheapest (economy) courier service; faster
+    // paid services stay available for customers who want them.
+    const cheapest = rates.length ? rates.reduce((a, b) => (b.rate < a.rate ? b : a)) : null
+    return [freeNationwideRate(), ...rates.filter((r) => r !== cheapest)]
   }
 
   if (rates.length === 0) {
     throw new DeliveryError('No delivery options available for this address.', 422)
   }
   return rates
+}
+
+/** Bag subtotal (rand, excl. delivery) qualifies for free nationwide delivery. */
+export function qualifiesForFreeShipping(subtotal: number): boolean {
+  return subtotal >= FREE_SHIPPING_THRESHOLD
+}
+
+export function freeNationwideRate(): ShippingRate {
+  return {
+    code: FREE_NATIONWIDE_CODE,
+    name: `Free delivery · orders R${FREE_SHIPPING_THRESHOLD}+`,
+    rate: 0,
+    deliveryEstimate: FREE_SHIPPING_ESTIMATE,
+  }
 }
 
 /**

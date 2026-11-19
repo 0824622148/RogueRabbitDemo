@@ -1,10 +1,11 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
 import { useCart } from '@/context/CartContext'
 import { formatRand } from '@/lib/money'
-import { SHOP_ORDERS_ON_HOLD, COMING_SOON_LABEL, NATIONWIDE_DELIVERY_LIVE } from '@/lib/store-status'
+import { trackInitiateCheckout } from '@/lib/meta-pixel'
+import { SHOP_ORDERS_ON_HOLD, COMING_SOON_LABEL, NATIONWIDE_DELIVERY_LIVE, FREE_SHIPPING_THRESHOLD } from '@/lib/store-status'
 import DeliveryAddressFields, {
   EMPTY_ADDRESS, cleanAddress, checkoutInputStyle, type DeliveryAddress,
 } from './DeliveryAddressFields'
@@ -21,6 +22,14 @@ export default function CheckoutForm() {
   const [address, setAddress] = useState<DeliveryAddress>(EMPTY_ADDRESS)
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState('')
+
+  // Once per visit to this page, as soon as the stored bag has loaded.
+  const checkoutTracked = useRef(false)
+  useEffect(() => {
+    if (!hydrated || items.length === 0 || checkoutTracked.current) return
+    checkoutTracked.current = true
+    trackInitiateCheckout(items)
+  }, [hydrated, items])
 
   // Back button from PayFast restores this page from the bfcache with the
   // button still "processing" — re-enable it.
@@ -217,7 +226,7 @@ export default function CheckoutForm() {
         <p className="rr-mono" style={{ fontSize: 9, color: '#A6A6A8', marginTop: 14, lineHeight: 1.8, letterSpacing: '.1em' }}>
           YOU WILL BE REDIRECTED TO PAYFAST TO COMPLETE PAYMENT SECURELY.
           FREE DELIVERY IN ENNERDALE — THE ROUGE RABBIT TEAM WILL WHATSAPP YOU TO ARRANGE A TIME.
-          {NATIONWIDE_DELIVERY_LIVE ? 'NATIONWIDE ORDERS SHIP WITH THE COURIER GUY.' : 'NATIONWIDE DELIVERY IS COMING SOON.'}
+          {NATIONWIDE_DELIVERY_LIVE ? `NATIONWIDE ORDERS SHIP WITH THE COURIER GUY, OR FREE ON ORDERS OF R${FREE_SHIPPING_THRESHOLD}+ (3–5 WORKING DAYS).` : 'NATIONWIDE DELIVERY IS COMING SOON.'}
         </p>
       </aside>
     </div>

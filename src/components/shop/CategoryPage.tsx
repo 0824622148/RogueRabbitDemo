@@ -30,7 +30,7 @@ export default async function CategoryPage({
   blurb,
   status = { n: 'IN', l: 'STOCK · SHIPS NOW' },
   footnote = NATIONWIDE_DELIVERY_LIVE
-    ? 'FREE DELIVERY IN ENNERDALE · NATIONWIDE WITH THE COURIER GUY'
+    ? 'FREE DELIVERY IN ENNERDALE · FREE NATIONWIDE ON ORDERS OF R900+'
     : 'BORN IN ENNERDALE · FREE HOME-TOWN DELIVERY · NATIONWIDE COMING SOON',
 }: Props) {
   const products = await getProductsByCategory(category)

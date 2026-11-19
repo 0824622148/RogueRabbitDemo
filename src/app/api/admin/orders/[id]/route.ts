@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { requireAdmin } from '@/lib/admin/session'
 import { getServiceClient } from '@/lib/admin/service'
-import { ADMIN_TRANSITIONS } from '@/lib/admin/format'
+import { ADMIN_TRANSITIONS, isTeamDispatch } from '@/lib/admin/format'
 import { sendEmail, esc } from '@/lib/email'
 
 function customerDeliveredHtml(order: Record<string, any>): string {
@@ -67,8 +67,9 @@ export async function PATCH(
   }
 
   // Courier orders go paid → shipped only by booking a collection (so they
-  // always get a tracking number).
-  if (next === 'shipped' && order.fulfilment_type !== 'local_delivery') {
+  // always get a tracking number). Team-dispatched orders (Ennerdale, free
+  // R900+) are moved by hand.
+  if (next === 'shipped' && !isTeamDispatch(order)) {
     return NextResponse.json({ error: 'Use BOOK COLLECTION for courier orders' }, { status: 422 })
   }
 
@@ -88,7 +89,7 @@ export async function PATCH(
     return NextResponse.json({ error: 'Order changed — refresh and try again' }, { status: 409 })
   }
 
-  if (next === 'delivered' && order.fulfilment_type === 'local_delivery') {
+  if (next === 'delivered' && isTeamDispatch(order)) {
     await sendEmail(order.email, `Delivered · ${order.reference}`, customerDeliveredHtml(order))
   }
 

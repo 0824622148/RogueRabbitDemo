@@ -1,5 +1,7 @@
 /** Shared formatting + status helpers for the admin dashboard. */
 
+import { FREE_NATIONWIDE_CODE } from '@/lib/store-status'
+
 const JHB = 'Africa/Johannesburg'
 
 /** Date + time in SA locale/timezone (e.g. "03 Jul 2026, 14:32"). */
@@ -62,6 +64,16 @@ export type AdminOrder = Record<string, any>
 
 export function isLocalDelivery(o: AdminOrder): boolean {
   return o.fulfilment_type === 'local_delivery'
+}
+
+/** Free R900+ nationwide order — the team dispatches it manually (no courier booking). */
+export function isFreeNationwide(o: AdminOrder): boolean {
+  return o.ship_service_code === FREE_NATIONWIDE_CODE
+}
+
+/** Orders the team dispatches themselves: Ennerdale hand delivery + free R900+ orders. */
+export function isTeamDispatch(o: AdminOrder): boolean {
+  return isLocalDelivery(o) || isFreeNationwide(o)
 }
 
 /**

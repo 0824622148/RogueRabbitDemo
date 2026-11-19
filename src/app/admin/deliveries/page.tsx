@@ -1,7 +1,7 @@
 import PageHeader from '@/components/admin/PageHeader'
 import OrdersTable from '@/components/admin/OrdersTable'
 import { getPaidOrders } from '@/lib/admin/queries'
-import { isLocalDelivery } from '@/lib/admin/format'
+import { isLocalDelivery, isFreeNationwide } from '@/lib/admin/format'
 import { card } from '@/lib/admin/ui'
 
 export const dynamic = 'force-dynamic'
@@ -12,15 +12,19 @@ export const dynamic = 'force-dynamic'
  *    The Courier Guy / ShipLogic shipment). Shipped orders carry tracking.
  *  - Local (Ennerdale): delivered by hand by the Rouge Rabbit team, free.
  *    Never booked with the courier — moved to OUT FOR DELIVERY then DELIVERED.
+ *  - Free R900+ nationwide: dispatched manually by the team (no "Book
+ *    Collection") — moved to DISPATCHED then DELIVERED.
  */
 export default async function DeliveriesPage() {
   const orders = await getPaidOrders()
-  const courier = orders.filter((o) => !isLocalDelivery(o))
   const local = orders.filter((o) => isLocalDelivery(o))
+  const freeNationwide = orders.filter((o) => !isLocalDelivery(o) && isFreeNationwide(o))
+  const courier = orders.filter((o) => !isLocalDelivery(o) && !isFreeNationwide(o))
 
   const toBook = courier.filter((o) => o.status === 'paid' && !o.shiplogic_shipment_id)
   const inTransit = courier.filter((o) => o.status === 'shipped')
   const localOpen = local.filter((o) => o.status === 'paid' || o.status === 'shipped')
+  const freeToDispatch = freeNationwide.filter((o) => o.status === 'paid')
 
   const stat = (label: string, value: number, accent: string) => (
     <div style={card}>
@@ -49,6 +53,7 @@ export default async function DeliveriesPage() {
         {stat('COURIER · TO BOOK', toBook.length, '#3B82F6')}
         {stat('COURIER · IN TRANSIT', inTransit.length, '#3B82F6')}
         {stat('ENNERDALE · TO DELIVER', localOpen.length, '#D90017')}
+        {stat('FREE R900+ · TO DISPATCH', freeToDispatch.length, '#D90017')}
         {stat('DELIVERED', orders.filter((o) => o.status === 'delivered').length, '#2A9D2A')}
       </div>
 
@@ -59,6 +64,15 @@ export default async function DeliveriesPage() {
         statusTabs={['paid', 'shipped', 'delivered']}
         initialStatus="paid"
         emptyLabel="NO ENNERDALE ORDERS WAITING"
+      />
+
+      {heading('FREE NATIONWIDE (R900+) — TEAM DISPATCH', 'free')}
+      {note('FREE DELIVERY, 3–5 WORKING DAYS. DISPATCH MANUALLY USING THE ADDRESS AND CONTACT DETAILS BELOW — DO NOT USE “BOOK COLLECTION”. CLICK “OUT FOR DELIVERY” WHEN IT LEAVES (SHOWS AS DISPATCHED), THEN “DELIVERED”.')}
+      <OrdersTable
+        orders={freeNationwide}
+        statusTabs={['paid', 'shipped', 'delivered']}
+        initialStatus="paid"
+        emptyLabel="NO FREE R900+ ORDERS WAITING"
       />
 
       {heading('THE COURIER GUY — NATIONWIDE')}

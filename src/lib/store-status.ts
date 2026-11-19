@@ -44,6 +44,24 @@ export function isOnHold(category: string | null | undefined): boolean {
  */
 export const NATIONWIDE_DELIVERY_LIVE = true
 
+/**
+ * Free delivery (outside Ennerdale) once the bag subtotal reaches this many
+ * rand (client, 19 Nov 2026). Offered as its own option (FREE_NATIONWIDE_CODE),
+ * dispatched manually by the team; faster paid Courier Guy options stay.
+ * Enforced in src/lib/delivery.ts.
+ */
+export const FREE_SHIPPING_THRESHOLD = 900
+
+/**
+ * Service code stored on orders.ship_service_code for free R900+ orders.
+ * These are dispatched manually by the Rouge Rabbit team — never booked
+ * through "Book collection".
+ */
+export const FREE_NATIONWIDE_CODE = 'RR_FREE_NATIONWIDE'
+
+/** Delivery estimate shown on the free option. */
+export const FREE_SHIPPING_ESTIMATE = '3–5 working days'
+
 /** Shown at checkout to addresses outside Ennerdale while nationwide is off. */
 export const OUTSIDE_DELIVERY_AREA_MESSAGE =
   'Apologies — we are delivering to your area soon. Rouge Rabbit was born in Ennerdale, ' +
@@ -51,7 +69,7 @@ export const OUTSIDE_DELIVERY_AREA_MESSAGE =
 
 /** One-line delivery promise for product pages, the bag and checkout. */
 export const DELIVERY_SUMMARY = NATIONWIDE_DELIVERY_LIVE
-  ? 'Free in Ennerdale — the town where Rouge Rabbit was born, hand-delivered by our team. Nationwide with The Courier Guy, calculated at checkout.'
+  ? 'Free in Ennerdale — the town where Rouge Rabbit was born, hand-delivered by our team. Nationwide with The Courier Guy — free on orders of R' + FREE_SHIPPING_THRESHOLD + '+ (3–5 working days), otherwise calculated at checkout.'
   : 'Free in Ennerdale — the town where Rouge Rabbit was born, hand-delivered by our team. Nationwide delivery coming soon.'
 
 /** Stands in for the price wherever an amount would normally be shown. */

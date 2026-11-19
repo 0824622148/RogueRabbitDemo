@@ -3,7 +3,7 @@
 import { useMemo, useState } from 'react'
 import OrderStatusButton from './OrderStatusButton'
 import BookCollectionButton from './BookCollectionButton'
-import { fmt, rand, statusLabel, STATUS_COLOUR, itemsLabel, isLocalDelivery } from '@/lib/admin/format'
+import { fmt, rand, statusLabel, STATUS_COLOUR, itemsLabel, isLocalDelivery, isFreeNationwide } from '@/lib/admin/format'
 import { cell, th, tableWrap } from '@/lib/admin/ui'
 
 type Order = Record<string, any>
@@ -99,6 +99,8 @@ export default function OrdersTable({
           <tbody>
             {filtered.map((o) => {
               const local = isLocalDelivery(o)
+              const freeNationwide = isFreeNationwide(o)
+              const team = local || freeNationwide
               return (
               <tr key={o.id} style={{ background: '#0F0F10' }}>
                 <td style={cell}>{o.reference}</td>
@@ -115,13 +117,15 @@ export default function OrdersTable({
                 <td style={{ ...cell, color: '#A6A6A8' }}>{o.email}</td>
                 <td style={cell}>
                   <span style={{ color: STATUS_COLOUR[o.status] ?? '#A6A6A8', fontSize: 9, letterSpacing: '.16em' }}>
-                    ● {local && o.status === 'shipped' ? 'OUT FOR DELIVERY' : statusLabel(o.status)}
+                    ● {team && o.status === 'shipped' ? (local ? 'OUT FOR DELIVERY' : 'DISPATCHED') : statusLabel(o.status)}
                   </span>
                 </td>
                 <td style={{ ...cell, color: '#D90017' }}>{rand(o.amount_due)}</td>
-                <td style={{ ...cell, color: local ? '#D90017' : '#A6A6A8', fontSize: 10 }}>
+                <td style={{ ...cell, color: team ? '#D90017' : '#A6A6A8', fontSize: 10 }}>
                   {local
                     ? 'FREE · LOCAL (ENNERDALE)'
+                    : freeNationwide
+                    ? 'FREE · R900+ · TEAM DISPATCH (3–5 DAYS)'
                     : `${o.ship_service_name || o.ship_service_code || '—'}${o.shipping_cost ? ` · ${rand(o.shipping_cost)}` : ''}`}
                 </td>
                 <td style={{ ...cell, color: '#A6A6A8', fontSize: 10 }}>{o.tracking_number ?? '—'}</td>
@@ -129,13 +133,13 @@ export default function OrdersTable({
                 <td style={{ ...cell, color: '#A6A6A8' }}>{fmt(o.paid_at ?? o.created_at)}</td>
                 <td style={cell}>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                    {!local && o.status === 'paid' && !o.shiplogic_shipment_id && (
+                    {!team && o.status === 'paid' && !o.shiplogic_shipment_id && (
                       <BookCollectionButton orderId={o.id} />
                     )}
                     <OrderStatusButton
                       orderId={o.id}
                       currentStatus={o.status}
-                      local={local}
+                      local={team}
                       hasShipment={Boolean(o.shiplogic_shipment_id)}
                     />
                   </div>

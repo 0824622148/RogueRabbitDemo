@@ -61,6 +61,10 @@ export default function ShippingReturnsPage() {
           Everywhere else in South Africa, orders are delivered door-to-door by The Courier Guy.
           The delivery fee is calculated live at checkout from your address.
         </li>
+        <li>
+          <strong style={{ color: '#E6E6E6' }}>Free nationwide delivery on orders of R900 or more</strong> —
+          dispatched by the Rouge Rabbit team within 3–5 working days. Faster paid courier options remain available at checkout.
+        </li>
       </ul>
 
       <h3 style={S.h3}>Order Tracking</h3>

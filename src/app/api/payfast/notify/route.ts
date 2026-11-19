@@ -1,3 +1,4 @@
+import { FREE_NATIONWIDE_CODE, FREE_SHIPPING_ESTIMATE } from '@/lib/store-status'
 import { NextRequest } from 'next/server'
 import { getServiceClient } from '@/lib/admin/service'
 import { validateITN, isPayFastSource } from '@/lib/payfast'
@@ -72,6 +73,8 @@ function customerShopHtml(order: Row, items: Row[]): string {
   const local = order.fulfilment_type === 'local_delivery'
   const next = local
     ? `We deliver Ennerdale orders ourselves — free. The Rouge Rabbit team will WhatsApp you on ${esc(order.phone)} to arrange a time (usually within ${LOCAL_DELIVERY_ESTIMATE}).`
+    : order.ship_service_code === FREE_NATIONWIDE_CODE
+    ? `Your order qualifies for free delivery. The Rouge Rabbit team will dispatch it to the address below — expect it within ${FREE_SHIPPING_ESTIMATE}. We'll contact you on ${esc(order.phone)} or by email if we need anything.`
     : `We'll book your parcel with The Courier Guy and email you a tracking number as soon as it's on its way.`
 
   return shell(`
@@ -129,6 +132,8 @@ function adminPaidHtml(
   const local = order.fulfilment_type === 'local_delivery'
   const nextStep = local
     ? '● PAID — DELIVER BY HAND (ENNERDALE). SEE ADMIN → DELIVERIES → LOCAL.'
+    : order.ship_service_code === FREE_NATIONWIDE_CODE
+    ? '● PAID — FREE R900+ ORDER. DISPATCH MANUALLY (3–5 WORKING DAYS). SEE ADMIN → DELIVERIES → FREE NATIONWIDE.'
     : '● PAID — BOOK COLLECTION IN ADMIN → DELIVERIES.'
 
   const productRows = order.order_type === 'shop'
@@ -294,7 +299,7 @@ export async function POST(request: NextRequest) {
       adminEmail(),
       `${alerts.length ? '[ACTION NEEDED] ' : ''}[PAID] ${reference} — ${paid.name} · ${
         isShop ? itemsSummary(items) : `${paid.colourway} ${paid.size_value}`
-      }${paid.fulfilment_type === 'local_delivery' ? ' · ENNERDALE' : ''}`,
+      }${paid.fulfilment_type === 'local_delivery' ? ' · ENNERDALE' : paid.ship_service_code === FREE_NATIONWIDE_CODE ? ' · FREE R900+ · TEAM DISPATCH' : ''}`,
       adminPaidHtml(paid, items, pfPaymentId, alerts),
     ),
   ])

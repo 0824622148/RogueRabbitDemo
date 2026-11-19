@@ -1,3 +1,4 @@
+import { FREE_NATIONWIDE_CODE } from '@/lib/store-status'
 import { NextRequest, NextResponse } from 'next/server'
 import { requireAdmin } from '@/lib/admin/session'
 import { getServiceClient } from '@/lib/admin/service'
@@ -63,6 +64,14 @@ export async function POST(
   if (order.fulfilment_type === 'local_delivery') {
     return NextResponse.json(
       { error: 'Ennerdale local delivery — deliver by hand, do not book a courier' },
+      { status: 422 },
+    )
+  }
+
+  // Free R900+ orders are dispatched manually by the team.
+  if (order.ship_service_code === FREE_NATIONWIDE_CODE) {
+    return NextResponse.json(
+      { error: 'Free R900+ order — dispatched manually by the team, do not book a collection' },
       { status: 422 },
     )
   }

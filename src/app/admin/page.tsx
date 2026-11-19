@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import PageHeader from '@/components/admin/PageHeader'
 import { getPaidOrders, getMembers } from '@/lib/admin/queries'
-import { fmt, rand, statusLabel, STATUS_COLOUR, PAID_STATUSES, itemsLabel, isLocalDelivery } from '@/lib/admin/format'
+import { fmt, rand, statusLabel, STATUS_COLOUR, PAID_STATUSES, itemsLabel, isLocalDelivery, isFreeNationwide, isTeamDispatch } from '@/lib/admin/format'
 import { card, cell, th, tableWrap } from '@/lib/admin/ui'
 
 export const dynamic = 'force-dynamic'
@@ -17,7 +17,8 @@ export default async function AdminDashboardPage() {
   const revenue = live.reduce((sum, o) => sum + Number(o.amount_due ?? 0), 0)
 
   // "Needs attention" — the two fulfilment queues.
-  const toBook = orders.filter((o) => o.status === 'paid' && !isLocalDelivery(o) && !o.shiplogic_shipment_id)
+  const toBook = orders.filter((o) => o.status === 'paid' && !isTeamDispatch(o) && !o.shiplogic_shipment_id)
+  const toDispatch = orders.filter((o) => o.status === 'paid' && isFreeNationwide(o))
   const toDeliver = orders.filter((o) => isLocalDelivery(o) && (o.status === 'paid' || o.status === 'shipped'))
 
   const stats = [
@@ -29,6 +30,7 @@ export default async function AdminDashboardPage() {
   const attention = [
     { label: 'COURIER ORDERS TO BOOK', count: toBook.length, href: '/admin/deliveries', accent: '#3B82F6' },
     { label: 'ENNERDALE — DELIVER BY HAND', count: toDeliver.length, href: '/admin/deliveries#local', accent: '#D90017' },
+    { label: 'FREE R900+ — DISPATCH MANUALLY', count: toDispatch.length, href: '/admin/deliveries#free', accent: '#D90017' },
   ]
 
   const recent = orders.slice(0, 6)
@@ -97,8 +99,8 @@ export default async function AdminDashboardPage() {
                   <td style={cell}>{o.reference}</td>
                   <td style={cell}>{o.name}</td>
                   <td style={{ ...cell, color: '#A6A6A8', whiteSpace: 'normal', maxWidth: 280 }}>{itemsLabel(o)}</td>
-                  <td style={{ ...cell, color: isLocalDelivery(o) ? '#D90017' : '#A6A6A8', fontSize: 10 }}>
-                    {isLocalDelivery(o) ? 'LOCAL · ENNERDALE' : 'COURIER'}
+                  <td style={{ ...cell, color: isTeamDispatch(o) ? '#D90017' : '#A6A6A8', fontSize: 10 }}>
+                    {isLocalDelivery(o) ? 'LOCAL · ENNERDALE' : isFreeNationwide(o) ? 'FREE R900+ · TEAM' : 'COURIER'}
                   </td>
                   <td style={cell}>
                     <span style={{ color: STATUS_COLOUR[o.status] ?? '#A6A6A8', fontSize: 9, letterSpacing: '.16em' }}>
