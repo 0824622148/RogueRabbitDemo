@@ -5,6 +5,8 @@ import { sendCampaign } from '@/lib/admin/email'
 
 export const dynamic = 'force-dynamic'
 
+const EMAIL_RE = /^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/
+
 /**
  * Send a campaign to members.
  * - test=true → sends only to the single `testEmail` (preview to yourself).
@@ -38,6 +40,9 @@ export async function POST(request: NextRequest) {
     if (!testEmail) {
       return NextResponse.json({ error: 'Test email address required' }, { status: 422 })
     }
+    if (!EMAIL_RE.test(testEmail)) {
+      return NextResponse.json({ error: 'Enter a valid test email address' }, { status: 422 })
+    }
     try {
       await sendCampaign([testEmail], `[TEST] ${subject}`, message)
     } catch (err) {
@@ -60,13 +65,20 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Failed to load members' }, { status: 500 })
   }
 
-  const recipients = Array.from(
+  const addresses = Array.from(
     new Set(
       (members ?? [])
         .filter((m: any) => !m.unsubscribed && m.email)
         .map((m: any) => String(m.email).trim().toLowerCase()),
     ),
   )
+  // Resend rejects the whole batch (422) if any one `to` is malformed, so a
+  // single junk row would block the campaign. Skip and log those instead.
+  const recipients = addresses.filter((e) => EMAIL_RE.test(e))
+  const skipped = addresses.filter((e) => !EMAIL_RE.test(e))
+  if (skipped.length) {
+    console.warn('[ADMIN EMAIL] Skipping invalid member emails:', JSON.stringify(skipped))
+  }
 
   if (!recipients.length) {
     return NextResponse.json({ error: 'No subscribed members to email' }, { status: 422 })
@@ -88,5 +100,5 @@ export async function POST(request: NextRequest) {
     console.error('[ADMIN EMAIL] Campaign sent but log failed:', JSON.stringify(logError))
   }
 
-  return NextResponse.json({ success: true, sent })
+  return NextResponse.json({ success: true, sent, skipped: skipped.length })
 }
