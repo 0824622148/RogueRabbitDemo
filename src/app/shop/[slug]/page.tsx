@@ -32,9 +32,11 @@ export default async function ShopProductPage({ params, searchParams }: { params
   }
 
   const initialColourwayId = typeof query.colour === 'string' ? query.colour : undefined
-  const isAccessory = String(product.category).toUpperCase() === 'ACCESSORIES'
-  const categoryHref = isAccessory ? '/shop/accessories' : '/shop/tops'
-  const categoryLabel = isAccessory ? 'ACCESSORIES' : 'TOPS'
+  const cat = String(product.category).toUpperCase()
+  const [categoryHref, categoryLabel] =
+    cat === 'ACCESSORIES' ? ['/shop/accessories', 'ACCESSORIES']
+    : cat === 'TRACK SETS' ? ['/shop/track-sets', 'TRACK SETS']
+    : ['/shop/tops', 'TOPS']
 
   return (
     <div style={{ background: '#0F0F10', color: '#E6E6E6', fontFamily: 'var(--font-body)' }}>

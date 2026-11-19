@@ -40,11 +40,12 @@ export const CAP_MEASURE_TIPS = [
   'Pull the strap through the buckle to tighten, or let it out to loosen, until the cap sits snug without pressing.',
 ]
 
-export type ApparelKind = 'tee' | 'cap' | null
+export type ApparelKind = 'tee' | 'cap' | 'set' | null
 
 export function apparelKind(product: { name: string; category?: string | null }): ApparelKind {
   if (isTee(product.name)) return 'tee'
   if (/\bCAP\b/i.test(product.name)) return 'cap'
+  if (String(product.category ?? '').toUpperCase() === 'TRACK SETS' || /\bTRACK SET\b/i.test(product.name)) return 'set'
   return null
 }
 
@@ -71,6 +72,23 @@ export function productDetails(
         'Front ROUGE RABBIT branding · statement back artwork',
         sizes.length > 1 ? `Unisex · sizes ${sizes[0]} – ${sizes[sizes.length - 1]}` : 'Unisex',
         'Wash cold, inside out · do not tumble dry · do not iron the print',
+      ],
+    }
+  }
+  if (kind === 'set') {
+    // Built from the client's packshots (19 Nov 2026). Add fabric and care
+    // details once the team confirms them.
+    return {
+      description:
+        'Two-piece Rouge Track set in yellow, royal blue and red. A short-sleeve hooded half-zip ' +
+        'with a front pouch pocket, and matching cargo shorts. Move different.',
+      specs: [
+        'Set of two: hooded half-zip top + cargo shorts',
+        'Top: short sleeves, half-zip, adjustable toggle hood and hem',
+        'Top: front pouch pocket · "MOVE DIFFERENT." front · "SAME DESTINATION. DIFFERENT ROUTES." back',
+        'Shorts: elastic drawstring waist, two cargo pockets (snap and buckle-strap)',
+        'RR monogram on top and shorts',
+        sizes.length > 1 ? `Sizes ${sizes[0]} – ${sizes[sizes.length - 1]}` : 'Sold as a set',
       ],
     }
   }

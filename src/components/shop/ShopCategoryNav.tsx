@@ -3,6 +3,7 @@ import { SNEAKER_ORDERS_ON_HOLD, SNEAKERS_HIDDEN } from '@/lib/store-status'
 
 const CATEGORIES = [
   { label: 'ALL ITEMS', href: '/shop' },
+  { label: 'TRACK SETS', href: '/shop/track-sets' },
   { label: 'TOPS', href: '/shop/tops' },
   { label: 'ACCESSORIES', href: '/shop/accessories' },
   { label: 'FOOTWEAR', href: '/shop/footwear', soon: SNEAKER_ORDERS_ON_HOLD },

@@ -48,13 +48,13 @@ export interface StockProduct {
   colourways: StockColourway[]
 }
 
-/** Stock-tracked products (tees + caps), grouped product → colourway → size. */
+/** Stock-tracked products (track sets, tees, caps), grouped product → colourway → size. */
 export async function getInventory(): Promise<StockProduct[]> {
   const db = getServiceClient()
   const { data, error } = await db
     .from('products')
     .select('id, name, category, colourways (id, name, hex, sort_order, inventory (id, size_value, stock_count, sort_order))')
-    .in('category', ['APPAREL', 'ACCESSORIES'])
+    .in('category', ['TRACK SETS', 'APPAREL', 'ACCESSORIES'])
     .eq('is_active', true)
     .order('category', { ascending: false })
     .order('id')

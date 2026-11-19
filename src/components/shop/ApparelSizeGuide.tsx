@@ -44,7 +44,7 @@ function Tips({ items }: { items: string[] }) {
 }
 
 /** Body of the guide for one product type. */
-export function ApparelSizeContent({ kind }: { kind: Exclude<ApparelKind, null> }) {
+export function ApparelSizeContent({ kind }: { kind: 'tee' | 'cap' }) {
   if (kind === 'cap') {
     return (
       <>
@@ -63,7 +63,7 @@ export function ApparelSizeContent({ kind }: { kind: Exclude<ApparelKind, null> 
 }
 
 /** "SIZE GUIDE" link + modal on the tee / cap product page. */
-export default function ApparelSizeGuide({ kind }: { kind: Exclude<ApparelKind, null> }) {
+export default function ApparelSizeGuide({ kind }: { kind: 'tee' | 'cap' }) {
   const [open, setOpen] = useState(false)
 
   useEffect(() => {

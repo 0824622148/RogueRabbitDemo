@@ -14,6 +14,7 @@ export function buildMenu({ featured, drops }: { featured: NavItem[]; drops: Nav
       href: '/shop',
       children: [
         { label: 'ALL ITEMS', href: '/shop' },
+        { label: 'TRACK SETS', href: '/shop/track-sets', tag: 'NEW' },
         { label: 'TOPS', href: '/shop/tops' },
         { label: 'ACCESSORIES', href: '/shop/accessories' },
         ...(SNEAKERS_HIDDEN
