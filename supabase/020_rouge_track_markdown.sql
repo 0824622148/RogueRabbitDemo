@@ -1,3 +1,4 @@
+-- SUPERSEDED by 021_frequency_short_set_live.sql (23 Nov 2026) — do not run.
 -- Rouge Rabbit — ROUGE TRACK SET November markdown.
 -- Run on Mon 23 Nov 2026, when the ads go live: R3,200 → R2,500, with R3,200
 -- shown crossed out. Pages refresh within about a minute.

@@ -40,6 +40,37 @@ export const CAP_MEASURE_TIPS = [
   'Pull the strap through the buckle to tighten, or let it out to loosen, until the cap sits snug without pressing.',
 ]
 
+// Frequency short set (Track Sets) — from the manufacturer's grading chart (client, 23 Nov 2026;
+// public/assets/drops/rouge-track/size-chart.jpg). L is the approved sample,
+// the rest are graded from it. Rows the chart marks unconfirmed (cap height,
+// brim width, cuff length) are left out.
+export interface SetSizeRow {
+  size: string
+  top: { bust: number; length: number; sleeve: number }
+  shorts: { waist: number; hip: number; inseam: number }
+}
+
+export const SET_SIZES: SetSizeRow[] = [
+  { size: 'S',   top: { bust: 55, length: 63, sleeve: 22.5 }, shorts: { waist: 36, hip: 52.5, inseam: 20 } },
+  { size: 'M',   top: { bust: 57, length: 65, sleeve: 23 },   shorts: { waist: 38, hip: 54.5, inseam: 22 } },
+  { size: 'L',   top: { bust: 59, length: 67, sleeve: 23.5 }, shorts: { waist: 40, hip: 56.5, inseam: 24 } },
+  { size: 'XL',  top: { bust: 61, length: 69, sleeve: 24 },   shorts: { waist: 42, hip: 58.5, inseam: 26 } },
+  { size: '2XL', top: { bust: 63, length: 71, sleeve: 24.5 }, shorts: { waist: 44, hip: 60.5, inseam: 28 } },
+  { size: '3XL', top: { bust: 65, length: 73, sleeve: 25 },   shorts: { waist: 46, hip: 62.5, inseam: 30 } },
+  { size: '4XL', top: { bust: 67, length: 75, sleeve: 25.5 }, shorts: { waist: 48, hip: 64.5, inseam: 32 } },
+]
+
+export const SET_FIT_NOTE =
+  'Unisex, relaxed and slightly oversized. Top and shorts come in the same size. Take your usual size, or size down for a closer fit.'
+
+export const SET_MEASURE_TIPS = [
+  'Half bust and half waist / hip are measured flat across, so double them for the full measurement.',
+  'Front length runs from the high point of the shoulder to the hem. Inseam runs from the crotch seam to the leg opening.',
+  'Measurements are approximate and can vary by 1–2 cm.',
+]
+
+export const SET_CHART_IMAGE = '/assets/drops/rouge-track/size-chart.jpg'
+
 export type ApparelKind = 'tee' | 'cap' | 'set' | null
 
 export function apparelKind(product: { name: string; category?: string | null }): ApparelKind {
@@ -80,7 +111,7 @@ export function productDetails(
     // details once the team confirms them.
     return {
       description:
-        'Two-piece Rouge Track set in yellow, royal blue and red. A short-sleeve hooded half-zip ' +
+        'Two-piece Frequency short set in yellow, royal blue and red. A short-sleeve hooded half-zip ' +
         'with a front pouch pocket, and matching cargo shorts. Move different.',
       specs: [
         'Set of two: hooded half-zip top + cargo shorts',
@@ -88,7 +119,8 @@ export function productDetails(
         'Top: front pouch pocket · "MOVE DIFFERENT." front · "SAME DESTINATION. DIFFERENT ROUTES." back',
         'Shorts: elastic drawstring waist, two cargo pockets (snap and buckle-strap)',
         'RR monogram on top and shorts',
-        sizes.length > 1 ? `Sizes ${sizes[0]} – ${sizes[sizes.length - 1]}` : 'Sold as a set',
+        'Unisex · relaxed, oversized fit',
+        sizes.length > 1 ? `Sizes ${sizes[0]} – ${sizes[sizes.length - 1]} · top and shorts in the same size` : 'Sold as a set',
       ],
     }
   }

@@ -390,6 +390,7 @@
 .rr-4col-grid          { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--steel); }
 .rr-4col-grid-gap      { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
 .rr-4col-grid-gap.rr-pair { grid-template-columns: repeat(2, 1fr); }
+.rr-4col-grid-gap.rr-trio { grid-template-columns: repeat(3, 1fr); }
 .rr-campaign-grid      { display: grid; grid-template-columns: 1fr 1fr; position: absolute; inset: 0; }
 .rr-split-cta          { display: grid; grid-template-columns: 1fr 1.4fr; }
 .rr-footer-grid        { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 60px; }
@@ -495,7 +496,8 @@
   .rr-hero-stats       { gap: 24px; margin-top: 36px; }
   .rr-trust-grid       { grid-template-columns: 1fr 1fr; gap: 20px; padding: 24px 20px; }
   .rr-4col-grid        { grid-template-columns: repeat(2, 1fr); }
-  .rr-4col-grid-gap    { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .rr-4col-grid-gap,
+  .rr-4col-grid-gap.rr-trio { grid-template-columns: repeat(2, 1fr); gap: 16px; }
   .rr-campaign-grid    { position: static; display: flex; flex-direction: column; }
   .rr-campaign-strip-inner { height: auto; }
   .rr-campaign-image   { height: 300px; }
@@ -608,7 +610,8 @@
   .rr-hero-title       { font-size: clamp(60px, 17vw, 86px); }
   .rr-4col-grid        { grid-template-columns: 1fr; }
   .rr-4col-grid-gap,
-  .rr-4col-grid-gap.rr-pair { grid-template-columns: 1fr; }
+  .rr-4col-grid-gap.rr-pair,
+  .rr-4col-grid-gap.rr-trio { grid-template-columns: 1fr; }
   .rr-trust-grid       { grid-template-columns: 1fr; }
   .rr-footer-grid      { grid-template-columns: 1fr; }
   .rr-footer-brand     { grid-column: 1; }

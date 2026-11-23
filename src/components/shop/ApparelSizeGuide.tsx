@@ -2,9 +2,13 @@
 
 import { useEffect, useState } from 'react'
 import {
-  CAP_FIT_NOTE, CAP_MEASURE_TIPS, TEE_FIT_NOTE, TEE_MEASURE_TIPS, TEE_SIZES,
-  type ApparelKind,
+  CAP_FIT_NOTE, CAP_MEASURE_TIPS, SET_CHART_IMAGE, SET_FIT_NOTE, SET_MEASURE_TIPS, SET_SIZES,
+  TEE_FIT_NOTE, TEE_MEASURE_TIPS, TEE_SIZES,
 } from '@/lib/apparel-sizing'
+
+type GuideKind = 'tee' | 'cap' | 'set'
+
+const GUIDE_LABEL: Record<GuideKind, string> = { tee: 'TEE SIZE GUIDE', cap: 'CAP FIT', set: 'TRACK SET SIZE GUIDE' }
 
 const muted = { color: '#A6A6A8', fontSize: 12, lineHeight: 1.7 }
 
@@ -35,6 +39,59 @@ export function TeeSizeChart() {
   )
 }
 
+/** One half of the track set chart (top or shorts), in cm. */
+function SetChart({ title, heads, rows }: { title: string; heads: string[]; rows: [string, ...number[]][] }) {
+  const cols = `0.8fr repeat(${heads.length}, 1fr)`
+  return (
+    <div style={{ border: '1px solid #3A3A3C', maxWidth: 480 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: cols, padding: '12px 16px', borderBottom: '1px solid #3A3A3C', background: '#1E1E20' }}>
+        {[title, ...heads].map((h, i) => (
+          <span key={h} className="rr-mono" style={{ fontSize: 9, color: i === 0 ? '#E6E6E6' : '#A6A6A8', letterSpacing: '.14em' }}>{h}</span>
+        ))}
+      </div>
+      {rows.map(([size, ...vals], i) => (
+        <div
+          key={size}
+          style={{
+            display: 'grid', gridTemplateColumns: cols, padding: '10px 16px',
+            borderBottom: i < rows.length - 1 ? '1px solid #3A3A3C' : 'none',
+            background: i % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.02)',
+          }}
+        >
+          <span className="rr-mono" style={{ color: '#E6E6E6', fontSize: 12 }}>{size}</span>
+          {vals.map((v, j) => (
+            <span key={j} className="rr-mono" style={{ color: j === 0 ? '#E6E6E6' : '#A6A6A8', fontSize: 12 }}>{v}</span>
+          ))}
+        </div>
+      ))}
+    </div>
+  )
+}
+
+/** Track set charts (top + shorts) in cm, with a link to the full grading chart. */
+export function SetSizeChart() {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+      <SetChart
+        title="TOP"
+        heads={['HALF BUST', 'LENGTH', 'SLEEVE']}
+        rows={SET_SIZES.map((r) => [r.size, r.top.bust, r.top.length, r.top.sleeve])}
+      />
+      <SetChart
+        title="SHORTS"
+        heads={['HALF WAIST', 'HALF HIP', 'INSEAM']}
+        rows={SET_SIZES.map((r) => [r.size, r.shorts.waist, r.shorts.hip, r.shorts.inseam])}
+      />
+      <span className="rr-mono" style={{ fontSize: 10, color: '#A6A6A8', letterSpacing: '.12em' }}>
+        ALL MEASUREMENTS IN CM ·{' '}
+        <a href={SET_CHART_IMAGE} target="_blank" rel="noopener noreferrer" style={{ color: '#E6E6E6' }}>
+          VIEW THE FULL CHART →
+        </a>
+      </span>
+    </div>
+  )
+}
+
 function Tips({ items }: { items: string[] }) {
   return (
     <ul style={{ ...muted, margin: '16px 0 0', paddingLeft: 18, display: 'flex', flexDirection: 'column', gap: 6 }}>
@@ -44,7 +101,16 @@ function Tips({ items }: { items: string[] }) {
 }
 
 /** Body of the guide for one product type. */
-export function ApparelSizeContent({ kind }: { kind: 'tee' | 'cap' }) {
+export function ApparelSizeContent({ kind }: { kind: GuideKind }) {
+  if (kind === 'set') {
+    return (
+      <>
+        <p style={{ ...muted, margin: '0 0 18px' }}>{SET_FIT_NOTE}</p>
+        <SetSizeChart />
+        <Tips items={SET_MEASURE_TIPS} />
+      </>
+    )
+  }
   if (kind === 'cap') {
     return (
       <>
@@ -62,8 +128,8 @@ export function ApparelSizeContent({ kind }: { kind: 'tee' | 'cap' }) {
   )
 }
 
-/** "SIZE GUIDE" link + modal on the tee / cap product page. */
-export default function ApparelSizeGuide({ kind }: { kind: 'tee' | 'cap' }) {
+/** "SIZE GUIDE" link + modal on the tee / cap / track set product page. */
+export default function ApparelSizeGuide({ kind }: { kind: GuideKind }) {
   const [open, setOpen] = useState(false)
 
   useEffect(() => {
@@ -101,7 +167,7 @@ export default function ApparelSizeGuide({ kind }: { kind: 'tee' | 'cap' }) {
           <div
             role="dialog"
             aria-modal="true"
-            aria-label={kind === 'cap' ? 'Cap fit guide' : 'Tee size guide'}
+            aria-label={GUIDE_LABEL[kind].toLowerCase()}
             onClick={(e) => e.stopPropagation()}
             style={{
               background: '#1E1E20', border: '1px solid #3A3A3C', position: 'relative',
@@ -119,7 +185,7 @@ export default function ApparelSizeGuide({ kind }: { kind: 'tee' | 'cap' }) {
               ✕ CLOSE
             </button>
             <span className="rr-overline" style={{ color: '#D90017', display: 'block', marginBottom: 14 }}>
-              [ {kind === 'cap' ? 'CAP FIT' : 'TEE SIZE GUIDE'} ]
+              [ {GUIDE_LABEL[kind]} ]
             </span>
             <ApparelSizeContent kind={kind} />
             <a

@@ -193,7 +193,7 @@ export default function ApparelPDP({ product, initialColourwayId }: Props) {
             <div className="rr-overline" style={{ color: '#A6A6A8' }}>
               SIZE{selected ? ` · ${selected.size_value}` : ''}
             </div>
-            {(kind === 'tee' || kind === 'cap') && <ApparelSizeGuide kind={kind} />}
+            {kind && <ApparelSizeGuide kind={kind} />}
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: `repeat(${Math.min(Math.max(sizes.length, 1), 6)}, 1fr)`, gap: 6 }}>
             {sizes.map((s) => {

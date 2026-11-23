@@ -47,15 +47,18 @@ export default function SizingGuidePage() {
   const rows = SIZE_GUIDE[gender]
 
   return (
-    <PolicyLayout title="Sizing Guide" lastUpdated="October 2026">
+    <PolicyLayout title="Sizing Guide" lastUpdated="November 2026">
 
       <p style={S.p}>
-        Find your fit for every Rouge Rabbit piece: {SNEAKERS_HIDDEN ? 'tees and caps' : 'tees, caps and footwear'}. Still unsure?
+        Find your fit for every Rouge Rabbit piece: {SNEAKERS_HIDDEN ? 'tees, track sets and caps' : 'tees, track sets, caps and footwear'}. Still unsure?
         Our team is happy to help (details at the bottom of this page).
       </p>
 
       <h2 id="tees" style={S.h2}>Tees</h2>
       <ApparelSizeContent kind="tee" />
+
+      <h2 id="track-sets" style={S.h2}>Track Sets</h2>
+      <ApparelSizeContent kind="set" />
 
       <h2 id="caps" style={S.h2}>Caps</h2>
       <ApparelSizeContent kind="cap" />

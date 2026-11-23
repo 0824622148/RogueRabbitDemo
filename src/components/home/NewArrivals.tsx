@@ -9,20 +9,21 @@ interface Props {
 
 export default function NewArrivals({ products }: Props) {
   const pair = products.length <= 2
+  const trio = products.length === 3
   return (
     <section className="rr-section-pad" style={{ background: '#0F0F10' }}>
       <SectionHead
         index="01"
-        kicker="LATEST RELEASES · SIGNAL + BEAUTY IN CONTRAST · IN STOCK NOW"
+        kicker="LATEST RELEASES · FREQUENCY + SIGNAL + BEAUTY IN CONTRAST · IN STOCK NOW"
         title="NEW ARRIVALS."
         action="All drops"
         actionHref="/drops"
       />
-      {/* One or two drop tees get a wide two-up instead of half an empty row. */}
-      <div className={`rr-4col-grid-gap rr-section-inner-pad${pair ? ' rr-pair' : ''}`}>
+      {/* Two or three latest pieces fill the row instead of leaving empty slots. */}
+      <div className={`rr-4col-grid-gap rr-section-inner-pad${pair ? ' rr-pair' : trio ? ' rr-trio' : ''}`}>
         {products.map((p, i) => (
           <Link key={p.id} href={`/shop/${p.slug}${p.colourwayId ? `?colour=${p.colourwayId}` : ''}`} style={{ display: 'block', textDecoration: 'none' }}>
-            <ProductCard product={p} mediaHeight={pair ? 560 : 340} indexLabel={`R/01${i + 1}`} />
+            <ProductCard product={p} mediaHeight={pair ? 560 : trio ? 440 : 340} indexLabel={`R/01${i + 1}`} />
           </Link>
         ))}
       </div>

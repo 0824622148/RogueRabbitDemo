@@ -1,3 +1,4 @@
+-- SUPERSEDED by 021_frequency_short_set_live.sql (23 Nov 2026) — do not run.
 -- Rouge Rabbit — ROUGE TRACK set (19 Nov 2026).
 -- Client (Clayton, 19 Nov): new "Track Sets" category; on sale now at R3,200,
 -- marked down to R2,500 from Mon 23 Nov when the ads go live

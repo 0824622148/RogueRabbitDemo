@@ -18,14 +18,16 @@ export const revalidate = 300
 
 export default async function HomePage() {
   // The client wants the home page on the latest releases only, so New Arrivals
-  // is just Signal and Beauty in Contrast. The rest of the range stays in /shop.
-  const [sideProducts, signal, bic, upcoming] = await Promise.all([
+  // is the Frequency short set (collection rouge-track), then Signal and Beauty in Contrast. The rest of the
+  // range stays in /shop.
+  const [sideProducts, track, signal, bic, upcoming] = await Promise.all([
     getProductsByCategory('FOOTWEAR', 'SIDE'),
+    getCollection('rouge-track'),
     getCollection('signal'),
     getCollection('beauty-in-contrast'),
     getUpcomingDrops(),
   ])
-  const latest = [signal, bic].flatMap((d) =>
+  const latest = [track, signal, bic].flatMap((d) =>
     d ? [...d.products, ...d.children.flatMap((c) => c.products)] : [],
   )
 

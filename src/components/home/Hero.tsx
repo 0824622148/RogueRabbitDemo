@@ -2,15 +2,19 @@ import Link from 'next/link'
 import Arrow from '@/components/brand/Arrow'
 import HeroCarousel, { type HeroSlide } from './HeroCarousel'
 
-// Campaign photos for the hero frame — the home page focuses on the latest
-// releases only, so it alternates Signal and Beauty in Contrast.
+// Campaign photos for the hero frame — the latest releases only: the
+// Frequency short set (Track Sets) leads, then Signal and Beauty in Contrast.
+const RT = '/assets/drops/rouge-track'
 const BIC = '/assets/drops/beauty-in-contrast'
 const SIG = '/assets/drops/signal'
+const TRACK_SET = '/shop/rouge-track-set'
 const HERO_SLIDES: HeroSlide[] = [
+  { src: `${RT}/model-front.jpg`, alt: 'Frequency short set worn — yellow half-zip hooded top, MOVE DIFFERENT., with cargo shorts', caption: 'FREQUENCY SHORT SET', href: TRACK_SET, pos: 'center 35%' },
+  { src: `${RT}/model-back.jpg`, alt: 'Frequency top back — SAME DESTINATION. DIFFERENT ROUTES.', caption: 'FREQUENCY · BACK', href: TRACK_SET, pos: 'center 35%' },
+  { src: `${RT}/model-side.jpg`, alt: 'Frequency short set worn hood up — side view of the cargo shorts', caption: 'FREQUENCY · HOOD UP', href: TRACK_SET, pos: 'center 35%' },
   { src: `${BIC}/back.jpg`, alt: 'Beauty in Contrast tee back print — statue with a red-painted blindfold', caption: 'BEAUTY IN CONTRAST TEE', href: '/drops/beauty-in-contrast', pos: 'center 45%' },
+  { src: `${RT}/model-crouch.jpg`, alt: 'Frequency short set worn — crouching, front', caption: 'FREQUENCY SHORT SET', href: TRACK_SET, pos: 'center 40%' },
   { src: `${SIG}/back.jpg`, alt: 'Signal tee back print — diver helmet with a goldfish', caption: 'SIGNAL TEE', href: '/drops/signal', pos: 'center 45%' },
-  { src: `${BIC}/front.jpg`, alt: 'Beauty in Contrast white tee and cap — front', caption: 'BEAUTY IN CONTRAST · FRONT', href: '/drops/beauty-in-contrast', pos: 'center 40%' },
-  { src: `${SIG}/front.jpg`, alt: 'Signal black tee and cap — front', caption: 'SIGNAL · FRONT', href: '/drops/signal', pos: 'center 40%' },
 ]
 
 function Stat({ n, l }: { n: string; l: string }) {
@@ -44,7 +48,7 @@ export default function Hero() {
         }}
       >
         <span className="rr-mono" style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}>
-          SIGNAL × BEAUTY IN CONTRAST
+          FREQUENCY · MOVE DIFFERENT.
         </span>
         <span className="rr-mono" style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)', color: '#D90017' }}>
           OUT NOW
@@ -62,7 +66,7 @@ export default function Hero() {
         }}
       >
         <span className="rr-mono" style={{ writingMode: 'vertical-rl' }}>SCROLL ↓</span>
-        <span className="rr-mono" style={{ writingMode: 'vertical-rl' }}>SIG × BIC</span>
+        <span className="rr-mono" style={{ writingMode: 'vertical-rl' }}>RR · FREQUENCY</span>
       </div>
 
       {/* Background gradient */}
@@ -96,28 +100,28 @@ export default function Hero() {
         {/* Left copy */}
         <div>
           <div style={{ marginBottom: 24 }}>
-            <span className="rr-mono">LATEST RELEASES · SIGNAL + BEAUTY IN CONTRAST</span>
+            <span className="rr-mono">LATEST RELEASE · THE FREQUENCY SHORT SET</span>
           </div>
           <h1
             className="rr-display rr-hero-title"
             style={{ margin: 0, color: '#E6E6E6', letterSpacing: '-.01em' }}
           >
-            TWO DROPS.<br />
-            <span style={{ color: '#D90017' }}>OUT NOW.</span>
+            MOVE<br />
+            <span style={{ color: '#D90017' }}>DIFFERENT.</span>
           </h1>
           <p style={{ marginTop: 22, color: '#A6A6A8', maxWidth: 460, fontSize: 14, lineHeight: 1.7 }}>
-            Signal — not everything needs to be received. Beauty in Contrast — beauty lives
-            in the contrast. Two new back-print tees, limited runs, marked with the rabbit.
-            Worn loud.
+            Same destination. Different routes. The Frequency short set is a short-sleeve hooded
+            half-zip and matching cargo shorts in yellow, royal blue and red, sold together.
+            Plus the latest tees, Signal and Beauty in Contrast.
           </p>
           <div style={{ display: 'flex', gap: 14, marginTop: 28, flexWrap: 'wrap' }}>
-            <Link href="/drops/signal">
+            <Link href={TRACK_SET}>
               <button className="rr-btn">
-                SHOP SIGNAL <span className="arr"><Arrow size={14} /></span>
+                SHOP FREQUENCY <span className="arr"><Arrow size={14} /></span>
               </button>
             </Link>
-            <Link href="/drops/beauty-in-contrast">
-              <button className="rr-btn rr-btn--ghost">SHOP BEAUTY IN CONTRAST ▸</button>
+            <Link href="/drops">
+              <button className="rr-btn rr-btn--ghost">LATEST TEES ▸</button>
             </Link>
           </div>
           <div
@@ -127,8 +131,8 @@ export default function Hero() {
               borderTop: '1px solid #3A3A3C', flexWrap: 'wrap',
             }}
           >
-            <Stat n="02" l="NEW DROPS" />
-            <Stat n="R350" l="PER TEE" />
+            <Stat n="2-PIECE" l="SHORT SET" />
+            <Stat n="UNISEX" l="RELAXED FIT" />
             <Stat n="FREE" l="ENNERDALE DELIVERY" />
             <Stat n="SA" l="NATIONWIDE SHIPPING" />
           </div>
