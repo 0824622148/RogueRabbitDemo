@@ -10,11 +10,13 @@ import WishlistEmailModal from '@/components/wishlist/WishlistEmailModal'
 import { SubscribeProvider } from '@/context/SubscribeContext'
 import SubscribeModal from '@/components/brand/SubscribeModal'
 import DropBanner from '@/components/brand/DropBanner'
+import FreeShippingBanner from '@/components/brand/FreeShippingBanner'
 import { CartProvider } from '@/context/CartContext'
 import CartDrawer from '@/components/shop/CartDrawer'
 import { NavMenuProvider } from '@/context/NavMenuContext'
 import { dropHref, getNavMenu, getPopupDrop, getUpcomingDrops } from '@/lib/queries/collections'
 import { formatDropDate } from '@/lib/drop-dates'
+import { NATIONWIDE_DELIVERY_LIVE } from '@/lib/store-status'
 import { buildMenu } from '@/lib/nav'
 import { META_PIXEL_BASE_CODE } from '@/lib/meta-pixel'
 import CookieBanner from '@/components/brand/CookieBanner'
@@ -83,6 +85,7 @@ export default async function RootLayout({
       >
         <NavMenuProvider menu={menu}>
           <SubscribeProvider campaign={popupDrop ? `${popupDrop.slug}:${popupDrop.status}` : ''}>
+            {NATIONWIDE_DELIVERY_LIVE && <FreeShippingBanner />}
             {nextDrops.length > 0 && (
               <DropBanner
                 names={nextDrops.map((c) => c.name).join(' + ')}

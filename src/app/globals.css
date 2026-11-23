@@ -132,6 +132,20 @@
 }
 .rr-marquee__track > span { display: inline-flex; align-items: center; gap: 60px; }
 
+/* ── Free delivery bar (above the nav) ────── */
+.rr-ship-banner {
+  background: var(--bone); color: var(--raven);
+  padding: 9px 16px; text-align: center; line-height: 1.5;
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: .16em;
+  text-transform: uppercase;
+}
+.rr-ship-banner a { color: inherit; text-decoration: none; }
+.rr-ship-banner a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.rr-ship-banner strong { font-weight: 500; color: #B00013; }
+@media (max-width: 768px) {
+  .rr-ship-banner { padding: 8px 10px; font-size: 10px; letter-spacing: .04em; }
+}
+
 /* ── Drop announcement bar (above the nav) ────── */
 .rr-drop-banner {
   display: flex; align-items: center; justify-content: center; gap: 22px;

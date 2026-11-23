@@ -326,14 +326,14 @@ export default function NavBar() {
             <DropdownPanel item={openItem} />
           </div>
         )}
-      </header>
 
-      {/* Mobile slide-down menu — accordion per section */}
+      {/* Mobile slide-down menu — accordion per section. Inside the sticky header
+          so it opens below it whether or not a banner sits above the nav. */}
       {menuOpen && (
         <div
           style={{
-            position: 'fixed', top: 64, left: 0, right: 0,
-            maxHeight: 'calc(100vh - 64px)', overflowY: 'auto',
+            position: 'absolute', top: '100%', left: 0, right: 0,
+            maxHeight: 'calc(100dvh - 120px)', overflowY: 'auto',
             background: '#0F0F10',
             borderBottom: '1px solid #3A3A3C',
             zIndex: 49,
@@ -407,6 +407,7 @@ export default function NavBar() {
           </button>
         </div>
       )}
+      </header>
     </>
   )
 }
