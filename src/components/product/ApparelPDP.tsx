@@ -195,7 +195,7 @@ export default function ApparelPDP({ product, initialColourwayId }: Props) {
             </div>
             {kind && <ApparelSizeGuide kind={kind} />}
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: `repeat(${Math.min(Math.max(sizes.length, 1), 6)}, 1fr)`, gap: 6 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: `repeat(${Math.min(Math.max(sizes.length, 1), 7)}, 1fr)`, gap: 6 }}>
             {sizes.map((s) => {
               const oos = available(s) === 0
               return (
