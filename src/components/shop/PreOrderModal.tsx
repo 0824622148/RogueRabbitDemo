@@ -28,7 +28,7 @@ export default function PreOrderModal({ initialColourway, initialSize, initialGe
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
 
-  // Delivery address + live options (free local delivery for Ennerdale)
+  // Delivery address + live options
   const [address, setAddress] = useState<DeliveryAddress>(EMPTY_ADDRESS)
   const {
     rates, selectedRate, setSelectedRate,
@@ -398,7 +398,7 @@ export default function PreOrderModal({ initialColourway, initialSize, initialGe
             <p className="rr-mono" style={{ fontSize: 9, color: '#A6A6A8', marginTop: 14, lineHeight: 1.8, letterSpacing: '.1em' }}>
               YOU WILL BE REDIRECTED TO PAYFAST TO COMPLETE PAYMENT SECURELY.
               THIS IS A PRE-ORDER — DELIVERY FROM {DELIVERY_FROM.toUpperCase()}. THE TEAM WILL BE IN
-              TOUCH TO CONFIRM BEFORE DISPATCH. FREE DELIVERY IN ENNERDALE; NATIONWIDE WITH THE COURIER GUY.
+              TOUCH TO CONFIRM BEFORE DISPATCH. NATIONWIDE DELIVERY WITH THE COURIER GUY.
             </p>
           </div>
         )}

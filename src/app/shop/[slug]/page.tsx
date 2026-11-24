@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   if (!product) return { title: 'Not found — Rouge Rabbit' }
   return {
     title: `${product.name} — Rouge Rabbit`,
-    description: `${product.name} by Rouge Rabbit. In stock now — free delivery in Ennerdale.`,
+    description: `${product.name} by Rouge Rabbit. In stock now — free nationwide delivery on orders of R900+.`,
   }
 }
 

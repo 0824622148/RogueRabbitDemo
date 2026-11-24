@@ -91,8 +91,8 @@ export default function DeliveryOptions({ rates, selectedRate, onSelect, loading
       <div className="rr-overline" style={{ marginBottom: 12, color: '#A6A6A8' }}>DELIVERY OPTION</div>
 
       {!addressComplete && msg(NATIONWIDE_DELIVERY_LIVE
-        ? `ENTER YOUR ADDRESS TO SEE DELIVERY OPTIONS. FREE DELIVERY IN ENNERDALE, AND NATIONWIDE ON ORDERS OF R${FREE_SHIPPING_THRESHOLD}+.`
-        : 'HOME FIRST: ROUGE RABBIT WAS BORN IN ENNERDALE, SO WE CURRENTLY DELIVER THERE ONLY — FREE. NATIONWIDE DELIVERY COMING SOON.')}
+        ? `ENTER YOUR ADDRESS TO SEE DELIVERY OPTIONS. FREE NATIONWIDE DELIVERY ON ORDERS OF R${FREE_SHIPPING_THRESHOLD}+.`
+        : 'NATIONWIDE DELIVERY COMING SOON.')}
       {addressComplete && loading && msg('FETCHING DELIVERY OPTIONS…')}
       {addressComplete && !loading && error && msg(error.toUpperCase(), '#D90017')}
 

@@ -3,6 +3,7 @@ import Link from 'next/link'
 import NavBar from '@/components/brand/NavBar'
 import Footer from '@/components/brand/Footer'
 import ClearCart from '@/components/checkout/ClearCart'
+import { FREE_SHIPPING_THRESHOLD } from '@/lib/store-status'
 
 export const metadata: Metadata = {
   title: 'Thank You — Rouge Rabbit',
@@ -36,8 +37,8 @@ export default async function CheckoutSuccessPage({
 
           <p className="rr-mono" style={{ fontSize: 11, color: '#A6A6A8', lineHeight: 1.9, letterSpacing: '.1em', margin: '0 0 32px' }}>
             AS SOON AS PAYFAST CONFIRMS YOUR PAYMENT WE&apos;LL EMAIL YOUR ORDER CONFIRMATION.
-            ENNERDALE ORDERS: THE ROUGE RABBIT TEAM WILL WHATSAPP YOU TO ARRANGE DELIVERY.
-            EVERYWHERE ELSE: YOU&apos;LL GET A COURIER GUY TRACKING NUMBER BY EMAIL ONCE IT SHIPS.
+            COURIER ORDERS: YOU&apos;LL GET A COURIER GUY TRACKING NUMBER BY EMAIL ONCE IT SHIPS.
+            FREE R{FREE_SHIPPING_THRESHOLD}+ DELIVERY: THE ROUGE RABBIT TEAM DISPATCHES YOUR ORDER THEMSELVES.
           </p>
 
           {ref && (

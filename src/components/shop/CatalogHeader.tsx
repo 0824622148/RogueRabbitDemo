@@ -15,9 +15,9 @@ export default function CatalogHeader({
   title = 'CATALOG/',
   accent = '26',
   blurb = SNEAKERS_HIDDEN
-    ? 'Track sets, tees and caps, in stock now — free delivery in Ennerdale, where Rouge Rabbit was born, and nationwide on orders of R900+.'
+    ? 'Track sets, tees and caps, in stock now — free nationwide delivery on orders of R900+.'
     : 'Footwear, apparel and accessories. The Bagged League × Rouge Rabbit tees and caps are ' +
-      'in stock now — free delivery in Ennerdale, where Rouge Rabbit was born. Rouge 01 sneakers coming soon.',
+      'in stock now — free nationwide delivery on orders of R900+. Rouge 01 sneakers coming soon.',
   stats = [
     { n: '05', l: 'COLOURWAYS' },
     { n: '01', l: 'DROP · ACTIVE' },

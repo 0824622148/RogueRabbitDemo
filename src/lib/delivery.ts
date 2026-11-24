@@ -3,7 +3,8 @@
 //
 // Two ways an order reaches the customer:
 //   1. Ennerdale (postal code in ENNERDALE_POSTAL_CODES) — free, delivered by
-//      the Rouge Rabbit team themselves. Never booked with The Courier Guy.
+//      the Rouge Rabbit team themselves. Off since 24 Nov 2026
+//      (LOCAL_DELIVERY_LIVE); earlier orders still carry the code.
 //   2. Everywhere else — The Courier Guy, live-quoted via Shiplogic. Orders
 //      of FREE_SHIPPING_THRESHOLD+ also get a free option (FREE_NATIONWIDE_CODE)
 //      that the team dispatches manually — not booked via "Book collection".
@@ -13,6 +14,7 @@
 
 import { getRates, isConfigured, type Address, type Parcel, type ShippingRate } from '@/lib/shiplogic'
 import {
+  LOCAL_DELIVERY_LIVE,
   NATIONWIDE_DELIVERY_LIVE,
   OUTSIDE_DELIVERY_AREA_MESSAGE,
   FREE_SHIPPING_THRESHOLD,
@@ -81,13 +83,13 @@ export class DeliveryError extends Error {
 }
 
 /**
- * Delivery options for an address. Ennerdale gets the free local option only;
- * everywhere else gets live The Courier Guy rates, plus a free manually
+ * Delivery options for an address. While LOCAL_DELIVERY_LIVE, Ennerdale gets the
+ * free local option only; everywhere else gets live The Courier Guy rates, plus a free manually
  * dispatched option on orders of FREE_SHIPPING_THRESHOLD+.
  * Throws DeliveryError with an HTTP-friendly status on failure.
  */
 export async function quoteDelivery(address: Address, input: DeliveryQuoteInput): Promise<ShippingRate[]> {
-  if (isEnnerdale(address.postalCode)) {
+  if (LOCAL_DELIVERY_LIVE && isEnnerdale(address.postalCode)) {
     return [localDeliveryRate()]
   }
 

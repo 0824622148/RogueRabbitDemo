@@ -134,7 +134,7 @@ export default function Hero() {
           >
             <Stat n="2-PIECE" l="SHORT SET" />
             <Stat n="UNISEX" l="RELAXED FIT" />
-            <Stat n="FREE" l="ENNERDALE DELIVERY" />
+            <Stat n="S–4XL" l="SIZES" />
             <Stat n={`R${FREE_SHIPPING_THRESHOLD}+`} l="FREE NATIONWIDE DELIVERY" />
           </div>
         </div>

@@ -149,8 +149,7 @@ export default function PreorderPolicyPage() {
       <p style={S.p}>Rouge Rabbit currently ships exclusively within South Africa.</p>
       <h3 style={S.h3}>Delivery Costs</h3>
       <ul style={S.ul}>
-        <li><strong style={{ color: '#E6E6E6' }}>Free local delivery in Ennerdale</strong> (postal code 1830), delivered by the Rouge Rabbit team.</li>
-        <li>Everywhere else, delivery by The Courier Guy — the fee is calculated at checkout.</li>
+        <li>Delivery by The Courier Guy — the fee is calculated at checkout.</li>
       </ul>
 
       <div style={{ marginTop: 56, padding: '32px', background: '#1E1E20', border: '1px solid #3A3A3C' }}>

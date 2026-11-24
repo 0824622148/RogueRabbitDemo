@@ -16,7 +16,8 @@ const PREORDER_DECLARED_VALUE = Math.round(Number(process.env.SHIPLOGIC_DECLARED
  * cart. With items, the parcel and declared value come from the cart; without,
  * the ROUGE 01 shoe box and pre-order price are used.
  *
- * Ennerdale postal codes get the free local option only (no Shiplogic call).
+ * While LOCAL_DELIVERY_LIVE, Ennerdale postal codes get the free local option
+ * only (no Shiplogic call).
  * These rates are for display — checkout routes re-quote on the server.
  */
 export async function POST(request: NextRequest) {

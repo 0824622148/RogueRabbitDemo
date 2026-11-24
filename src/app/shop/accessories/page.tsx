@@ -4,7 +4,7 @@ import { NATIONWIDE_DELIVERY_LIVE } from '@/lib/store-status'
 
 export const metadata: Metadata = {
   title: 'Accessories — Rouge Rabbit',
-  description: 'Rouge Rabbit caps and accessories — in stock now. Free delivery in Ennerdale.',
+  description: 'Rouge Rabbit caps and accessories — in stock now. Free nationwide delivery on orders of R900+.',
 }
 
 // Stock and prices come from Supabase; refresh every minute so a sell-out
@@ -17,8 +17,8 @@ export default function AccessoriesPage() {
       category="ACCESSORIES"
       title="Accessories"
       blurb={NATIONWIDE_DELIVERY_LIVE
-        ? 'Rouge Rabbit caps — in stock and shipping now. Born in Ennerdale, so home delivery is free. Nationwide with The Courier Guy.'
-        : 'Rouge Rabbit caps — in stock now. Born in Ennerdale, so home gets first delivery — free. Nationwide coming soon.'}
+        ? 'Rouge Rabbit caps — in stock and shipping now. Nationwide with The Courier Guy, free on orders of R900+.'
+        : 'Rouge Rabbit caps — in stock now. Nationwide delivery coming soon.'}
     />
   )
 }

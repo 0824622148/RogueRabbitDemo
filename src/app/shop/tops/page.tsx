@@ -4,7 +4,7 @@ import { NATIONWIDE_DELIVERY_LIVE } from '@/lib/store-status'
 
 export const metadata: Metadata = {
   title: 'Tops — Rouge Rabbit',
-  description: 'Rouge Rabbit tees and tops — in stock now. Free delivery in Ennerdale.',
+  description: 'Rouge Rabbit tees and tops — in stock now. Free nationwide delivery on orders of R900+.',
 }
 
 // Stock and prices come from Supabase; refresh every minute so a sell-out
@@ -20,8 +20,8 @@ export default function TopsPage() {
       category="APPAREL"
       title="Tops"
       blurb={NATIONWIDE_DELIVERY_LIVE
-        ? 'Rouge Rabbit tees — in stock and shipping now. Born in Ennerdale, so home delivery is free. Nationwide with The Courier Guy.'
-        : 'Rouge Rabbit tees — in stock now. Born in Ennerdale, so home gets first delivery — free. Nationwide coming soon.'}
+        ? 'Rouge Rabbit tees — in stock and shipping now. Nationwide with The Courier Guy, free on orders of R900+.'
+        : 'Rouge Rabbit tees — in stock now. Nationwide delivery coming soon.'}
     />
   )
 }

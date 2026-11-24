@@ -37,15 +37,20 @@ export function isOnHold(category: string | null | undefined): boolean {
 }
 
 /**
- * Courier (The Courier Guy) delivery outside Ennerdale. While false, only
- * Ennerdale postal codes can check out — everyone else sees
- * OUTSIDE_DELIVERY_AREA_MESSAGE. Enforced on the server in src/lib/delivery.ts.
+ * Free hand delivery to Ennerdale postal codes. Off at the client's request
+ * (24 Nov 2026): Ennerdale now gets the same options as everywhere else.
+ */
+export const LOCAL_DELIVERY_LIVE = false
+
+/**
+ * Courier (The Courier Guy) delivery. While false, no address can check out
+ * (unless LOCAL_DELIVERY_LIVE) — customers see OUTSIDE_DELIVERY_AREA_MESSAGE. Enforced on the server in src/lib/delivery.ts.
  * Flip to true once the ShipLogic account is fully set up.
  */
 export const NATIONWIDE_DELIVERY_LIVE = true
 
 /**
- * Free delivery (outside Ennerdale) once the bag subtotal reaches this many
+ * Free delivery once the bag subtotal reaches this many
  * rand (client, 19 Nov 2026). Offered as its own option (FREE_NATIONWIDE_CODE),
  * dispatched manually by the team; faster paid Courier Guy options stay.
  * Enforced in src/lib/delivery.ts.
@@ -62,15 +67,14 @@ export const FREE_NATIONWIDE_CODE = 'RR_FREE_NATIONWIDE'
 /** Delivery estimate shown on the free option. */
 export const FREE_SHIPPING_ESTIMATE = '3–5 working days'
 
-/** Shown at checkout to addresses outside Ennerdale while nationwide is off. */
+/** Shown at checkout while nationwide delivery is off. */
 export const OUTSIDE_DELIVERY_AREA_MESSAGE =
-  'Apologies — we are delivering to your area soon. Rouge Rabbit was born in Ennerdale, ' +
-  'so our home town gets first delivery (free) while we roll out nationwide.'
+  'Apologies — we are delivering to your area soon.'
 
 /** One-line delivery promise for product pages, the bag and checkout. */
 export const DELIVERY_SUMMARY = NATIONWIDE_DELIVERY_LIVE
-  ? 'Free in Ennerdale — the town where Rouge Rabbit was born, hand-delivered by our team. Nationwide with The Courier Guy — free on orders of R' + FREE_SHIPPING_THRESHOLD + '+ (3–5 working days), otherwise calculated at checkout.'
-  : 'Free in Ennerdale — the town where Rouge Rabbit was born, hand-delivered by our team. Nationwide delivery coming soon.'
+  ? 'Nationwide with The Courier Guy — free on orders of R' + FREE_SHIPPING_THRESHOLD + '+ (3–5 working days), otherwise calculated at checkout.'
+  : 'Nationwide delivery coming soon.'
 
 /** Stands in for the price wherever an amount would normally be shown. */
 export const COMING_SOON_LABEL = 'COMING SOON'

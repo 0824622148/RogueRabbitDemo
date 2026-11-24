@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useCart, MAX_QTY_PER_LINE } from '@/context/CartContext'
 import { formatRand } from '@/lib/money'
-import { SHOP_ORDERS_ON_HOLD, COMING_SOON_LABEL } from '@/lib/store-status'
+import { SHOP_ORDERS_ON_HOLD, COMING_SOON_LABEL, FREE_SHIPPING_THRESHOLD } from '@/lib/store-status'
 
 const stepBtn: React.CSSProperties = {
   width: 28, height: 28, background: 'none',
@@ -157,7 +157,7 @@ export default function CartDrawer() {
                   <span className="rr-mono" style={{ fontSize: 14, color: '#E6E6E6' }}>{formatRand(subtotal)}</span>
                 </div>
                 <p className="rr-mono" style={{ fontSize: 9, color: '#A6A6A8', letterSpacing: '.1em', lineHeight: 1.7, margin: '0 0 16px' }}>
-                  DELIVERY CALCULATED AT CHECKOUT · FREE IN ENNERDALE
+                  DELIVERY CALCULATED AT CHECKOUT · FREE ON ORDERS OF R{FREE_SHIPPING_THRESHOLD}+
                 </p>
                 {SHOP_ORDERS_ON_HOLD ? (
                   <div className="rr-btn" style={{ width: '100%', justifyContent: 'center', opacity: 0.45 }}>
