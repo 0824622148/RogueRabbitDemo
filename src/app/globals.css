@@ -399,7 +399,11 @@
 .rr-hero-section       { height: 820px; }
 .rr-hero-grid          { display: grid; grid-template-columns: 1fr 1fr; padding: 60px 80px; gap: 40px; align-items: center; height: 100%; }
 .rr-hero-title         { font-size: 180px; }
-.rr-hero-stats         { gap: 40px; }
+.rr-hero-stats         { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 28px 20px; }
+@media (max-width: 1280px) {
+  .rr-hero-section     { height: 900px; }
+  .rr-hero-stats       { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
 .rr-trust-grid         { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; padding: 26px 80px; }
 .rr-4col-grid          { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--steel); }
 .rr-4col-grid-gap      { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }

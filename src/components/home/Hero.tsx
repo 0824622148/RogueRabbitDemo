@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import Arrow from '@/components/brand/Arrow'
+import { FREE_SHIPPING_THRESHOLD } from '@/lib/store-status'
 import HeroCarousel, { type HeroSlide } from './HeroCarousel'
 
 // Campaign photos for the hero frame — the latest releases only: the
@@ -9,11 +10,11 @@ const BIC = '/assets/drops/beauty-in-contrast'
 const SIG = '/assets/drops/signal'
 const TRACK_SET = '/shop/rouge-track-set'
 const HERO_SLIDES: HeroSlide[] = [
-  { src: `${RT}/model-front.jpg`, alt: 'Frequency short set worn — yellow half-zip hooded top, MOVE DIFFERENT., with cargo shorts', caption: 'FREQUENCY SHORT SET', href: TRACK_SET, pos: 'center 35%' },
-  { src: `${RT}/model-back.jpg`, alt: 'Frequency top back — SAME DESTINATION. DIFFERENT ROUTES.', caption: 'FREQUENCY · BACK', href: TRACK_SET, pos: 'center 35%' },
-  { src: `${RT}/model-side.jpg`, alt: 'Frequency short set worn hood up — side view of the cargo shorts', caption: 'FREQUENCY · HOOD UP', href: TRACK_SET, pos: 'center 35%' },
+  { src: `${RT}/model-front.jpg`, alt: 'Frequency short set worn — yellow half-zip hooded top, MOVE DIFFERENT., with cargo shorts', caption: 'FREQUENCY SHORT SET', href: TRACK_SET, pos: 'center 8%' },
+  { src: `${RT}/model-back.jpg`, alt: 'Frequency top back — SAME DESTINATION. DIFFERENT ROUTES.', caption: 'FREQUENCY · BACK', href: TRACK_SET, pos: 'center 8%' },
+  { src: `${RT}/model-side.jpg`, alt: 'Frequency short set worn hood up — side view of the cargo shorts', caption: 'FREQUENCY · HOOD UP', href: TRACK_SET, pos: 'center 8%' },
   { src: `${BIC}/back.jpg`, alt: 'Beauty in Contrast tee back print — statue with a red-painted blindfold', caption: 'BEAUTY IN CONTRAST TEE', href: '/drops/beauty-in-contrast', pos: 'center 45%' },
-  { src: `${RT}/model-crouch.jpg`, alt: 'Frequency short set worn — crouching, front', caption: 'FREQUENCY SHORT SET', href: TRACK_SET, pos: 'center 40%' },
+  { src: `${RT}/model-crouch.jpg`, alt: 'Frequency short set worn — crouching, front', caption: 'FREQUENCY SHORT SET', href: TRACK_SET, pos: 'center 20%' },
   { src: `${SIG}/back.jpg`, alt: 'Signal tee back print — diver helmet with a goldfish', caption: 'SIGNAL TEE', href: '/drops/signal', pos: 'center 45%' },
 ]
 
@@ -21,7 +22,7 @@ function Stat({ n, l }: { n: string; l: string }) {
   return (
     <div>
       <div className="rr-display" style={{ fontSize: 38, color: '#E6E6E6' }}>{n}</div>
-      <div className="rr-mono" style={{ marginTop: 4 }}>{l}</div>
+      <div className="rr-mono" style={{ marginTop: 4, lineHeight: 1.6 }}>{l}</div>
     </div>
   )
 }
@@ -127,14 +128,14 @@ export default function Hero() {
           <div
             className="rr-hero-stats"
             style={{
-              display: 'flex', marginTop: 48, paddingTop: 24,
-              borderTop: '1px solid #3A3A3C', flexWrap: 'wrap',
+              marginTop: 48, paddingTop: 24,
+              borderTop: '1px solid #3A3A3C',
             }}
           >
             <Stat n="2-PIECE" l="SHORT SET" />
             <Stat n="UNISEX" l="RELAXED FIT" />
             <Stat n="FREE" l="ENNERDALE DELIVERY" />
-            <Stat n="SA" l="NATIONWIDE SHIPPING" />
+            <Stat n={`R${FREE_SHIPPING_THRESHOLD}+`} l="FREE NATIONWIDE DELIVERY" />
           </div>
         </div>
 
