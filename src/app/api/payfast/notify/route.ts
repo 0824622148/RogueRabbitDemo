@@ -7,6 +7,7 @@ import { formatRand } from '@/lib/money'
 import { sendEmail, adminEmail, esc } from '@/lib/email'
 import { LOCAL_DELIVERY_ESTIMATE } from '@/lib/delivery'
 import { isPreOrderLine, PREORDER_BATCH } from '@/lib/apparel-preorder'
+import { metaContextFromITN, sendMetaPurchase } from '@/lib/meta-capi'
 
 export const dynamic = 'force-dynamic'
 
@@ -312,6 +313,28 @@ export async function POST(request: NextRequest) {
       adminPaidHtml(paid, items, pfPaymentId, alerts),
     ),
   ])
+
+  // Meta Conversions API — buyers who accepted cookies only. Never blocks the ITN.
+  const metaCtx = metaContextFromITN(params)
+  if (isShop && metaCtx) {
+    try {
+      const ids = [...new Set(items.map((i) => Number(i.product_id)))]
+      const { data: products } = await db.from('products').select('id, slug').in('id', ids)
+      const slugOf = new Map((products ?? []).map((p: Row) => [Number(p.id), String(p.slug)]))
+      await sendMetaPurchase({
+        reference,
+        email: paid.email,
+        phone: paid.phone,
+        name: paid.name,
+        city: paid.city,
+        postalCode: paid.postal_code,
+        value: Number(paid.subtotal),
+        contents: items.map((i) => ({ id: slugOf.get(Number(i.product_id)) ?? String(i.product_id), quantity: Number(i.qty) })),
+      }, metaCtx)
+    } catch (err) {
+      console.error('[META CAPI] skipped:', err)
+    }
+  }
 
   return new Response('OK', { status: 200 })
 }

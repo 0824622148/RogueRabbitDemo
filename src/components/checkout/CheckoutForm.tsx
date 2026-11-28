@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { useCart } from '@/context/CartContext'
 import { formatRand } from '@/lib/money'
 import { isPreOrderSlug, PREORDER_LINE_NOTE, PREORDER_NOTE } from '@/lib/apparel-preorder'
-import { trackInitiateCheckout } from '@/lib/meta-pixel'
+import { trackInitiateCheckout, COOKIE_CONSENT_KEY } from '@/lib/meta-pixel'
 import { SHOP_ORDERS_ON_HOLD, COMING_SOON_LABEL, NATIONWIDE_DELIVERY_LIVE, FREE_SHIPPING_THRESHOLD } from '@/lib/store-status'
 import DeliveryAddressFields, {
   EMPTY_ADDRESS, cleanAddress, checkoutInputStyle, type DeliveryAddress,
@@ -13,6 +13,19 @@ import DeliveryAddressFields, {
 import DeliveryOptions, { useDeliveryRates } from './DeliveryOptions'
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+/**
+ * Lets the server send Meta its own Purchase event (src/lib/meta-capi.ts) —
+ * only when the buyer accepted cookies, the same rule as the pixel.
+ */
+function metaCheckoutContext(): { metaConsent: boolean; fbp?: string; fbc?: string } {
+  let consent = false
+  try { consent = localStorage.getItem(COOKIE_CONSENT_KEY) === 'accepted' } catch { /* private mode */ }
+  if (!consent) return { metaConsent: false }
+  const cookie = (name: string) =>
+    document.cookie.split('; ').find((c) => c.startsWith(name + '='))?.slice(name.length + 1)
+  return { metaConsent: true, fbp: cookie('_fbp'), fbc: cookie('_fbc') }
+}
 
 export default function CheckoutForm() {
   const { items, subtotal, hydrated, count } = useCart()
@@ -76,6 +89,7 @@ export default function CheckoutForm() {
           ...cleanAddress(address),
           serviceCode: selectedRate!.code,
           items: cartItems,
+          ...metaCheckoutContext(),
         }),
       })
       const data = await res.json()

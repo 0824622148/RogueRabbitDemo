@@ -40,6 +40,12 @@ interface PayFastOrder {
   /** Site-relative paths PayFast sends the customer back to (the reference is appended). */
   returnPath: string
   cancelPath: string
+  /**
+   * custom_str1–5 (Meta browser context, see src/lib/meta-capi.ts). They follow
+   * item_name, as in PayFast's field order. Empty values are left out of the
+   * form signature and come back blank on the ITN.
+   */
+  customFields?: Record<string, string>
 }
 
 export function buildPayFastPayload(order: PayFastOrder): {
@@ -73,6 +79,10 @@ export function buildPayFastPayload(order: PayFastOrder): {
     m_payment_id: order.reference,
     amount: order.amountDue.toFixed(2),
     item_name: itemName,
+  }
+  for (const k of ['custom_str1', 'custom_str2', 'custom_str3', 'custom_str4', 'custom_str5']) {
+    const v = order.customFields?.[k]
+    if (v) fields[k] = v
   }
 
   // Never log the pre-hash string — it contains the passphrase.

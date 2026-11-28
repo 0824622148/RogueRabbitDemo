@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServiceClient } from '@/lib/admin/service'
 import { buildPayFastPayload } from '@/lib/payfast'
+import { metaCustomFields } from '@/lib/meta-capi'
 import { SHOP_ORDERS_ON_HOLD, ORDERS_ON_HOLD_MESSAGE } from '@/lib/store-status'
 import { verifyDelivery, toAddress, apparelParcel, DeliveryError } from '@/lib/delivery'
 import { parseCartInput, priceCart, cartSubtotal, cartUnits, CartError } from '@/lib/cart-server'
@@ -140,6 +141,12 @@ export async function POST(request: NextRequest) {
       itemName: `Rouge Rabbit order ${reference} · ${units} item${units === 1 ? '' : 's'}`,
       returnPath: '/checkout/success',
       cancelPath: '/checkout/cancel',
+      customFields: metaCustomFields(body.metaConsent === true, {
+        fbp: typeof body.fbp === 'string' ? body.fbp : undefined,
+        fbc: typeof body.fbc === 'string' ? body.fbc : undefined,
+        ip: request.headers.get('x-forwarded-for')?.split(',')[0].trim() || request.headers.get('x-real-ip') || undefined,
+        userAgent: request.headers.get('user-agent') ?? undefined,
+      }),
     })
 
     return NextResponse.json({ success: true, reference, payfast })
