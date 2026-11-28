@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
 import { useCart } from '@/context/CartContext'
 import { formatRand } from '@/lib/money'
+import { isPreOrderSlug, PREORDER_LINE_NOTE, PREORDER_NOTE } from '@/lib/apparel-preorder'
 import { trackInitiateCheckout } from '@/lib/meta-pixel'
 import { SHOP_ORDERS_ON_HOLD, COMING_SOON_LABEL, NATIONWIDE_DELIVERY_LIVE, FREE_SHIPPING_THRESHOLD } from '@/lib/store-status'
 import DeliveryAddressFields, {
@@ -175,6 +176,11 @@ export default function CheckoutForm() {
                 <div className="rr-mono" style={{ fontSize: 10, color: '#A6A6A8', letterSpacing: '.1em' }}>
                   {l.colourway} · {l.size} · ×{l.qty}
                 </div>
+                {isPreOrderSlug(l.slug) && (
+                  <div className="rr-mono" style={{ fontSize: 9, color: '#D90017', letterSpacing: '.12em', margin: '4px 0 8px' }}>
+                    {PREORDER_LINE_NOTE}
+                  </div>
+                )}
               </div>
               <div className="rr-mono" style={{ fontSize: 12, color: '#E6E6E6', whiteSpace: 'nowrap' }}>
                 {formatRand(l.unitPrice * l.qty)}
@@ -198,6 +204,12 @@ export default function CheckoutForm() {
             <span className="rr-mono" style={{ fontSize: 16, color: '#E6E6E6' }}>{formatRand(total)}</span>
           </div>
         </div>
+
+        {items.some((l) => isPreOrderSlug(l.slug)) && (
+          <p style={{ border: '1px solid #D90017', padding: '12px 14px', fontSize: 12, lineHeight: 1.6, color: '#E6E6E6', margin: '0 0 16px' }}>
+            {PREORDER_NOTE}
+          </p>
+        )}
 
         {submitError && (
           <div className="rr-mono" role="alert" style={{ fontSize: 11, color: '#D90017', marginBottom: 16, letterSpacing: '.12em', lineHeight: 1.6 }}>

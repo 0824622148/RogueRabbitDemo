@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useCart, MAX_QTY_PER_LINE } from '@/context/CartContext'
 import { formatRand } from '@/lib/money'
+import { isPreOrderSlug, PREORDER_LINE_NOTE } from '@/lib/apparel-preorder'
 import { SHOP_ORDERS_ON_HOLD, COMING_SOON_LABEL, FREE_SHIPPING_THRESHOLD } from '@/lib/store-status'
 
 const stepBtn: React.CSSProperties = {
@@ -111,6 +112,11 @@ export default function CartDrawer() {
                         <div className="rr-mono" style={{ fontSize: 10, color: '#A6A6A8', marginBottom: 10, letterSpacing: '.12em' }}>
                           SIZE {item.size} · {formatRand(item.unitPrice)}
                         </div>
+                {isPreOrderSlug(item.slug) && (
+                  <div className="rr-mono" style={{ fontSize: 9, color: '#D90017', letterSpacing: '.12em', margin: '4px 0 8px' }}>
+                    {PREORDER_LINE_NOTE}
+                  </div>
+                )}
                         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                           <button
                             style={stepBtn}

@@ -112,13 +112,13 @@ export default function Hero() {
           </h1>
           <p style={{ marginTop: 22, color: '#A6A6A8', maxWidth: 460, fontSize: 14, lineHeight: 1.7 }}>
             Same destination. Different routes. The Frequency short set is a short-sleeve hooded
-            half-zip and matching cargo shorts in yellow, royal blue and red, sold together.
+            half-zip and matching cargo shorts in yellow, royal blue and red, sold together. Pre-order now: the first run is limited to 50 sets.
             Plus the latest tees, Signal and Beauty in Contrast.
           </p>
           <div style={{ display: 'flex', gap: 14, marginTop: 28, flexWrap: 'wrap' }}>
             <Link href={TRACK_SET}>
               <button className="rr-btn">
-                SHOP FREQUENCY <span className="arr"><Arrow size={14} /></span>
+                PRE-ORDER FREQUENCY <span className="arr"><Arrow size={14} /></span>
               </button>
             </Link>
             <Link href="/drops">

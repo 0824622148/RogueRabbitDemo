@@ -6,6 +6,7 @@ import { DELIVERY_FROM } from '@/lib/preorder'
 import { formatRand } from '@/lib/money'
 import { sendEmail, adminEmail, esc } from '@/lib/email'
 import { LOCAL_DELIVERY_ESTIMATE } from '@/lib/delivery'
+import { isPreOrderLine, PREORDER_BATCH } from '@/lib/apparel-preorder'
 
 export const dynamic = 'force-dynamic'
 
@@ -51,7 +52,7 @@ function deliveryLabel(order: Row): string {
 
 function itemsSummary(items: Row[]): string {
   return items
-    .map((i) => `${esc(i.product_name)} ${esc(i.colourway_name ?? '')} ${esc(i.size_value ?? '')} ×${i.qty}`.replace(/\s+/g, ' '))
+    .map((i) => `${esc(i.product_name)} ${esc(i.colourway_name ?? '')} ${esc(i.size_value ?? '')} ×${i.qty}${isPreOrderLine(i) ? ' [PRE-ORDER]' : ''}`.replace(/\s+/g, ' '))
     .join(', ')
 }
 
@@ -76,6 +77,9 @@ function customerShopHtml(order: Row, items: Row[]): string {
     : order.ship_service_code === FREE_NATIONWIDE_CODE
     ? `Your order qualifies for free delivery. The Rouge Rabbit team will dispatch it to the address below — expect it within ${FREE_SHIPPING_ESTIMATE}. We'll contact you on ${esc(order.phone)} or by email if we need anything.`
     : `We'll book your parcel with The Courier Guy and email you a tracking number as soon as it's on its way.`
+  const preOrder = items.some(isPreOrderLine)
+    ? `<p style="color:#E6E6E6;line-height:1.8;font-size:12px;margin:0 0 12px;"><strong>Pre-order:</strong> the Frequency short set is made in a first run of ${PREORDER_BATCH}. We'll dispatch it as soon as that run is ready and email you with updates before it ships.</p>`
+    : ''
 
   return shell(`
     <p style="color:#A6A6A8;line-height:1.8;font-size:12px;margin:0 0 20px;">
@@ -83,12 +87,13 @@ function customerShopHtml(order: Row, items: Row[]): string {
     </p>
     <div style="border:1px solid #D90017;padding:16px 20px;margin-bottom:28px;">
       <p style="color:#D90017;font-size:10px;letter-spacing:.2em;margin:0 0 10px;">WHAT HAPPENS NEXT</p>
+      ${preOrder}
       <p style="color:#E6E6E6;line-height:1.8;font-size:12px;margin:0;">${next}</p>
     </div>
     <div style="border:1px solid #3A3A3C;padding:20px;margin-bottom:24px;">
       <p style="color:#D90017;font-size:10px;letter-spacing:.2em;margin:0 0 16px;">ORDER SUMMARY</p>
       ${items.map((i) => row(
-        `${esc(i.product_name)} · ${esc(i.colourway_name ?? '')} · ${esc(i.size_value ?? '')} ×${i.qty}`,
+        `${esc(i.product_name)} · ${esc(i.colourway_name ?? '')} · ${esc(i.size_value ?? '')} ×${i.qty}${isPreOrderLine(i) ? ' · PRE-ORDER' : ''}`,
         formatRand(Number(i.unit_price) * Number(i.qty)),
       )).join('')}
       ${row('Subtotal', formatRand(order.subtotal))}
@@ -136,6 +141,10 @@ function adminPaidHtml(
     ? '● PAID — FREE R900+ ORDER. DISPATCH MANUALLY (3–5 WORKING DAYS). SEE ADMIN → DELIVERIES → FREE NATIONWIDE.'
     : '● PAID — BOOK COLLECTION IN ADMIN → DELIVERIES.'
 
+  if (order.order_type === 'shop' && items.some(isPreOrderLine)) {
+    alerts = [...alerts, `PRE-ORDER — contains the Frequency short set. Hold it until the first run of ${PREORDER_BATCH} is ready.`]
+  }
+
   const productRows = order.order_type === 'shop'
     ? [adminRow('Items', itemsSummary(items) || '—'), adminRow('Subtotal', formatRand(order.subtotal))]
     : [
@@ -146,7 +155,7 @@ function adminPaidHtml(
 
   return `<div style="font-family:monospace;background:#0F0F10;color:#E6E6E6;padding:32px;">
     ${alerts.map((a) => `<div style="border:1px solid #D90017;color:#D90017;padding:12px 16px;margin-bottom:16px;">⚠ ${a}</div>`).join('')}
-    <h2 style="color:#2A9D2A;margin:0 0 24px;">● PAYMENT VERIFIED — ${local ? 'LOCAL DELIVERY' : 'READY TO SHIP'}</h2>
+    <h2 style="color:#2A9D2A;margin:0 0 24px;">● PAYMENT VERIFIED — ${local ? 'LOCAL DELIVERY' : items.some(isPreOrderLine) ? 'PRE-ORDER · HOLD' : 'READY TO SHIP'}</h2>
     <table style="border-collapse:collapse;width:100%;">
       ${[
         adminRow('Order ID', `#${order.id}`),

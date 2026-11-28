@@ -11,6 +11,7 @@ import { apparelKind, productDetails } from '@/lib/apparel-sizing'
 import { formatDropDate } from '@/lib/drop-dates'
 import { trackAddToCart, trackViewContent } from '@/lib/meta-pixel'
 import ApparelSizeGuide from '@/components/shop/ApparelSizeGuide'
+import { isPreOrderSlug, PREORDER_NOTE, PREORDER_BATCH } from '@/lib/apparel-preorder'
 
 interface Props {
   product: ProductDetail
@@ -34,6 +35,8 @@ export default function ApparelPDP({ product, initialColourwayId }: Props) {
   const preRelease = product.releaseDate !== null
   const locked = onHold || preRelease
   const kind = apparelKind(product)
+  // Paid in full now, dispatched when the first production run is ready.
+  const preOrder = isPreOrderSlug(product.slug)
 
   useEffect(() => {
     trackViewContent(product.slug, product.price, product.name)
@@ -145,6 +148,11 @@ export default function ApparelPDP({ product, initialColourwayId }: Props) {
           <span className="rr-mono" style={{ fontSize: 20, color: '#E6E6E6' }}>
             {onHold ? COMING_SOON_LABEL : formatRand(product.price)}
           </span>
+          {!onHold && preOrder && (
+            <span className="rr-mono" style={{ fontSize: 11, color: '#D90017', letterSpacing: '.14em' }}>
+              PRE-ORDER PRICE
+            </span>
+          )}
           {!onHold && product.compareAt != null && (
             <span className="rr-mono" style={{ fontSize: 13, color: '#A6A6A8', textDecoration: 'line-through' }}>
               {formatRand(product.compareAt)}
@@ -161,6 +169,15 @@ export default function ApparelPDP({ product, initialColourwayId }: Props) {
           <p style={{ color: '#A6A6A8', fontSize: 13, lineHeight: 1.7, margin: '0 0 32px', maxWidth: 480 }}>
             {details.description}
           </p>
+        )}
+
+        {preOrder && !onHold && (
+          <div style={{ border: '1px solid #D90017', padding: '14px 16px', margin: '0 0 28px', maxWidth: 480 }}>
+            <div className="rr-mono" style={{ fontSize: 10, color: '#D90017', letterSpacing: '.18em', marginBottom: 6 }}>
+              PRE-ORDER · FIRST RUN OF {PREORDER_BATCH}
+            </div>
+            <p style={{ color: '#E6E6E6', fontSize: 13, lineHeight: 1.6, margin: 0 }}>{PREORDER_NOTE}</p>
+          </div>
         )}
 
         {/* Colourways */}
@@ -213,7 +230,7 @@ export default function ApparelPDP({ product, initialColourwayId }: Props) {
           </div>
           {selected && available(selected) <= HURRY_AT && (
             <div className="rr-mono" style={{ fontSize: 10, color: '#D90017', marginTop: 10, letterSpacing: '.12em' }}>
-              HURRY — {available(selected)} LEFT
+              {preOrder ? `${available(selected)} PRE-ORDER SPOTS LEFT` : `HURRY — ${available(selected)} LEFT`}
             </div>
           )}
         </div>
@@ -267,7 +284,7 @@ export default function ApparelPDP({ product, initialColourwayId }: Props) {
                 ? 'SOLD OUT'
                 : !selected
                   ? 'SELECT A SIZE'
-                  : `ADD TO BAG · ${formatRand(product.price * qty)}`}
+                  : `${preOrder ? 'PRE-ORDER' : 'ADD TO BAG'} · ${formatRand(product.price * qty)}`}
           </span>
           {!locked && !soldOut && selected && <span>→</span>}
         </button>
@@ -294,7 +311,9 @@ export default function ApparelPDP({ product, initialColourwayId }: Props) {
 
         <div style={{ borderTop: '1px solid #3A3A3C', marginTop: 32, paddingTop: 20 }}>
           {[
-            ['DELIVERY', DELIVERY_SUMMARY],
+            ['DELIVERY', preOrder
+              ? `Dispatched once the first run of ${PREORDER_BATCH} is ready. ${DELIVERY_SUMMARY}`
+              : DELIVERY_SUMMARY],
             ['PAYMENT', 'Secure checkout with PayFast.'],
             ['RETURNS', 'See our shipping & returns policy.'],
           ].map(([k, v]) => (

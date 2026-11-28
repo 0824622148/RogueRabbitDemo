@@ -1,6 +1,7 @@
 /** Shared formatting + status helpers for the admin dashboard. */
 
 import { FREE_NATIONWIDE_CODE } from '@/lib/store-status'
+import { isPreOrderLine } from '@/lib/apparel-preorder'
 
 const JHB = 'Africa/Johannesburg'
 
@@ -94,7 +95,8 @@ export function itemsLabel(o: AdminOrder): string {
     const items = (o.order_items ?? []) as AdminOrder[]
     if (!items.length) return '—'
     return items
-      .map((i) => [i.product_name, i.colourway_name, i.size_value].filter(Boolean).join(' ') + ` ×${i.qty}`)
+      .map((i) => [i.product_name, i.colourway_name, i.size_value].filter(Boolean).join(' ') + ` ×${i.qty}` +
+        (isPreOrderLine(i) ? ' [PRE-ORDER]' : ''))
       .join(', ')
   }
   return [`ROUGE 01 ${o.colourway ?? ''}`.trim(), o.size_value && `${o.size_value} · ${o.gender ?? ''}`]

@@ -2,6 +2,7 @@ import { cache } from 'react'
 import { supabase } from '@/lib/supabase'
 import { formatDropDay, isReleased } from '@/lib/drop-dates'
 import { SNEAKERS_HIDDEN } from '@/lib/store-status'
+import { isPreOrderSlug, PREORDER_BADGE } from '@/lib/apparel-preorder'
 import type { Product, ColourwayDB, InventoryItem } from '@/types'
 
 const LISTING_COLUMNS = `
@@ -58,7 +59,9 @@ function colourwayToProduct(p: any, cw: any, view: 'FRONT' | 'SIDE'): Product {
     drop_label: p.drop_label,
     price: p.price as number,
     image: img,
-    badge: isReleased(p.release_date) ? p.badge ?? undefined : `DROPS ${formatDropDay(p.release_date)}`,
+    badge: !isReleased(p.release_date)
+      ? `DROPS ${formatDropDay(p.release_date)}`
+      : isPreOrderSlug(p.slug) ? PREORDER_BADGE : p.badge ?? undefined,
     compareAt: p.compare_at_price ?? undefined,
     mediaBg: p.media_bg ?? undefined,
     contain: p.image_contain ?? undefined,
@@ -157,7 +160,7 @@ export async function getProduct(slug: string): Promise<ProductDetail | null> {
     dropLabel: d.drop_label ?? null,
     price: Number(d.price),
     compareAt: d.compare_at_price != null ? Number(d.compare_at_price) : null,
-    badge: d.badge ?? null,
+    badge: isPreOrderSlug(d.slug) ? PREORDER_BADGE : d.badge ?? null,
     mediaBg: d.media_bg ?? null,
     releaseDate: isReleased(d.release_date) ? null : d.release_date,
     colourways,

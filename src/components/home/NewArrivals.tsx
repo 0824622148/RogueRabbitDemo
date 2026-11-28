@@ -14,7 +14,7 @@ export default function NewArrivals({ products }: Props) {
     <section className="rr-section-pad" style={{ background: '#0F0F10' }}>
       <SectionHead
         index="01"
-        kicker="LATEST RELEASES · FREQUENCY + SIGNAL + BEAUTY IN CONTRAST · IN STOCK NOW"
+        kicker="LATEST RELEASES · FREQUENCY (PRE-ORDER) + SIGNAL + BEAUTY IN CONTRAST"
         title="NEW ARRIVALS."
         action="All drops"
         actionHref="/drops"

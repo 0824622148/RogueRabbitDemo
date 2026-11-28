@@ -16,7 +16,7 @@ export default function TrackSetsPage() {
     <CategoryPage
       category="TRACK SETS"
       title="Track Sets"
-      blurb="Frequency — a short-sleeve hooded half-zip and matching cargo shorts, sold as a set. Move different. Free nationwide delivery: this set qualifies for free shipping on its own."
+      blurb="Frequency — a short-sleeve hooded half-zip and matching cargo shorts, sold as a set. Move different. Pre-order only: the first run is limited to 50 sets and ships when it's ready. Free nationwide delivery: this set qualifies for free shipping on its own."
     />
   )
 }

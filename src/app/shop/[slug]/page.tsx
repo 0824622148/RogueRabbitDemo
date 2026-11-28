@@ -5,6 +5,7 @@ import NavBar from '@/components/brand/NavBar'
 import Footer from '@/components/brand/Footer'
 import ApparelPDP from '@/components/product/ApparelPDP'
 import { getProduct } from '@/lib/queries/products'
+import { isPreOrderSlug } from '@/lib/apparel-preorder'
 
 // Product pages for in-stock apparel and accessories. ROUGE 01 has its own
 // static route (/shop/rouge-01), which takes precedence over this one.
@@ -18,7 +19,7 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   if (!product) return { title: 'Not found — Rouge Rabbit' }
   return {
     title: `${product.name} — Rouge Rabbit`,
-    description: `${product.name} by Rouge Rabbit. In stock now — free nationwide delivery on orders of R900+.`,
+    description: `${product.name} by Rouge Rabbit. ${isPreOrderSlug(product.slug) ? 'Pre-order now' : 'In stock now'} — free nationwide delivery on orders of R900+.`,
   }
 }
 
